@@ -1,0 +1,58 @@
+<footer>
+    <div class="container">
+          <div class="row">
+                  <div class="col-lg-3 pull-left">
+                  <p><span class="pull-left">
+Copyright &copy; <?php echo $title;?> 2015</span>
+</p>
+</div>
+                  <div class="col-lg-9 pull-right">
+<ul class="list-inline pull-right list-unstyled">
+                    <li><a href="//support.legendpricing.com" target="_blank">help center</a></li>
+                    <li><a href="http://blog.legendpricing.com/" target="_blank">product blog</a></li>
+                    <li><a href="http://status.legendpricing.com/" target="_blank">system status</a></li>
+                    <li><a href="//www.legendpricing.com/terms-of-service/" target="_blank">terms of service</a></li>
+                    <li><a href="//www.legendpricing.com/privacy-policy/" target="_blank">privacy policy</a></li>
+                </ul>
+                                  </div>
+                                  </div>
+                                      </div>
+                                        </div>
+                                      </footer>
+<br/>
+<br/>
+<br/>
+<br/>
+                                      </body>
+                                      </html>
+                                              <!--
+<div class="container-fluid footer">  <div class="row">
+
+    <div class="col-md-3">
+
+      <address>
+        <strong>Twitter, Inc.</strong><br /> 795 Folsom Ave, Suite 600<br /> San Francisco, CA 94107<br /> <abbr title="Phone">P:</abbr> (123) 456-7890
+      </address>
+    </div>
+    <div class="col-md-3">
+      <blockquote>
+        <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.
+        </p> <small>Someone famous <cite>Source Title</cite></small>
+      </blockquote>
+    </div>
+    <div class="col-md-3">
+      <blockquote>
+        <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.
+        </p> <small>Someone famous <cite>Source Title</cite></small>
+      </blockquote>
+    </div>
+    <div class="col-md-3">
+      <blockquote>
+        <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.
+        </p> <small>Someone famous <cite>Source Title</cite></small>
+      </blockquote>
+    </div>
+</div>  -->

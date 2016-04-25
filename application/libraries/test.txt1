@@ -1,0 +1,1198 @@
+SimpleXMLElement Object
+(
+    [NotificationMetaData] => SimpleXMLElement Object
+        (
+            [NotificationType] => AnyOfferChanged
+            [PayloadVersion] => 1.0
+            [UniqueId] => f3131a58-c230-4e30-a44e-e2204fa81bed
+            [PublishTime] => 2015-09-04T20:13:33.953Z
+            [SellerId] => A2H709HJFL5E2Z
+            [MarketplaceId] => ATVPDKIKX0DER
+        )
+
+    [NotificationPayload] => SimpleXMLElement Object
+        (
+            [AnyOfferChangedNotification] => SimpleXMLElement Object
+                (
+                    [OfferChangeTrigger] => SimpleXMLElement Object
+                        (
+                            [MarketplaceId] => ATVPDKIKX0DER
+                            [ASIN] => B000UEZ36W
+                            [ItemCondition] => new
+                            [TimeOfOfferChange] => 2015-09-04T20:13:30.608Z
+                        )
+
+                    [Summary] => SimpleXMLElement Object
+                        (
+                            [NumberOfOffers] => SimpleXMLElement Object
+                                (
+                                    [OfferCount] => Array
+                                        (
+                                            [0] => 5
+                                            [1] => 42
+                                            [2] => 3
+                                            [3] => 1
+                                            [4] => 1
+                                        )
+
+                                )
+
+                            [LowestPrices] => SimpleXMLElement Object
+                                (
+                                    [LowestPrice] => Array
+                                        (
+                                            [0] => SimpleXMLElement Object
+                                                (
+                                                    [@attributes] => Array
+                                                        (
+                                                            [condition] => new
+                                                            [fulfillmentChannel] => Amazon
+                                                        )
+
+                                                    [LandedPrice] => SimpleXMLElement Object
+                                                        (
+                                                            [Amount] => 6.50
+                                                            [CurrencyCode] => USD
+                                                        )
+
+                                                    [ListingPrice] => SimpleXMLElement Object
+                                                        (
+                                                            [Amount] => 6.50
+                                                            [CurrencyCode] => USD
+                                                        )
+
+                                                    [Shipping] => SimpleXMLElement Object
+                                                        (
+                                                            [Amount] => 0.00
+                                                            [CurrencyCode] => USD
+                                                        )
+
+                                                )
+
+                                            [1] => SimpleXMLElement Object
+                                                (
+                                                    [@attributes] => Array
+                                                        (
+                                                            [condition] => new
+                                                            [fulfillmentChannel] => Merchant
+                                                        )
+
+                                                    [LandedPrice] => SimpleXMLElement Object
+                                                        (
+                                                            [Amount] => 13.78
+                                                            [CurrencyCode] => USD
+                                                        )
+
+                                                    [ListingPrice] => SimpleXMLElement Object
+                                                        (
+                                                            [Amount] => 13.78
+                                                            [CurrencyCode] => USD
+                                                        )
+
+                                                    [Shipping] => SimpleXMLElement Object
+                                                        (
+                                                            [Amount] => 0.00
+                                                            [CurrencyCode] => USD
+                                                        )
+
+                                                )
+
+                                            [2] => SimpleXMLElement Object
+                                                (
+                                                    [@attributes] => Array
+                                                        (
+                                                            [condition] => refurbished
+                                                            [fulfillmentChannel] => Merchant
+                                                        )
+
+                                                    [LandedPrice] => SimpleXMLElement Object
+                                                        (
+                                                            [Amount] => 4.20
+                                                            [CurrencyCode] => USD
+                                                        )
+
+                                                    [ListingPrice] => SimpleXMLElement Object
+                                                        (
+                                                            [Amount] => 4.20
+                                                            [CurrencyCode] => USD
+                                                        )
+
+                                                    [Shipping] => SimpleXMLElement Object
+                                                        (
+                                                            [Amount] => 0.00
+                                                            [CurrencyCode] => USD
+                                                        )
+
+                                                )
+
+                                            [3] => SimpleXMLElement Object
+                                                (
+                                                    [@attributes] => Array
+                                                        (
+                                                            [condition] => used
+                                                            [fulfillmentChannel] => Amazon
+                                                        )
+
+                                                    [LandedPrice] => SimpleXMLElement Object
+                                                        (
+                                                            [Amount] => 10.61
+                                                            [CurrencyCode] => USD
+                                                        )
+
+                                                    [ListingPrice] => SimpleXMLElement Object
+                                                        (
+                                                            [Amount] => 10.61
+                                                            [CurrencyCode] => USD
+                                                        )
+
+                                                    [Shipping] => SimpleXMLElement Object
+                                                        (
+                                                            [Amount] => 0.00
+                                                            [CurrencyCode] => USD
+                                                        )
+
+                                                )
+
+                                            [4] => SimpleXMLElement Object
+                                                (
+                                                    [@attributes] => Array
+                                                        (
+                                                            [condition] => used
+                                                            [fulfillmentChannel] => Merchant
+                                                        )
+
+                                                    [LandedPrice] => SimpleXMLElement Object
+                                                        (
+                                                            [Amount] => 18.48
+                                                            [CurrencyCode] => USD
+                                                        )
+
+                                                    [ListingPrice] => SimpleXMLElement Object
+                                                        (
+                                                            [Amount] => 13.49
+                                                            [CurrencyCode] => USD
+                                                        )
+
+                                                    [Shipping] => SimpleXMLElement Object
+                                                        (
+                                                            [Amount] => 4.99
+                                                            [CurrencyCode] => USD
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                            [BuyBoxPrices] => SimpleXMLElement Object
+                                (
+                                    [BuyBoxPrice] => SimpleXMLElement Object
+                                        (
+                                            [@attributes] => Array
+                                                (
+                                                    [condition] => new
+                                                )
+
+                                            [LandedPrice] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 7.68
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [ListingPrice] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 7.68
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [Shipping] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 0.00
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                        )
+
+                                )
+
+                            [ListPrice] => SimpleXMLElement Object
+                                (
+                                    [Amount] => 9.99
+                                    [CurrencyCode] => USD
+                                )
+
+                            [SalesRankings] => SimpleXMLElement Object
+                                (
+                                    [SalesRank] => SimpleXMLElement Object
+                                        (
+                                            [ProductCategoryId] => 705323011
+                                            [Rank] => 1
+                                        )
+
+                                )
+
+                            [BuyBoxEligibleOffers] => SimpleXMLElement Object
+                                (
+                                    [OfferCount] => Array
+                                        (
+                                            [0] => 5
+                                            [1] => 25
+                                            [2] => 3
+                                            [3] => 1
+                                            [4] => 0
+                                        )
+
+                                )
+
+                        )
+
+                    [Offers] => SimpleXMLElement Object
+                        (
+                            [Offer] => Array
+                                (
+                                    [0] => SimpleXMLElement Object
+                                        (
+                                            [SellerId] => A2R54C0ODOWZBF
+                                            [SubCondition] => new
+                                            [SellerFeedbackRating] => SimpleXMLElement Object
+                                                (
+                                                    [SellerPositiveFeedbackRating] => 91
+                                                    [FeedbackCount] => 96
+                                                )
+
+                                            [ShippingTime] => SimpleXMLElement Object
+                                                (
+                                                    [@attributes] => Array
+                                                        (
+                                                            [minimumHours] => 0
+                                                            [maximumHours] => 0
+                                                            [availabilityType] => FUTURE_WITH_DATE
+                                                            [availableDate] => 2015-09-12T07:00:00.000Z
+                                                        )
+
+                                                )
+
+                                            [ListingPrice] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 6.50
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [Shipping] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 0.00
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [IsFulfilledByAmazon] => true
+                                            [IsBuyBoxWinner] => false
+                                            [IsFeaturedMerchant] => true
+                                            [ShipsDomestically] => true
+                                        )
+
+                                    [1] => SimpleXMLElement Object
+                                        (
+                                            [SellerId] => ATVPDKIKX0DER
+                                            [SubCondition] => new
+                                            [SellerFeedbackRating] => SimpleXMLElement Object
+                                                (
+                                                    [SellerPositiveFeedbackRating] => 91
+                                                    [FeedbackCount] => 387
+                                                )
+
+                                            [ShippingTime] => SimpleXMLElement Object
+                                                (
+                                                    [@attributes] => Array
+                                                        (
+                                                            [minimumHours] => 0
+                                                            [maximumHours] => 0
+                                                            [availabilityType] => NOW
+                                                        )
+
+                                                )
+
+                                            [ListingPrice] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 7.68
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [Shipping] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 0.00
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [IsFulfilledByAmazon] => true
+                                            [IsBuyBoxWinner] => true
+                                            [IsFeaturedMerchant] => true
+                                            [ShipsDomestically] => true
+                                        )
+
+                                    [2] => SimpleXMLElement Object
+                                        (
+                                            [SellerId] => A2H709HJFL5E2Z
+                                            [SubCondition] => new
+                                            [SellerFeedbackRating] => SimpleXMLElement Object
+                                                (
+                                                    [SellerPositiveFeedbackRating] => 93
+                                                    [FeedbackCount] => 29
+                                                )
+
+                                            [ShippingTime] => SimpleXMLElement Object
+                                                (
+                                                    [@attributes] => Array
+                                                        (
+                                                            [minimumHours] => 0
+                                                            [maximumHours] => 0
+                                                            [availabilityType] => FUTURE_WITH_DATE
+                                                            [availableDate] => 2015-09-06T20:13:00.000Z
+                                                        )
+
+                                                )
+
+                                            [ListingPrice] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 13.70
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [Shipping] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 0.00
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [IsFulfilledByAmazon] => true
+                                            [IsBuyBoxWinner] => false
+                                            [IsFeaturedMerchant] => true
+                                            [ShipsDomestically] => true
+                                        )
+
+                                    [3] => SimpleXMLElement Object
+                                        (
+                                            [SellerId] => A2YKX5ZMEZXBT6
+                                            [SubCondition] => new
+                                            [SellerFeedbackRating] => SimpleXMLElement Object
+                                                (
+                                                    [SellerPositiveFeedbackRating] => 95
+                                                    [FeedbackCount] => 1511
+                                                )
+
+                                            [ShippingTime] => SimpleXMLElement Object
+                                                (
+                                                    [@attributes] => Array
+                                                        (
+                                                            [minimumHours] => 24
+                                                            [maximumHours] => 48
+                                                            [availabilityType] => NOW
+                                                        )
+
+                                                )
+
+                                            [ListingPrice] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 13.78
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [Shipping] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 0.00
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [ShipsFrom] => SimpleXMLElement Object
+                                                (
+                                                    [Country] => SimpleXMLElement Object
+                                                        (
+                                                        )
+
+                                                    [State] => SimpleXMLElement Object
+                                                        (
+                                                        )
+
+                                                )
+
+                                            [IsFulfilledByAmazon] => false
+                                            [IsBuyBoxWinner] => false
+                                            [ConditionNotes] => Fast Shipping!
+                                            [IsFeaturedMerchant] => true
+                                            [ShipsDomestically] => true
+                                        )
+
+                                    [4] => SimpleXMLElement Object
+                                        (
+                                            [SellerId] => A3LGJ9ZB5RSN9T
+                                            [SubCondition] => new
+                                            [SellerFeedbackRating] => SimpleXMLElement Object
+                                                (
+                                                    [SellerPositiveFeedbackRating] => 94
+                                                    [FeedbackCount] => 12102
+                                                )
+
+                                            [ShippingTime] => SimpleXMLElement Object
+                                                (
+                                                    [@attributes] => Array
+                                                        (
+                                                            [minimumHours] => 24
+                                                            [maximumHours] => 48
+                                                            [availabilityType] => NOW
+                                                        )
+
+                                                )
+
+                                            [ListingPrice] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 14.26
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [Shipping] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 0.00
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [ShipsFrom] => SimpleXMLElement Object
+                                                (
+                                                    [Country] => SimpleXMLElement Object
+                                                        (
+                                                        )
+
+                                                    [State] => SimpleXMLElement Object
+                                                        (
+                                                        )
+
+                                                )
+
+                                            [IsFulfilledByAmazon] => false
+                                            [IsBuyBoxWinner] => false
+                                            [IsFeaturedMerchant] => true
+                                            [ShipsDomestically] => true
+                                        )
+
+                                    [5] => SimpleXMLElement Object
+                                        (
+                                            [SellerId] => A2R0FX412W1BDT
+                                            [SubCondition] => new
+                                            [SellerFeedbackRating] => SimpleXMLElement Object
+                                                (
+                                                    [SellerPositiveFeedbackRating] => 95
+                                                    [FeedbackCount] => 163744
+                                                )
+
+                                            [ShippingTime] => SimpleXMLElement Object
+                                                (
+                                                    [@attributes] => Array
+                                                        (
+                                                            [minimumHours] => 24
+                                                            [maximumHours] => 48
+                                                            [availabilityType] => NOW
+                                                        )
+
+                                                )
+
+                                            [ListingPrice] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 14.33
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [Shipping] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 0.00
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [ShipsFrom] => SimpleXMLElement Object
+                                                (
+                                                    [Country] => SimpleXMLElement Object
+                                                        (
+                                                        )
+
+                                                    [State] => SimpleXMLElement Object
+                                                        (
+                                                        )
+
+                                                )
+
+                                            [IsFulfilledByAmazon] => false
+                                            [IsBuyBoxWinner] => false
+                                            [IsFeaturedMerchant] => true
+                                            [ShipsDomestically] => true
+                                        )
+
+                                    [6] => SimpleXMLElement Object
+                                        (
+                                            [SellerId] => A1XBPHGHAXLHDG
+                                            [SubCondition] => new
+                                            [SellerFeedbackRating] => SimpleXMLElement Object
+                                                (
+                                                    [SellerPositiveFeedbackRating] => 95
+                                                    [FeedbackCount] => 264672
+                                                )
+
+                                            [ShippingTime] => SimpleXMLElement Object
+                                                (
+                                                    [@attributes] => Array
+                                                        (
+                                                            [minimumHours] => 24
+                                                            [maximumHours] => 48
+                                                            [availabilityType] => NOW
+                                                        )
+
+                                                )
+
+                                            [ListingPrice] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 14.34
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [Shipping] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 0.00
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [ShipsFrom] => SimpleXMLElement Object
+                                                (
+                                                    [Country] => SimpleXMLElement Object
+                                                        (
+                                                        )
+
+                                                    [State] => SimpleXMLElement Object
+                                                        (
+                                                        )
+
+                                                )
+
+                                            [IsFulfilledByAmazon] => false
+                                            [IsBuyBoxWinner] => false
+                                            [IsFeaturedMerchant] => true
+                                            [ShipsDomestically] => true
+                                        )
+
+                                    [7] => SimpleXMLElement Object
+                                        (
+                                            [SellerId] => A2CK5NG72UVSTT
+                                            [SubCondition] => new
+                                            [SellerFeedbackRating] => SimpleXMLElement Object
+                                                (
+                                                    [SellerPositiveFeedbackRating] => 98
+                                                    [FeedbackCount] => 76979
+                                                )
+
+                                            [ShippingTime] => SimpleXMLElement Object
+                                                (
+                                                    [@attributes] => Array
+                                                        (
+                                                            [minimumHours] => 96
+                                                            [maximumHours] => 120
+                                                            [availabilityType] => NOW
+                                                        )
+
+                                                )
+
+                                            [ListingPrice] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 14.36
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [Shipping] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 0.00
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [ShipsFrom] => SimpleXMLElement Object
+                                                (
+                                                    [Country] => US
+                                                    [State] => MD
+                                                )
+
+                                            [IsFulfilledByAmazon] => false
+                                            [IsBuyBoxWinner] => false
+                                            [IsFeaturedMerchant] => true
+                                            [ShipsDomestically] => true
+                                        )
+
+                                    [8] => SimpleXMLElement Object
+                                        (
+                                            [SellerId] => A1L9D0A8YQ4I2J
+                                            [SubCondition] => new
+                                            [SellerFeedbackRating] => SimpleXMLElement Object
+                                                (
+                                                    [SellerPositiveFeedbackRating] => 98
+                                                    [FeedbackCount] => 88223
+                                                )
+
+                                            [ShippingTime] => SimpleXMLElement Object
+                                                (
+                                                    [@attributes] => Array
+                                                        (
+                                                            [minimumHours] => 72
+                                                            [maximumHours] => 96
+                                                            [availabilityType] => NOW
+                                                        )
+
+                                                )
+
+                                            [ListingPrice] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 10.66
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [Shipping] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 3.99
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [ShipsFrom] => SimpleXMLElement Object
+                                                (
+                                                    [Country] => SimpleXMLElement Object
+                                                        (
+                                                        )
+
+                                                    [State] => SimpleXMLElement Object
+                                                        (
+                                                        )
+
+                                                )
+
+                                            [IsFulfilledByAmazon] => false
+                                            [IsBuyBoxWinner] => false
+                                            [IsFeaturedMerchant] => true
+                                            [ShipsDomestically] => true
+                                        )
+
+                                    [9] => SimpleXMLElement Object
+                                        (
+                                            [SellerId] => A2Y7LLQC87RDQ
+                                            [SubCondition] => new
+                                            [SellerFeedbackRating] => SimpleXMLElement Object
+                                                (
+                                                    [SellerPositiveFeedbackRating] => 98
+                                                    [FeedbackCount] => 45442
+                                                )
+
+                                            [ShippingTime] => SimpleXMLElement Object
+                                                (
+                                                    [@attributes] => Array
+                                                        (
+                                                            [minimumHours] => 24
+                                                            [maximumHours] => 48
+                                                            [availabilityType] => NOW
+                                                        )
+
+                                                )
+
+                                            [ListingPrice] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 12.20
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [Shipping] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 3.49
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [ShipsFrom] => SimpleXMLElement Object
+                                                (
+                                                    [Country] => SimpleXMLElement Object
+                                                        (
+                                                        )
+
+                                                    [State] => SimpleXMLElement Object
+                                                        (
+                                                        )
+
+                                                )
+
+                                            [IsFulfilledByAmazon] => false
+                                            [IsBuyBoxWinner] => false
+                                            [ConditionNotes] => Available & Ships Promptly.
+                                            [IsFeaturedMerchant] => true
+                                            [ShipsDomestically] => true
+                                        )
+
+                                    [10] => SimpleXMLElement Object
+                                        (
+                                            [SellerId] => A21O2PZKD3CG2B
+                                            [SubCondition] => new
+                                            [SellerFeedbackRating] => SimpleXMLElement Object
+                                                (
+                                                    [SellerPositiveFeedbackRating] => 100
+                                                    [FeedbackCount] => 1
+                                                )
+
+                                            [ShippingTime] => SimpleXMLElement Object
+                                                (
+                                                    [@attributes] => Array
+                                                        (
+                                                            [minimumHours] => 0
+                                                            [maximumHours] => 0
+                                                            [availabilityType] => FUTURE_WITH_DATE
+                                                            [availableDate] => 2015-09-05T17:30:00.000Z
+                                                        )
+
+                                                )
+
+                                            [ListingPrice] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 15.99
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [Shipping] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 0.00
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [IsFulfilledByAmazon] => true
+                                            [IsBuyBoxWinner] => false
+                                            [IsFeaturedMerchant] => true
+                                            [ShipsDomestically] => true
+                                        )
+
+                                    [11] => SimpleXMLElement Object
+                                        (
+                                            [SellerId] => A1XY2LVHE4IHUW
+                                            [SubCondition] => new
+                                            [SellerFeedbackRating] => SimpleXMLElement Object
+                                                (
+                                                    [SellerPositiveFeedbackRating] => 81
+                                                    [FeedbackCount] => 13859
+                                                )
+
+                                            [ShippingTime] => SimpleXMLElement Object
+                                                (
+                                                    [@attributes] => Array
+                                                        (
+                                                            [minimumHours] => 96
+                                                            [maximumHours] => 120
+                                                            [availabilityType] => NOW
+                                                        )
+
+                                                )
+
+                                            [ListingPrice] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 15.99
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [Shipping] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 0.00
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [ShipsFrom] => SimpleXMLElement Object
+                                                (
+                                                    [Country] => US
+                                                    [State] => CA
+                                                )
+
+                                            [IsFulfilledByAmazon] => false
+                                            [IsBuyBoxWinner] => false
+                                            [IsFeaturedMerchant] => true
+                                            [ShipsDomestically] => true
+                                        )
+
+                                    [12] => SimpleXMLElement Object
+                                        (
+                                            [SellerId] => AX7HIM4T4ISD2
+                                            [SubCondition] => new
+                                            [SellerFeedbackRating] => SimpleXMLElement Object
+                                                (
+                                                    [SellerPositiveFeedbackRating] => 95
+                                                    [FeedbackCount] => 1801
+                                                )
+
+                                            [ShippingTime] => SimpleXMLElement Object
+                                                (
+                                                    [@attributes] => Array
+                                                        (
+                                                            [minimumHours] => 24
+                                                            [maximumHours] => 48
+                                                            [availabilityType] => NOW
+                                                        )
+
+                                                )
+
+                                            [ListingPrice] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 16.00
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [Shipping] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 0.00
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [ShipsFrom] => SimpleXMLElement Object
+                                                (
+                                                    [Country] => US
+                                                    [State] => AZ
+                                                )
+
+                                            [IsFulfilledByAmazon] => false
+                                            [IsBuyBoxWinner] => false
+                                            [IsFeaturedMerchant] => true
+                                            [ShipsDomestically] => true
+                                        )
+
+                                    [13] => SimpleXMLElement Object
+                                        (
+                                            [SellerId] => ALYC2INPHZWA1
+                                            [SubCondition] => new
+                                            [SellerFeedbackRating] => SimpleXMLElement Object
+                                                (
+                                                    [SellerPositiveFeedbackRating] => 94
+                                                    [FeedbackCount] => 28459
+                                                )
+
+                                            [ShippingTime] => SimpleXMLElement Object
+                                                (
+                                                    [@attributes] => Array
+                                                        (
+                                                            [minimumHours] => 96
+                                                            [maximumHours] => 120
+                                                            [availabilityType] => NOW
+                                                        )
+
+                                                )
+
+                                            [ListingPrice] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 16.41
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [Shipping] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 0.00
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [ShipsFrom] => SimpleXMLElement Object
+                                                (
+                                                    [Country] => US
+                                                    [State] => NY
+                                                )
+
+                                            [IsFulfilledByAmazon] => false
+                                            [IsBuyBoxWinner] => false
+                                            [ConditionNotes] => Brand new items only. Fast and friendly service. Tracking number on all orders.
+                                            [IsFeaturedMerchant] => true
+                                            [ShipsDomestically] => true
+                                        )
+
+                                    [14] => SimpleXMLElement Object
+                                        (
+                                            [SellerId] => A22BIT1HAJK5E9
+                                            [SubCondition] => new
+                                            [SellerFeedbackRating] => SimpleXMLElement Object
+                                                (
+                                                    [SellerPositiveFeedbackRating] => 95
+                                                    [FeedbackCount] => 26921
+                                                )
+
+                                            [ShippingTime] => SimpleXMLElement Object
+                                                (
+                                                    [@attributes] => Array
+                                                        (
+                                                            [minimumHours] => 24
+                                                            [maximumHours] => 48
+                                                            [availabilityType] => NOW
+                                                        )
+
+                                                )
+
+                                            [ListingPrice] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 12.09
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [Shipping] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 4.99
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [ShipsFrom] => SimpleXMLElement Object
+                                                (
+                                                    [Country] => DE
+                                                    [State] => SimpleXMLElement Object
+                                                        (
+                                                        )
+
+                                                )
+
+                                            [IsFulfilledByAmazon] => false
+                                            [IsBuyBoxWinner] => false
+                                            [IsFeaturedMerchant] => false
+                                            [ShipsDomestically] => true
+                                        )
+
+                                    [15] => SimpleXMLElement Object
+                                        (
+                                            [SellerId] => A24S0N00890G3R
+                                            [SubCondition] => new
+                                            [SellerFeedbackRating] => SimpleXMLElement Object
+                                                (
+                                                    [SellerPositiveFeedbackRating] => 96
+                                                    [FeedbackCount] => 44438
+                                                )
+
+                                            [ShippingTime] => SimpleXMLElement Object
+                                                (
+                                                    [@attributes] => Array
+                                                        (
+                                                            [minimumHours] => 96
+                                                            [maximumHours] => 120
+                                                            [availabilityType] => NOW
+                                                        )
+
+                                                )
+
+                                            [ListingPrice] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 17.11
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [Shipping] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 0.00
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [ShipsFrom] => SimpleXMLElement Object
+                                                (
+                                                    [Country] => US
+                                                    [State] => NJ
+                                                )
+
+                                            [IsFulfilledByAmazon] => false
+                                            [IsBuyBoxWinner] => false
+                                            [IsFeaturedMerchant] => true
+                                            [ShipsDomestically] => true
+                                        )
+
+                                    [16] => SimpleXMLElement Object
+                                        (
+                                            [SellerId] => ATRQ56T3H9TM5
+                                            [SubCondition] => new
+                                            [SellerFeedbackRating] => SimpleXMLElement Object
+                                                (
+                                                    [SellerPositiveFeedbackRating] => 95
+                                                    [FeedbackCount] => 5465
+                                                )
+
+                                            [ShippingTime] => SimpleXMLElement Object
+                                                (
+                                                    [@attributes] => Array
+                                                        (
+                                                            [minimumHours] => 24
+                                                            [maximumHours] => 48
+                                                            [availabilityType] => NOW
+                                                        )
+
+                                                )
+
+                                            [ListingPrice] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 17.16
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [Shipping] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 0.00
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [ShipsFrom] => SimpleXMLElement Object
+                                                (
+                                                    [Country] => SimpleXMLElement Object
+                                                        (
+                                                        )
+
+                                                    [State] => SimpleXMLElement Object
+                                                        (
+                                                        )
+
+                                                )
+
+                                            [IsFulfilledByAmazon] => false
+                                            [IsBuyBoxWinner] => false
+                                            [ConditionNotes] => Brand New
+                                            [IsFeaturedMerchant] => true
+                                            [ShipsDomestically] => true
+                                        )
+
+                                    [17] => SimpleXMLElement Object
+                                        (
+                                            [SellerId] => A3PBB6UH0N9XCK
+                                            [SubCondition] => new
+                                            [SellerFeedbackRating] => SimpleXMLElement Object
+                                                (
+                                                    [SellerPositiveFeedbackRating] => 0
+                                                    [FeedbackCount] => 0
+                                                )
+
+                                            [ShippingTime] => SimpleXMLElement Object
+                                                (
+                                                    [@attributes] => Array
+                                                        (
+                                                            [minimumHours] => 24
+                                                            [maximumHours] => 48
+                                                            [availabilityType] => NOW
+                                                        )
+
+                                                )
+
+                                            [ListingPrice] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 17.75
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [Shipping] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 0.00
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [ShipsFrom] => SimpleXMLElement Object
+                                                (
+                                                    [Country] => US
+                                                    [State] => FL
+                                                )
+
+                                            [IsFulfilledByAmazon] => false
+                                            [IsBuyBoxWinner] => false
+                                            [ConditionNotes] => In original package
+                                            [IsFeaturedMerchant] => true
+                                            [ShipsDomestically] => true
+                                        )
+
+                                    [18] => SimpleXMLElement Object
+                                        (
+                                            [SellerId] => A3PBB6UH0N9XCK
+                                            [SubCondition] => new
+                                            [SellerFeedbackRating] => SimpleXMLElement Object
+                                                (
+                                                    [SellerPositiveFeedbackRating] => 0
+                                                    [FeedbackCount] => 0
+                                                )
+
+                                            [ShippingTime] => SimpleXMLElement Object
+                                                (
+                                                    [@attributes] => Array
+                                                        (
+                                                            [minimumHours] => 24
+                                                            [maximumHours] => 48
+                                                            [availabilityType] => NOW
+                                                        )
+
+                                                )
+
+                                            [ListingPrice] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 17.75
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [Shipping] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 0.00
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [ShipsFrom] => SimpleXMLElement Object
+                                                (
+                                                    [Country] => US
+                                                    [State] => FL
+                                                )
+
+                                            [IsFulfilledByAmazon] => false
+                                            [IsBuyBoxWinner] => false
+                                            [ConditionNotes] => In original package
+                                            [IsFeaturedMerchant] => true
+                                            [ShipsDomestically] => true
+                                        )
+
+                                    [19] => SimpleXMLElement Object
+                                        (
+                                            [SellerId] => A28SS3BS1DBQ92
+                                            [SubCondition] => new
+                                            [SellerFeedbackRating] => SimpleXMLElement Object
+                                                (
+                                                    [SellerPositiveFeedbackRating] => 98
+                                                    [FeedbackCount] => 18882
+                                                )
+
+                                            [ShippingTime] => SimpleXMLElement Object
+                                                (
+                                                    [@attributes] => Array
+                                                        (
+                                                            [minimumHours] => 24
+                                                            [maximumHours] => 48
+                                                            [availabilityType] => NOW
+                                                        )
+
+                                                )
+
+                                            [ListingPrice] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 17.82
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [Shipping] => SimpleXMLElement Object
+                                                (
+                                                    [Amount] => 0.00
+                                                    [CurrencyCode] => USD
+                                                )
+
+                                            [ShipsFrom] => SimpleXMLElement Object
+                                                (
+                                                    [Country] => SimpleXMLElement Object
+                                                        (
+                                                        )
+
+                                                    [State] => SimpleXMLElement Object
+                                                        (
+                                                        )
+
+                                                )
+
+                                            [IsFulfilledByAmazon] => false
+                                            [IsBuyBoxWinner] => false
+                                            [IsFeaturedMerchant] => true
+                                            [ShipsDomestically] => true
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+        )
+
+)

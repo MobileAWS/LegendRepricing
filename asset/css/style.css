@@ -1,0 +1,73 @@
+*{ margin:0px; padding:0px;
+}
+
+body {
+        padding-top: 20px;
+        padding-bottom: 40px;
+		background-color:#0066FF;
+      }
+
+:*focus{ outline:none;
+}
+.clear{ clear:both;
+}
+image{ border:none;
+}
+a{ text-decoration:none;
+}
+.header{margin:auto; background-color:#407A52; height:50px;
+}
+.maindiv{ width:700px; margin:auto; 
+}
+.dotted_bdr{ background:url(../images/dotted.jpg) repeat-x; height:2px; width:auto;}
+.image_01{ float:left; margin-left:120px; margin-top:10px;
+}
+.image_02{ float:left; margin-left:5px; margin-top:25px;
+}
+.right_div{ width:230px; float:right; margin-left:110px; margin-top:10px;
+}
+.sg_up{ background:url(../images/signup_twitter.jpg) repeat-x; height:38px; width:97px; border:1px solid #eaeaea; cursor:pointer; float:left;}
+
+.type2{ font:13px Arial, Helvetica, sans-serif;  color:#000000; font-weight:bold; width:50px; text-align:center; margin-left:23px; margin-top:3px; 
+}
+.lo_in{ background:url(../images/signup_twitter.jpg) repeat-x; height:23px; width:152px; cursor:pointer; float:left; margin-left:20px;}
+
+.type3{ font:13px Arial, Helvetica, sans-serif;  color:#000000; font-weight:bold; text-align:center; line-height:38px;
+}
+.dotted2_bdr{ background:url(../images/dotted.jpg) repeat-x; height:2px; width:auto; margin:auto; margin-top:10px;
+}
+
+.pageview_div{ width:700px; margin:auto; margin-top:15px;
+}
+
+.offset_d{ border:1px solid #CCCCCC; width:367px; margin:auto; padding:25px; 
+}
+.txt_d{ width:365px; padding:15px 10px;  
+}
+.text{ font:14px Verdana, Arial, Helvetica, sans-serif; color:#000000; float:left; font-weight:bold; margin-right:15px; margin-top:8px; width:135px; text-align:left;
+} 
+.input_button{ width:190px; height:32px; background:#FFFFFF; box-shadow:0 0 4px #000 inset; border:none; padding:0 5px 0 5px;
+}
+.submit_button{ width:80px; height:32px; border:none; cursor:pointer; float:right; border:1px solid #3178ac; color:#FFFFFF; font-size:15px;
+}
+#link{
+background:#0086FD;
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0.0, #034480), color-stop(1.0, #3d91e8));
+	background: -webkit-linear-gradient(top, #034480 0.0%, #3d91e8 100.0%);
+	background: -moz-linear-gradient(top, #034480 0.0%, #3d91e8 100.0%);
+	background: -ms-linear-gradient(top, #034480 0.0%, #3d91e8 100.0%);
+	background: -o-linear-gradient(top, #034480 0.0%, #3d91e8 100.0%);
+	background: linear-gradient(top, #034480 0.0%, #3d91e8 100.0%);	box-shadow: inset 0px 0px 3px #515151;}
+	
+#link:hover{
+background:#0086FD;
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0.0, #3d91e8), color-stop(1.0, #034480));
+	background: -webkit-linear-gradient(top, #3d91e8 0.0%, #034480 100.0%);
+	background: -moz-linear-gradient(top, #3d91e8 0.0%, #034480 100.0%);
+	background: -ms-linear-gradient(top, #3d91e8 0.0%, #034480 100.0%);
+	background: -o-linear-gradient(top, #3d91e8 0.0%, #034480 100.0%);
+	background: linear-gradient(top, #3d91e8 0.0%, #034480 100.0%);	box-shadow: inset 0px 0px 3px #515151;
+}
+
+
+

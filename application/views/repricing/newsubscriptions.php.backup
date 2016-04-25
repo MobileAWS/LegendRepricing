@@ -1,0 +1,143 @@
+<div class="container-fluid">     
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h2 class="panel-title"><b>Manage</b></h2>
+    </div>  
+    <br/>
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-md-2">
+          <ul class="nav nav-pills nav-stacked">
+            <li><a  href="<?php echo base_url("content/profiles");?>" >Profile</a></li>
+            <li class="active"><a  href="<?php echo base_url("content/subscriptions");?>">Subscription</a></li>
+            <li><a  href="<?php echo base_url("content/addons");?>" >Addons</a></li>
+          </ul>
+        </div>
+        <div class="col-md-9">
+          <div class="row">
+            <div class="col-md-3">        
+              <div class="panel panel-default">
+                <div class="panel-heading text-center">
+                  <p class="panel-title"><h4>Basic</h4></p>
+                </div>    
+                <div class="panel-heading text-center">
+                  <h2 class="panel-title"><b>$50/month</b></h2>
+                </div>   
+                <br/>
+                <div class="panel-body"> 
+                  <ul class="list-unstyled text-center">
+                    <li><b>Includes 10k Listings</b></li>
+                    <li><b>1 Marketplace</b></li>
+                    <li>Hourly Repricing</li>               
+                    <li>Standard Support</li>
+                    <li>Pre-Configured Strategies</li>
+                  </ul>
+                  <button type="button" class="btn btn-primary btn-lg btn-block">Upgrade</button>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">        
+              <div class="panel panel-default">
+                <div class="panel-heading text-center">
+                  <p class="panel-title"><h4>Plus</h4></p>
+                </div>    
+                <div class="panel-heading text-center">
+                  <h2 class="panel-title"><b>$100/month</b></h2>
+                </div>   
+                <br/>
+                <div class="panel-body"> 
+                  <ul class="list-unstyled text-center">
+                    <li><b>Includes 10k Listings</b></li>
+                    <li><b>1 Marketplace</b></li>
+                    <li>Hourly Repricing</li>               
+                    <li>Standard Support</li>
+                    <li>Pre-Configured Strategies</li>
+                  </ul>
+                  <button type="button" class="btn btn-primary btn-lg btn-block">Upgrade</button>
+                </div>
+              </div>
+            </div> 
+            <div class="col-md-3">        
+              <div class="panel panel-default">
+                <div class="panel-heading text-center">
+                  <p class="panel-title"><h4>Premium</h4></p>
+                </div>    
+                <div class="panel-heading text-center">
+                  <h2 class="panel-title"><b>$150/month</b></h2>
+                </div>   
+                <br/>
+                <div class="panel-body"> 
+                  <ul class="list-unstyled text-center">
+                    <li><b>Includes 10k Listings</b></li>
+                    <li><b>1 Marketplace</b></li>
+                    <li>Continous Repricing</li>               
+                    <li>Standard Support</li>
+                    <li>Pre-Configured Strategies</li>
+                  </ul>
+                  <button type="button" class="btn btn-primary btn-lg btn-block">Upgrade</button>
+                </div>
+              </div>
+            </div>                                    
+            <div class="col-md-3">        
+              <div class="panel panel-default">
+                <div class="panel-heading text-center">
+                  <p class="panel-title"><h4>Enterprise</h4></p>
+                </div>    
+                <div class="panel-heading text-center">
+                  <h2 class="panel-title"><b>$200/month</b></h2>
+                </div>   
+                <br/>
+                <div class="panel-body"> 
+                  <ul class="list-unstyled text-center">
+                    <li><b>Includes 10k Listings</b></li>
+                    <li><b>Unlimited  Marketplace</b></li>
+                    <li>Hourly Repricing</li>               
+                    <li>Standard Support</li>
+                    <li>Pre-Configured Strategies</li>
+                  </ul>
+                  <button type="button" class="btn btn-primary btn-lg btn-block">Upgrade</button>
+                </div>
+              </div>
+            </div>                                            
+          </div>
+          <br/>
+          <br/>
+          <br/>
+          <div class="row">
+            <div class="col-md-6">
+              <h3>Billing Info</h3>
+              <hr />         
+              <div class="row">
+                <div class="col-md-6">
+                  <label for="pwd">Credit card number</label>
+                </div>
+                <div class="col-md-6">
+                  <label for="pwd">Expiration Date:</label>
+                </div>
+              </div>
+            </div>            
+            <div class="col-md-6">
+              <h3>Subscription Summary
+              <hr />         
+              <div class="row">
+                <div class="col-md-6">
+                  <label for="pwd">Current Plan</label>
+                </div>
+                <div class="col-md-6">
+                  <label for="pwd">$100/month</label>
+                </div>
+              </div>
+            </div>                     
+          </div>            
+          <p>
+          <h3> Cancellation</h3>
+          
+          </p>
+
+          <hr />
+          <p>You can cancel the account by clicking here <a href="#" >close my account</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

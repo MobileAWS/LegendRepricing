@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+
+<title><?php echo $title;?> - Ultimate repricer for Amazon US marketplace</title>
+
+<link rel="shortcut icon" href="<?=base_url();?>/asset/images/favicon.ico" />
+<!-- Bootstrap Core CSS -->
+<link href="<?=base_url();?>/asset/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Custom CSS -->
+<link href="<?=base_url();?>/asset/css/business-casual.css" rel="stylesheet">
+
+<!-- Fonts -->
+<link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=Josefin+Slab:100,300,400,600,700,100italic,300italic,400italic,600italic,700italic" rel="stylesheet" type="text/css">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+<style>
+.modal-open .modal,a:focus{
+      outline:none!important
+}
+.jumbotron         
+{
+background: url('http://solidcommerce.com/wp-content/uploads/2015/01/Master-The-Marketplaces.jpg') no-repeat center center;
+background-size:cover;
+}
+.ajax-loader {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto; /* presto! */
+z-index: 100;
+}              
+</style>
+<script>    
+  $('.top-left').notify({
+    message: { text: 'Aw yeah, It works!' }
+  }).show(); 
+$(function() {
+// Highlight the active nav link.
+var url = window.location.pathname;
+var filename = url.substr(url.lastIndexOf('/') + 1);
+$('.navbar a[href$="' + filename + '"]').parent().addClass("active");
+});          
+$(document).ready(function(){  
+  $('a:not([href^="#"])').click(function() {
+    var attr=$(this).attr('target');
+    if (typeof attr == typeof undefined)
+    {
+    $('#loading').show();
+    }
+  }); 
+  $("#send_forgot").click(function() {
+    var datastring = $("#forgot_password").serialize();
+    $('#loading').show();
+    $.ajax({
+      url: "<?= site_url('home/sendMail_forgot');?>",
+        type: "POST",
+        data: datastring,
+        cache :false,
+          success : function(response) {
+            //alert("we need ti s enow iner html to dip111ly the tablee");
+            alert(response);
+            //  now make it sorttable
+            //var newTableObject = document.getElementById('dynamicsave');
+            //sorttable.makeSortable(newTableObject);
+          }
+      });
+     $('#loading').hide();
+  }); 
+});  
+    
+</script>
+
+</head>
+
+

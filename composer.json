@@ -1,0 +1,23 @@
+{
+    "name": "vivifyideas/amazon-mws",
+    "description": "Amazonmws",
+    "authors": [
+        {
+            "name": "Vivify Ideas",
+            "email": "contact@vivifyideas.com"
+        }
+    ],
+    "require": 
+    {
+        "choomz/amazon-mws-sdk": "dev-master",
+        "chrisbarr/amazon-sns-php-api":"dev-master",
+        "twinsen/mws-subscription-api": "dev-master",
+        "CEikermann/apiTalk": "dev-master" 
+    }                       ,
+                            "autoload": {
+                                                                "classmap": [ "MarketplaceWebServiceSellers/","MarketplaceWebService/" ,"FBAInventoryServiceMWS/"]
+
+                                                                                                        }
+
+
+}

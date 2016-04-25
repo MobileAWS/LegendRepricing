@@ -1,0 +1,241 @@
+ <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="legend pricing --amazon repricer">
+    <meta name="keyword" content="legend , repricer,amazon repricing ,  amazon buybox">
+    <meta name="author" content="legend pricing">
+    <style>
+
+.panel {
+    overflow: auto;
+}
+.ajax-loader {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto; /* presto! */
+z-index: 100;
+}
+.divider-vertical {
+height: 50px;
+margin: 0 9px;
+border-left: 1px solid #F2F2F2;
+border-right: 1px solid #FFF;
+}
+.custom {
+    background-color: #FFFAFA;
+}
+
+</style>
+
+
+      <!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
+        <!--[if lt IE 9]>
+
+              <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+                  <script src="assets/js/respond.min.js"></script>
+                      <script src="assets/css/ie6-8.css"></script>
+
+                        <![endif]-->
+
+                        <link rel="shortcut icon" href="<?=base_url();?>/asset/images/legend.svg" />
+    <link href="http://getbootstrap.com/2.3.2/assets/js/google-code-prettify/prettify.css" rel="stylesheet">
+
+<!--<link href="css/business-casual.css" rel="stylesheet">-->
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>    
+
+<link rel='stylesheet' id='rgs-css' href='http://solidcommerce.com/wp-content/themes/salient/css/rgs.css?ver=4.8.1' type='text/css' media='all'/>
+<!--<link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">   -->
+<link href="<?=base_url();?>/asset/css/retina.min.css" rel="stylesheet">   
+<link href="<?=base_url();?>/asset/css/bootstrap-notify.css" rel="stylesheet">   
+<link href="<?=base_url();?>/asset/css/styles/alert-blackgloss.css" rel="stylesheet">   
+<link href="<?=base_url();?>/asset/css/styles/alert-bangtidy.css" rel="stylesheet">   
+<!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>-->
+<link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css"></style>
+<link href="<?=base_url();?>/asset/css/dataTables.responsive.css" rel="stylesheet">   
+<link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
+<script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+<!--<script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+<script type="text/javascript" src="<?=base_url();?>/asset/js/datatables.responsive.js"></script>
+<script type="text/javascript" src="<?=base_url();?>/asset/js/bootstrap-notify.js"></script>
+
+<script>      
+$(function() {
+  // Highlight the active nav link.
+      var url = window.location.pathname;
+          var filename = url.substr(url.lastIndexOf('/') + 1);
+          $('.navbar a[href$="' + filename + '"]').parent().addClass("active");
+});
+jQuery(document).ready(function() {
+
+
+  $("button.shownextrow").click(function() { 
+      $(this).closest("tr").next().toggle();
+  });
+
+
+  $('a:not([href^="#"])').click(function() {
+   var attr=$(this).attr('target');
+   var id=$(this).attr('id');
+   if(typeof id== typeof undefined || id!="disable")
+   {
+    if (typeof attr == typeof undefined)
+    {
+    $('#loading').show();
+    }
+   }
+  });
+  $.fn.editable.defaults.mode = 'popup';
+  $('.xedit').editable();
+  $(document).on('click','.listing-load',function(e){
+//    $('#loading').show();
+  });
+  $(document).on('click','.editable-submit',function(e){
+    e.stopPropagation();
+    e.preventDefault();
+    var x = $(this).closest('td').children('span').attr('id');
+    var key = $(this).closest('td').children('span').attr('key');
+    var y = $('.input-sm').val();
+    var z = $(this).closest('td').children('span')
+      var myarray={};
+    myarray["key"]=key;
+    myarray["id"]=x;
+    myarray["value"]=y;
+    $('#loading').show();
+    $.ajax({
+      //  url: "process?key="+key+"&id="+x+"&value="+y,
+      url: "<?= site_url('content/process');?>",        
+          type: 'POST',
+          data: myarray,
+          success: function(s){
+            if(s == 'status'){
+              alert("Successfully changed...It may take a while to reflect the price change on amazon website");
+              $(z).html(y);}
+            else
+            {  
+              alert(s);
+            }
+//              if(s == 'error') {
+  //              alert('Error Processing your Request!');}
+          },
+            error: function(e){
+              alert('Error Processing your Request!!');
+}
+});
+      $('#loading').hide();
+      });
+});                    
+$(document).ready(function(){
+
+//  $('#button').button();
+
+  $('#listings_button').click(function() {
+    $(this).html('<img src="http://www.bba-reman.com/images/fbloader.gif" />');
+  });
+
+
+    $("#submit_profiles").click(function() {
+       if($('#mypassword').val()!=$('#mycpassword').val()){
+                alert('Password not matches');
+                       return false;
+                   }
+      var con=confirm("ARE U SURE SAVING INTO DATABASE ?");        
+      if(con)
+    { 
+      var datastring = $("#form_profiles").serialize();
+    {                   
+      $('#loading').show();
+      $.ajax({
+        url: "<?= site_url('content/save_profiles');?>",
+          type: "POST",
+          data: datastring,
+          cache :false,
+          success : function(response) {
+            //alert("we need ti s enow iner html to dip111ly the tablee");
+            alert(response);
+            //  now make it sorttable
+            //var newTableObject = document.getElementById('dynamicsave');
+            //sorttable.makeSortable(newTableObject);
+          }
+      });
+      $('#loading').hide();
+    }
+    }
+  });                 
+
+  // settings
+$("#submit_settings").click(function() {
+/*
+  if(!$('#semitime').val()  || !$('#semitwusername').val())
+  {
+    alert("oops empty data set");
+    return false;
+  }
+  if($('#semitime').val()>59)
+  {  
+    alert("Invalida data");
+    return  false;
+}
+ */     
+  var con=confirm("ARE U SURE SAVING INTO DATABASE ?");        
+  if(con)
+  {          
+    var datastring = $("#form_settings").serialize();
+  {                   
+      $('#loading').show();
+    $.ajax({
+      url: "<?= site_url('content/save_settings');?>",
+        type: "POST",
+        data: datastring,
+        cache :false,
+        success : function(response) {
+          //alert("we need ti s enow iner html to dip111ly the tablee");
+          alert(response);
+        }
+    });
+      $('#loading').hide();
+  }
+  }
+});                 
+
+// subscriptions
+$("#submit_subscriptions").click(function() {
+  
+
+  var con=confirm("Are you sure upgrading");        
+  if(con)
+  {
+    var datastring = $("#schsemiauto").serialize();
+  {                   
+      $('#loading').show();
+    $.ajax({
+      url: "<?= site_url('content/save_subscriptions');?>",
+        type: "POST",
+        data: datastring,
+        cache :false,
+        success : function(response) {
+          //alert("we need ti s enow iner html to dip111ly the tablee");
+          alert(response);
+        }
+    });
+      $('#loading').hide();
+  }
+  }
+});                 
+
+
+        $('#myTable').dataTable({  "iDisplayLength": 25, responsive: true});
+        });
+</script>
+</head>                                                           
+

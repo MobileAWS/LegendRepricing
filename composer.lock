@@ -1,0 +1,291 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "hash": "3022406197ca3c109a6e30530ea5953e",
+    "content-hash": "d275553c95e50e7cc97b49cb0da7c19d",
+    "packages": [
+        {
+            "name": "ceikermann/apitalk",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/CEikermann/apiTalk.git",
+                "reference": "3890530728258d0b11e26bcef46e06abd497aa56"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/CEikermann/apiTalk/zipball/3890530728258d0b11e26bcef46e06abd497aa56",
+                "reference": "3890530728258d0b11e26bcef46e06abd497aa56",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2",
+                "symfony/browser-kit": "2.1.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "apiTalk": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Christian Eikermann",
+                    "email": "christian@chrisdev.de",
+                    "homepage": "http://chrisdev.de/"
+                }
+            ],
+            "description": "A very simple PHP 5.3 library to send HTTP request to an API ",
+            "keywords": [
+                "http client"
+            ],
+            "time": "2012-04-02 20:16:46"
+        },
+        {
+            "name": "choomz/amazon-mws-sdk",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/choomz/amazon-mws-sdk.git",
+                "reference": "cdeef9d565b12265ec7d861097f18c202a601e3e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/choomz/amazon-mws-sdk/zipball/cdeef9d565b12265ec7d861097f18c202a601e3e",
+                "reference": "cdeef9d565b12265ec7d861097f18c202a601e3e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "search/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "include-path": [
+                "search/src/"
+            ],
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Valentin Ferriere",
+                    "email": "valentin.ferriere@gmail.com",
+                    "homepage": "http://www.v-labs.fr"
+                }
+            ],
+            "description": "Amazon MWS PHP SDK",
+            "keywords": [
+                "amazon",
+                "mws"
+            ],
+            "time": "2012-12-10 19:34:10"
+        },
+        {
+            "name": "chrisbarr/amazon-sns-php-api",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/chrisbarr/AmazonSNS-PHP-API.git",
+                "reference": "953504c4ca4c3723aef25c04ab223db28ff3903d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/chrisbarr/AmazonSNS-PHP-API/zipball/953504c4ca4c3723aef25c04ab223db28ff3903d",
+                "reference": "953504c4ca4c3723aef25c04ab223db28ff3903d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "AmazonSNS": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Chris Barr",
+                    "email": "chris.barr@ntlworld.com"
+                }
+            ],
+            "description": "Amazon SNS PHP API",
+            "homepage": "https://github.com/chrisbarr/AmazonSNS-PHP-API",
+            "time": "2015-11-01 14:00:39"
+        },
+        {
+            "name": "symfony/browser-kit",
+            "version": "v2.1.13",
+            "target-dir": "Symfony/Component/BrowserKit",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/browser-kit.git",
+                "reference": "0bb8f07107a2911db0fe49c39f96b5018e5ab678"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/browser-kit/zipball/0bb8f07107a2911db0fe49c39f96b5018e5ab678",
+                "reference": "0bb8f07107a2911db0fe49c39f96b5018e5ab678",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3",
+                "symfony/dom-crawler": "2.1.*"
+            },
+            "require-dev": {
+                "symfony/css-selector": "2.1.*",
+                "symfony/process": "2.1.*"
+            },
+            "suggest": {
+                "symfony/process": "2.1.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Symfony\\Component\\BrowserKit": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com",
+                    "homepage": "http://fabien.potencier.org",
+                    "role": "Lead Developer"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony BrowserKit Component",
+            "homepage": "http://symfony.com",
+            "time": "2013-04-29 20:22:06"
+        },
+        {
+            "name": "symfony/dom-crawler",
+            "version": "v2.1.13",
+            "target-dir": "Symfony/Component/DomCrawler",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/dom-crawler.git",
+                "reference": "bedfd7eb44e3b1224d1e18335d2e36bbbed26cbe"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/bedfd7eb44e3b1224d1e18335d2e36bbbed26cbe",
+                "reference": "bedfd7eb44e3b1224d1e18335d2e36bbbed26cbe",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "symfony/css-selector": "2.1.*"
+            },
+            "suggest": {
+                "symfony/css-selector": "2.1.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Symfony\\Component\\DomCrawler": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com",
+                    "homepage": "http://fabien.potencier.org",
+                    "role": "Lead Developer"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony DomCrawler Component",
+            "homepage": "http://symfony.com",
+            "time": "2013-05-16 00:06:15"
+        },
+        {
+            "name": "twinsen/mws-subscription-api",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/EliasKotlyar/mws-subscription-api.git",
+                "reference": "7494003e55059abab0703943a63fa25b827eb688"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/EliasKotlyar/mws-subscription-api/zipball/7494003e55059abab0703943a63fa25b827eb688",
+                "reference": "7494003e55059abab0703943a63fa25b827eb688",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GNU3"
+            ],
+            "authors": [
+                {
+                    "name": "Elias Kotlyar",
+                    "email": "elias.kotlyar@gmail.com"
+                }
+            ],
+            "description": "Amazon MWS Subscription API with Composer integration",
+            "homepage": "https://github.com/EliasKotlyar/mws-subscription-api",
+            "keywords": [
+                "amazon",
+                "api",
+                "mws",
+                "subscription"
+            ],
+            "time": "2015-07-09 21:54:50"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "choomz/amazon-mws-sdk": 20,
+        "chrisbarr/amazon-sns-php-api": 20,
+        "twinsen/mws-subscription-api": 20,
+        "ceikermann/apitalk": 20
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="">
+<title>Legend Repricing</title>
+<link href="<?=base_url();?>/asset/css_d/default.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" language="javascript" src="<?=base_url();?>/asset/js_d/jquery.min.js"></script>
+</head>
+<body class="innerPage">
+<header id="home">
+	<div id="navigation-bar">
+		<div class="container">
+			<h1 id="logo"><a href="#" title="Legend Repricing">Legend Repricing</a></h1>
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"><span class="glyphicon glyphicon-align-justify"></span> Menu</button>
+			</div>
+			<div class="navbar-collapse collapse">
+				<ul class="nav navbar-nav navigation">
+					<li class="active"><a href="#" title="Listings"><span>Listings</span></a></li>
+                    <li><a href="<?=base_url();?>/content/subscriptions" title="Subscriptions"><span>Subscriptions</span></a></li>
+					<li><a href="#" title="Profiles"><span>Profiles</span></a></li>
+					<li><a href="#" title="Settings"><span>Settings</span></a></li>
+          <li><a href="#" title="Link eBay and Amazon FBA"><span>Link eBay and Amazon FBA</span></a></li>
+          <li><a href="#" title="Reports"><span>Reports</span></a></li>
+          <li><a href="#" title="Activity"><span>Activity</span></a></li>					
+				</ul>
+			</div>
+		</div>
+	</div>
+</header>
+<article>
+	<div class="top-header">
+	<ul class="list-welcomeAdmin">
+		<li><a href="#" title="login">Hi, akshay_agarwal2012@yahoo.com</a></li>
+        <li><a title="Logout" href="<?=base_url();?>logout" class="btn-logout btn">LOGOUT <i class="fa fa-sign-out"></i>
+</a></li>
+	</ul>
+	<span class="box-search">
+		<input type="submit" value="Search" class="btn-search"><i class="fa fa-search"></i>
+		<input type="text" class="input-header" title="Search" placeholder="Search">
+    <input type="submit" class="btn btn-submit" title="Submit" value="Submit"/>
+	</span>	
+</div>	
+	<div class="container">	
+<div id="content">
+		<div class="content">
+			<h1>
+					<div class="btn-setAction">	
+						<div class="btn-group">
+							<button title="Action" type="button" class="dropdown-toggle btn" data-toggle="dropdown">
+								 Action <i class="fa fa-angle-down"></i>
+							</button>
+							<ul class="dropdown-menu">
+								<li><a href="#">Dropdown link</a></li>
+								<li><a href="#">Dropdown link</a></li>
+							</ul>
+						</div>		
+						
+							<div class="btn-group">
+							<button title="Listing Views " type="button" class="dropdown-toggle btn" data-toggle="dropdown">
+								 Listing Views <i class="fa fa-angle-down"></i>
+							</button>
+							<ul class="dropdown-menu">
+								<li><a href="#">Dropdown link</a></li>
+								<li><a href="#">Dropdown link</a></li>
+							</ul>
+						</div>
+					</div>
+					All listings
+			</h1>
+			<div class="table-box">
+				<div class="content show-entry">
+							<h1>
+								<div class="fright"><span class="box-search">
+								<input type="submit" value="Search" class="btn-search"><i class="fa fa-search"></i>
+								<input type="text" class="input-header" title="Search" placeholder="Search">
+								</span>
+						</div>
+						 Show <input type="number" title="number" class="input-show"/> <span>Entries</span></h1>
+					</div>
+				<div class="table-responsive">
+					<table class="table">
+						<thead>
+								<tr>
+										<th><input type="checkbox" title=""/> <i class="fa fa-caret-up"></i></th>
+										<th>Item name</th>
+										<th>Price</th>
+										<th>Shipping</th>
+										<th>Qty</th>
+										<th>Condition</th>
+										<th>Status</th>
+										<th>Beatby</th>
+										<th>loren Ispam</th>
+										<th>Edit</th>
+								</tr>
+						 </thead>
+						 <tbody>		
+							<tr>
+									<td><input type="checkbox" title=""/></td>
+									<td>Grid-It Organizer,  Blue (CPG8BL)</td>
+									<td class="price">19.99</td>
+									<td>Notset</td>
+									<td>0</td>
+									<td>Notset</td>
+									<td>Active</td>
+									<td>Formula</td>
+									<td><a href="#" title=""><i class="fa fa-times"></i></a></td>
+									<td><i class="fa fa-pencil-square-o"></i></td>
+							</tr>
+							<tr>
+									<td><input type="checkbox" title=""/></td>
+									<td>Grid-It Organizer,  Blue (CPG8BL)</td>
+									<td class="price">19.99</td>
+									<td>Notset</td>
+									<td>0</td>
+									<td>Notset</td>
+									<td>Active</td>
+									<td>Formula</td>
+									<td><a href="#" title=""><i class="fa fa-check"></i></a></td>
+									<td><i class="fa fa-pencil-square-o"></i></td>
+							</tr>
+							<tr>
+									<td><input type="checkbox" title=""/></td>
+									<td>Grid-It Organizer,  Blue (CPG8BL)</td>
+									<td class="price">19.99</td>
+									<td>Notset</td>
+									<td>0</td>
+									<td>Notset</td>
+									<td>Active</td>
+									<td>Formula</td>
+									<td><a href="#" title=""><i class="fa fa-times"></i></a></td>
+									<td><i class="fa fa-pencil-square-o"></i></td>
+							</tr>
+							<tr>
+									<td><input type="checkbox" title=""/></td>
+									<td>Grid-It Organizer,  Blue (CPG8BL)</td>
+									<td class="price">19.99</td>
+									<td>Notset</td>
+									<td>0</td>
+									<td>Notset</td>
+									<td>Active</td>
+									<td>Formula</td>
+									<td><a href="#" title=""><i class="fa fa-times"></i></a></td>
+									<td><i class="fa fa-pencil-square-o"></i></td>
+							</tr>
+							<tr>
+									<td><input type="checkbox" title=""/></td>
+									<td>Grid-It Organizer,  Blue (CPG8BL)</td>
+									<td class="price">19.99</td>
+									<td>Notset</td>
+									<td>0</td>
+									<td>Notset</td>
+									<td>Active</td>
+									<td>Formula</td>
+									<td><a href="#" title=""><i class="fa fa-times"></i></a></td>
+									<td><i class="fa fa-pencil-square-o"></i></td>
+							</tr>
+							<tr>
+									<td><input type="checkbox" title=""/></td>
+									<td>Grid-It Organizer,  Blue (CPG8BL)</td>
+									<td class="price">19.99</td>
+									<td>Notset</td>
+									<td>0</td>
+									<td>Notset</td>
+									<td>Active</td>
+									<td>Formula</td>
+									<td><a href="#" title=""><i class="fa fa-times"></i></a></td>
+									<td><i class="fa fa-pencil-square-o"></i></td>
+							</tr>
+							<tr>
+									<td><input type="checkbox" title=""/></td>
+									<td>Grid-It Organizer,  Blue (CPG8BL)</td>
+									<td class="price">19.99</td>
+									<td>Notset</td>
+									<td>0</td>
+									<td>Notset</td>
+									<td>Active</td>
+									<td>Formula</td>
+									<td><a href="#" title=""><i class="fa fa-times"></i></a></td>
+									<td><i class="fa fa-pencil-square-o"></i></td>
+							</tr>
+							<tr>
+									<td><input type="checkbox" title=""/></td>
+									<td>Grid-It Organizer,  Blue (CPG8BL)</td>
+									<td class="price">19.99</td>
+									<td>Notset</td>
+									<td>0</td>
+									<td>Notset</td>
+									<td>Active</td>
+									<td>Formula</td>
+									<td><a href="#" title=""><i class="fa fa-times"></i></a></td>
+									<td><i class="fa fa-pencil-square-o"></i></td>
+							</tr>	
+						</tbody>	
+					</table>
+				</div>	
+			</div>
+			<div class="box-pagination">
+				<div class="showing-entry">Showing 1 to 25 of 27 entries</div>		
+					<ul class="pagination">
+						<li><a title="Prev" href="#" class="btn-prv">< Prev</a></li>
+						<li class="current"><a title="1" href="#">1</a></li>
+						<li><a title="2" href="#">2</a></li>
+						<li><a title="3" href="#">3</a></li>
+						<li><a title="4" href="#">4</a></li>
+						<li><a title="5" href="#">5</a></li>
+						<li><a title="6" href="#">6</a></li>				
+						<li><a title="Next" href="#" class="btn-prv">Next ></a></li>
+					</ul>				
+				</div>
+			<div class="clearF"></div>
+		</div><!--Content Closing-->
+	</div><!--Content Closing-->
+</div>	
+</article>
+<footer>
+	<div class="container">
+		<div class="btn-backTotop"> <a href="#home" title="Back To Top" class="scroll"><i class="fa fa-chevron-up"></i>top</a> </div>
+		<div class="row box-footer">
+			<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5 box-aboutUs">
+				<h6>legend repricing</h6>
+				<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</p>
+			</div>
+			<div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+				<h5>Lorem</h5>
+				<ul class="list-footermenu">
+					<li><a href="#" title="About Us">About us</a></li>
+					<li><a href="#" title="Ebay">Ebay</a></li>
+					<li><a href="#" title="Web analytics">Web Analytics</a></li>
+					<li><a href="#" title="Blog">Blog</a></li>
+					<li><a href="#" title="Amazon">Amazon</a></li>
+					<li><a href="#" title="Rakuten">Rakuten</a></li>
+					<li><a href="#" title="Magento">Magento</a></li>
+					<li><a href="#" title="Product Help">Product Help</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="footer-copyright">
+		<div class="container">
+			<p>copyright &copy; Legend Repricing 2015</p>
+		</div>
+	</div>
+	</div>
+</footer>
+<script type="text/javascript" language="javascript" src="<?=base_url();?>/asset/js_s/jquery.flexslider-min.js"></script> 
+<script type="text/javascript" language="javascript" src="<?=base_url();?>/asset/js_d/bootstrap/bootstrap.min.js"></script> 
+<script type="text/javascript" language="javascript" src="<?=base_url();?>/asset/js_d/html5shiv.js"></script> 
+<script type="text/javascript" language="javascript" src="<?=base_url();?>/asset/js_d/custom.js"></script>
+</body>
+</html>

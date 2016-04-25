@@ -1,0 +1,2152 @@
+<?php
+#ignore_user_abort(false);
+define ('DATE_FORMAT', 'Y-m-d\TH:i:s\Z');
+
+//define ('MERCHANT_ID', 'A112ZN3BG4B0O0');
+define('AWS_ACCESS_KEY_ID', 'AKIAJWQSXIPAKQWURUBQ');
+define('AWS_SECRET_ACCESS_KEY', 'dr13U/5uVl2DWth5VUd0WAAQ71dy3oSVwmEvqFZu');
+
+define('APPLICATION_NAME', '<Your Application Name>');
+define('APPLICATION_VERSION', '<Your Application Version or Build Number>');
+
+
+
+define ('MARKETPLACE_ID', 'ATVPDKIKX0DER');
+
+
+class Testing extends CI_Controller
+{ 
+  private static $appname="";
+  private static $CI;
+  private static  $appversion="";
+  private static $marketplaceIdArray = array();
+  private $gearman_server='localhost';
+  private $gearman_port='4730';                          
+  public function __construct(){
+
+    parent::__construct();
+    if(php_sapi_name() !== 'cli') {
+      show_404();
+    }
+    self::$appversion="sversion";
+    self::$appname="legendpricing";   
+    self::$marketplaceIdArray = array("Id" => array(trim("ATVPDKIKX0DER"))); 
+    self::$CI =& get_instance();               
+
+    log_message('info',"constructor");    
+  }     
+  static public function invokeRequestReport(MarketplaceWebService_Interface $service, $request) 
+  {
+      try {
+              $response = $service->requestReport($request);
+              
+//                echo ("Service Response\n");
+ //               echo ("=============================================================================\n");
+
+   //             echo("        RequestReportResponse\n");
+                if ($response->isSetRequestReportResult()) { 
+     //               echo("            RequestReportResult\n");
+                    $requestReportResult = $response->getRequestReportResult();
+                    
+                    if ($requestReportResult->isSetReportRequestInfo()) {
+                        
+                        $reportRequestInfo = $requestReportResult->getReportRequestInfo();
+       //                   echo("                ReportRequestInfo\n");
+                          if ($reportRequestInfo->isSetReportRequestId()) 
+                          {
+              //                echo("                    ReportRequestId\n");
+//                              echo("                        " . $reportRequestInfo->getReportRequestId() . "\n");
+                              return $reportRequestInfo->getReportRequestId();
+                          }
+                          if ($reportRequestInfo->isSetReportType()) 
+                          {
+         //                     echo("                    ReportType\n");
+           //                   echo("                        " . $reportRequestInfo->getReportType() . "\n");
+                          }
+                          if ($reportRequestInfo->isSetStartDate()) 
+                          {
+             //                 echo("                    StartDate\n");
+              ///                echo("                        " . $reportRequestInfo->getStartDate()->format(DATE_FORMAT) . "\n");
+                          }
+                          if ($reportRequestInfo->isSetEndDate()) 
+                          {
+                //              echo("                    EndDate\n");
+                 //             echo("                        " . $reportRequestInfo->getEndDate()->format(DATE_FORMAT) . "\n");
+                          }
+                          if ($reportRequestInfo->isSetSubmittedDate()) 
+                          {
+                   //           echo("                    SubmittedDate\n");
+                     //         echo("                        " . $reportRequestInfo->getSubmittedDate()->format(DATE_FORMAT) . "\n");
+                          }
+                          if ($reportRequestInfo->isSetReportProcessingStatus()) 
+                          {
+                     //         echo("                    ReportProcessingStatus\n");
+                      //        echo("                        " . $reportRequestInfo->getReportProcessingStatus() . "\n");
+                          }
+                      }
+                } 
+                if ($response->isSetResponseMetadata()) { 
+//                    echo("            ResponseMetadata\n");
+                    $responseMetadata = $response->getResponseMetadata();
+                    if ($responseMetadata->isSetRequestId()) 
+                    {
+  //                      echo("                RequestId\n");
+   //                     echo("                    " . $responseMetadata->getRequestId() . "\n");
+                    }
+                } 
+
+     //           echo("            ResponseHeaderMetadata: " . $response->getResponseHeaderMetadata() . "\n");
+      } catch (MarketplaceWebService_Exception $ex) {
+        log_message('error',$ex->getMessage());
+       /*
+         echo("Caught Exception: " . $ex->getMessage() . "\n");
+         echo("Response Status Code: " . $ex->getStatusCode() . "\n");
+         echo("Error Code: " . $ex->getErrorCode() . "\n");
+         echo("Error Type: " . $ex->getErrorType() . "\n");
+         echo("Request ID: " . $ex->getRequestId() . "\n");
+         echo("XML: " . $ex->getXML() . "\n");
+         echo("ResponseHeaderMetadata: " . $ex->getResponseHeaderMetadata() . "\n");
+        */
+     }
+ }
+ 
+
+                                                                                
+
+ static public function getnewreport($job)
+{
+  //  global $marketplaceIdArray;    
+    /// we have sellerid , mkpid , and token
+    $data = unserialize($job->workload());
+   log_message('info',print_r($data,TRUE));
+  log_message('info','printing the secret key');
+    log_message('info',AWS_SECRET_ACCESS_KEY);
+    log_message('info','printing the secret key11');         
+$marketplaceIdArray = array("Id" => array(trim("ATVPDKIKX0DER")));
+$serviceUrl = "https://mws.amazonservices.com";
+// United Kingdom
+//$serviceUrl = "https://mws.amazonservices.co.uk";
+// Germany
+//$serviceUrl = "https://mws.amazonservices.de";
+// France
+//$serviceUrl = "https://mws.amazonservices.fr";
+// Italy
+//$serviceUrl = "https://mws.amazonservices.it";
+// Japan
+//$serviceUrl = "https://mws.amazonservices.jp";
+// China
+//$serviceUrl = "https://mws.amazonservices.com.cn";
+// Canada
+//$serviceUrl = "https://mws.amazonservices.ca";
+// India
+//$serviceUrl = "https://mws.amazonservices.in";
+
+$config = array (
+  'ServiceURL' => $serviceUrl,
+  'ProxyHost' => null,
+  'ProxyPort' => -1,
+  'MaxErrorRetry' => 3,
+);
+
+/************************************************************************
+ * Instantiate Implementation of MarketplaceWebService
+ * 
+ * AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY constants 
+ * are defined in the .config.inc.php located in the same 
+ * directory as this sample
+ ***********************************************************************/
+ $service = new MarketplaceWebService_Client(
+     AWS_ACCESS_KEY_ID, 
+     AWS_SECRET_ACCESS_KEY, 
+     $config,
+     APPLICATION_NAME,
+     APPLICATION_VERSION);
+ 
+/************************************************************************
+ * Uncomment to try out Mock Service that simulates MarketplaceWebService
+ * responses without calling MarketplaceWebService service.
+ *
+ * Responses are loaded from local XML files. You can tweak XML files to
+ * experiment with various outputs during development
+ *
+ * XML files available under MarketplaceWebService/Mock tree
+ *
+ ***********************************************************************/
+ // $service = new MarketplaceWebService_Mock();
+
+/************************************************************************
+ * Setup request parameters and uncomment invoke to try out 
+ * sample for Report Action
+ ***********************************************************************/
+// Constructing the MarketplaceId array which will be passed in as the the MarketplaceIdList 
+// parameter to the RequestReportRequest object.
+//$marketplaceIdArray = array("Id" => array('<Marketplace_Id_1>','<Marketplace_Id_2>'));
+//$marketplaceIdArray = array("Id" => array('ATVPDKIKX0DER'));
+
+ // @TODO: set request. Action can be passed as MarketplaceWebService_Model_ReportRequest
+ // object or array of parameters
+ 
+// $parameters = array (
+//   'Merchant' => MERCHANT_ID,
+//   'MarketplaceIdList' => $marketplaceIdArray,
+//   'ReportType' => '_GET_MERCHANT_LISTINGS_DATA_',
+//   'ReportOptions' => 'ShowSalesChannel=true',
+//   'MWSAuthToken' => '<MWS Auth Token>', // Optional
+// );
+ 
+// $request = new MarketplaceWebService_Model_RequestReportRequest($parameters);
+ 
+ $request = new MarketplaceWebService_Model_RequestReportRequest();
+ $request->setMarketplaceIdList($marketplaceIdArray);
+ $request->setMerchant($data['sellerid']);
+ $request->setReportType('_GET_MERCHANT_LISTINGS_DATA_');
+ $request->setMWSAuthToken($data['mwsauthtoken']); // Optional
+
+// Using ReportOptions
+// $request->setReportOptions('ShowSalesChannel=true');
+ 
+ log_message('info',self::invokeRequestReport($service, $request));  
+ while(TRUE)
+    {
+     log_message('info',"Sleepin for 120 seconds for ".$data['sellerid']);
+      $id=self::getreportlist($data['sellerid']);   
+      if($id=="notfound")
+      {
+        sleep(120);
+        continue;
+      }
+      self::getreport($data['sellerid'],$id);
+      log_message('info',"ok  done populatin the mysql");
+      // now again refrehs the listing
+      // sleep(300);
+      // $res=self::invokeRequestReport();
+      break;
+      //now udate the mysql tabel
+
+
+    }                                    
+ }
+
+ static public function send_email($job)
+ {        
+   $data = unserialize($job->workload());        
+   self::$CI =& get_instance();               
+   self::$CI->email->set_newline("\r\n");
+   self::$CI->email->from('jimmycarter256@gmail.com'); // change it to yours
+   self::$CI->email->to($data['to']);// change it to yours
+   self::$CI->email->subject($data['subject']);
+   self::$CI->email->message($data['message']); 
+   if(self::$CI->email->send())
+   {
+     log_message('info',print_r($data,TRUE));
+   }
+   else
+   {
+     //shal we rrety
+     log_message('info','Failed to send the email');
+   }
+ }
+ static public function dynamic_report($job)
+ {
+   //  global $marketplaceIdArray;    
+   /// we have sellerid , mkpid , and token
+   $data = unserialize($job->workload());
+   log_message('info',print_r($data,TRUE));
+   log_message('info','printing the secret key');
+   log_message('info',AWS_SECRET_ACCESS_KEY);
+   log_message('info','printing the secret key11');         
+   $marketplaceIdArray = array("Id" => array(trim("ATVPDKIKX0DER")));
+   $serviceUrl = "https://mws.amazonservices.com";
+   // United Kingdom
+   //$serviceUrl = "https://mws.amazonservices.co.uk";
+   // Germany
+   //$serviceUrl = "https://mws.amazonservices.de";
+   // France
+//$serviceUrl = "https://mws.amazonservices.fr";
+// Italy
+//$serviceUrl = "https://mws.amazonservices.it";
+// Japan
+//$serviceUrl = "https://mws.amazonservices.jp";
+// China
+//$serviceUrl = "https://mws.amazonservices.com.cn";
+// Canada
+//$serviceUrl = "https://mws.amazonservices.ca";
+// India
+//$serviceUrl = "https://mws.amazonservices.in";
+
+$config = array (
+  'ServiceURL' => $serviceUrl,
+  'ProxyHost' => null,
+  'ProxyPort' => -1,
+  'MaxErrorRetry' => 3,
+);
+
+/************************************************************************
+ * Instantiate Implementation of MarketplaceWebService
+ * 
+ * AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY constants 
+ * are defined in the .config.inc.php located in the same 
+ * directory as this sample
+ ***********************************************************************/
+ $service = new MarketplaceWebService_Client(
+     AWS_ACCESS_KEY_ID, 
+     AWS_SECRET_ACCESS_KEY, 
+     $config,
+     APPLICATION_NAME,
+     APPLICATION_VERSION);
+ 
+/************************************************************************
+ * Uncomment to try out Mock Service that simulates MarketplaceWebService
+ * responses without calling MarketplaceWebService service.
+ *
+ * Responses are loaded from local XML files. You can tweak XML files to
+ * experiment with various outputs during development
+ *
+ * XML files available under MarketplaceWebService/Mock tree
+ *
+ ***********************************************************************/
+ // $service = new MarketplaceWebService_Mock();
+
+/************************************************************************
+ * Setup request parameters and uncomment invoke to try out 
+ * sample for Report Action
+ ***********************************************************************/
+// Constructing the MarketplaceId array which will be passed in as the the MarketplaceIdList 
+// parameter to the RequestReportRequest object.
+//$marketplaceIdArray = array("Id" => array('<Marketplace_Id_1>','<Marketplace_Id_2>'));
+//$marketplaceIdArray = array("Id" => array('ATVPDKIKX0DER'));
+
+ // @TODO: set request. Action can be passed as MarketplaceWebService_Model_ReportRequest
+ // object or array of parameters
+ 
+// $parameters = array (
+//   'Merchant' => MERCHANT_ID,
+//   'MarketplaceIdList' => $marketplaceIdArray,
+//   'ReportType' => '_GET_MERCHANT_LISTINGS_DATA_',
+//   'ReportOptions' => 'ShowSalesChannel=true',
+//   'MWSAuthToken' => '<MWS Auth Token>', // Optional
+// );
+ 
+// $request = new MarketplaceWebService_Model_RequestReportRequest($parameters);
+ 
+ $request = new MarketplaceWebService_Model_RequestReportRequest();
+ $request->setMarketplaceIdList($marketplaceIdArray);
+ $request->setMerchant($data['sellerid']);
+ $request->setReportType('_GET_MERCHANT_LISTINGS_DATA_');
+ $request->setMWSAuthToken($data['mwsauthtoken']); // Optional
+
+// Using ReportOptions
+// $request->setReportOptions('ShowSalesChannel=true');
+ 
+// log_message('error',self::invokeRequestReport($service, $request));  
+ $check_id=self::invokeRequestReport($service, $request);  
+ while(TRUE)
+    {
+     log_message('info',"Dynamic Sleepin for 120 seconds for ".$data['sellerid']);
+      $id=self::getreportlist($data['sellerid'],$check_id);   
+      if($id=="notfound")
+      {
+        sleep(120);
+        continue;
+      }
+      self::getreport($data['sellerid'],$id);
+      log_message('info',"ok  done populatin the mysql");
+      // now again refrehs the listing
+      // sleep(300);
+      // $res=self::invokeRequestReport();
+      break;
+      //now udate the mysql tabel
+
+
+    }                                    
+ }
+    
+  static public function pricemap_report($job)
+ {
+   return true;
+   //  global $marketplaceIdArray;    
+   /// we have sellerid , mkpid , and token
+   $data = unserialize($job->workload());
+   log_message('info',print_r($data,TRUE));
+   log_message('info','printing the secret key');
+   log_message('info',AWS_SECRET_ACCESS_KEY);
+   log_message('info','printing the secret key11');         
+   $marketplaceIdArray = array("Id" => array(trim("ATVPDKIKX0DER")));
+   $serviceUrl = "https://mws.amazonservices.com";
+ 
+$config = array (
+  'ServiceURL' => $serviceUrl,
+  'ProxyHost' => null,
+  'ProxyPort' => -1,
+  'MaxErrorRetry' => 3,
+);
+
+ $service = new MarketplaceWebService_Client(
+     AWS_ACCESS_KEY_ID, 
+     AWS_SECRET_ACCESS_KEY, 
+     $config,
+     APPLICATION_NAME,
+     APPLICATION_VERSION);
+ 
+/************************************************************************
+ * Uncomment to try out Mock Service that simulates MarketplaceWebService
+ * responses without calling MarketplaceWebService service.
+ *
+ * Responses are loaded from local XML files. You can tweak XML files to
+ * experiment with various outputs during development
+ *
+ * XML files available under MarketplaceWebService/Mock tree
+ *
+ ***********************************************************************/
+ // $service = new MarketplaceWebService_Mock();
+
+/************************************************************************
+ * Setup request parameters and uncomment invoke to try out 
+ * sample for Report Action
+ ***********************************************************************/
+// Constructing the MarketplaceId array which will be passed in as the the MarketplaceIdList 
+// parameter to the RequestReportRequest object.
+//$marketplaceIdArray = array("Id" => array('<Marketplace_Id_1>','<Marketplace_Id_2>'));
+//$marketplaceIdArray = array("Id" => array('ATVPDKIKX0DER'));
+
+ // @TODO: set request. Action can be passed as MarketplaceWebService_Model_ReportRequest
+ // object or array of parameters
+ 
+// $parameters = array (
+//   'Merchant' => MERCHANT_ID,
+//   'MarketplaceIdList' => $marketplaceIdArray,
+//   'ReportType' => '_GET_MERCHANT_LISTINGS_DATA_',
+//   'ReportOptions' => 'ShowSalesChannel=true',
+//   'MWSAuthToken' => '<MWS Auth Token>', // Optional
+// );
+ 
+// $request = new MarketplaceWebService_Model_RequestReportRequest($parameters);
+ 
+ $request = new MarketplaceWebService_Model_RequestReportRequest();
+ $request->setMarketplaceIdList($marketplaceIdArray);
+ $request->setMerchant($data['sellerid']);
+ $request->setReportType('_GET_MERCHANT_LISTINGS_DATA_');
+ $request->setMWSAuthToken($data['mwsauthtoken']); // Optional
+
+// Using ReportOptions
+// $request->setReportOptions('ShowSalesChannel=true');
+ 
+// log_message('error',self::invokeRequestReport($service, $request));  
+ $check_id=self::invokeRequestReport($service, $request);  
+    {
+      $id=self::getreportlist($data['sellerid'],$check_id);   
+      self::getreport($data['sellerid'],$id);
+      log_message('info',"ok  done populating the price map  the mysql");
+    }                                    
+ } 
+ 
+
+
+
+
+
+  public function printme()
+  {  
+    if(!$this->input->is_cli_request())
+    {
+      log_message('info',"createamazonupdate_workers my only be accessed from the command line");
+      return;
+    }
+  }
+  static public function getreport($sellerid,$reportid)
+  {     
+    log_message('info',"Actually getting the csv file");
+    $serviceUrl="https://mws.amazonservices.com";
+    $config = array (
+      'ServiceURL' => $serviceUrl,
+      'ProxyHost' => null,
+      'ProxyPort' => -1,
+      'MaxErrorRetry' => 3
+    );
+
+//    $awskey='AKIAIPGAVOI4KG2HPRZA';
+  ///  $secret='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';
+    $service = new  MarketplaceWebService_Client(AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY,$config,self::$appname,self::$appversion);     
+    $request = new MarketplaceWebService_Model_GetReportRequest();
+    $request->setMerchant($sellerid);
+    $request->setReport(@fopen('php://memory', 'rw+'));
+    $request->setReportId(''.$reportid);
+    self::$CI =& get_instance();               
+    $log_array=self::$CI->db->get_where("user_settings",array("sellerid"=>$sellerid))->row_array();
+    $request->setMWSAuthToken($log_array['mwsauthtoken']); // Optional
+    self::invokeGetReport($sellerid,$service, $request);        
+
+  } 
+
+  static public function update_on_new($sellerid, $sku)
+  {
+    self::$CI =& get_instance();               
+    $log_array=self::$CI->db->get_where("user_listings",array("sellerid"=>$sellerid,"sku"=>$sku))->row_array();
+    if($log_array)
+    {
+      $okthen=self::$CI->db->escape($log_array['last_modified']);
+      $diff=self::$CI->db->query("select TIMESTAMPDIFF(MINUTE,".$okthen.",NOW()) as mydiff")->row_array();
+      log_message('info',"Currently checking ".$sellerid.$sku);
+      if($diff['mydiff']>=10)
+      {
+        log_message('info',"Safe to update then".$sellerid.$sku);
+        return TRUE;
+      }
+        log_message('info',"Un Safe to update then".$sellerid.$sku);
+      return FALSE;
+    }
+    else
+    {
+      return TRUE;
+    }                                
+  }    
+
+  static public function invokeGetCompetitivePricingForSKU(MarketplaceWebServiceProducts_Interface $service, $request
+  ,array &$myarray)
+  {
+   log_message('info',"inside invokeGetCompetitivePricingForSKU");
+      try {
+        $response = $service->GetCompetitivePricingForSKU($request);
+
+        $dom = new DOMDocument();
+        $dom->loadXML($response->toXML());
+        $dom->preserveWhiteSpace = false;
+        $dom->formatOutput = true;   
+        $type= $dom->saveXML();
+        $xml=simplexml_load_string($response->toXML());
+        foreach($xml->GetCompetitivePricingForSKUResult as $prices)
+        {
+          $sku= trim($prices->attributes()->SellerSKU);
+          $status= trim($prices->attributes()->status);
+          if($status=="Success")
+          {
+            foreach($prices->Product->CompetitivePricing->CompetitivePrices->CompetitivePrice as $cprice)
+            {
+              // attributes 
+              if( strcasecmp(trim($cprice->attributes()->condition),$myarray[$sku]['condition'])==0 &&   strcasecmp(trim($cprice->attributes()->subcondition),$myarray[$sku]['subcondition'])==0)
+              {
+                //store the values 
+                $bb_status= trim($cprice->attributes()->belongsToRequester);
+                $bb_price= trim($cprice->Price->LandedPrice->Amount);
+                if(strcasecmp($bb_status,'false')==0)
+                  $myarray[$sku]["bb"]='no';
+                else
+                  $myarray[$sku]["bb"]='yes';
+                $myarray[$sku]["bb_price"]=$bb_price;
+                break;
+              }
+
+            }
+          }
+        }
+
+      } catch (MarketplaceWebServiceProducts_Exception $ex) {
+        log_message('error',$ex->getMessage()); 
+/*
+        echo("Caught Exception: " . $ex->getMessage() . "\n");
+        echo("Response Status Code: " . $ex->getStatusCode() . "\n");
+        echo("Error Code: " . $ex->getErrorCode() . "\n");
+        echo("Error Type: " . $ex->getErrorType() . "\n");
+        echo("Request ID: " . $ex->getRequestId() . "\n");
+        echo("XML: " . $ex->getXML() . "\n");
+        echo("ResponseHeaderMetadata: " . $ex->getResponseHeaderMetadata() . "\n");
+ */
+     }
+
+   return $myarray;
+ }
+                              
+                                 
+ static public  function invokeGetMyPriceForSKU(MarketplaceWebServiceProducts_Interface $service, $request,array &$myarray)
+  {
+   log_message('info',"inside invokeGetMyPriceForSKU");
+      try {
+        $response = $service->GetMyPriceForSKU($request);
+
+
+        $dom = new DOMDocument();
+        $dom->loadXML($response->toXML());
+        $dom->preserveWhiteSpace = false;
+        $dom->formatOutput = true;
+        $type= $dom->saveXML();
+        $xml=simplexml_load_string($response->toXML());
+        foreach($xml->GetMyPriceForSKUResult as $prices)
+        {
+          $sku= trim($prices->attributes()->SellerSKU);
+          $status= trim($prices->attributes()->status);
+          if($status=="Success")
+          { 
+            if(isset($prices->Product->Offers->Offer))
+            {
+              $myarray[$sku]['price']=@trim($prices->Product->Offers->Offer->BuyingPrice->ListingPrice->Amount);
+              $myarray[$sku]['ship_price']=isset($prices->Product->Offers->Offer->BuyingPrice->Shipping->Amount)?trim($prices->Product->Offers->Offer->BuyingPrice->Shipping->Amount):'notset';
+            }
+          }
+        }
+
+      } catch (MarketplaceWebServiceProducts_Exception $ex) {
+        log_message('error',$ex->getMessage());
+        /*
+        echo("Caught Exception: " . $ex->getMessage() . "\n");
+        echo("Response Status Code: " . $ex->getStatusCode() . "\n");
+        echo("Error Code: " . $ex->getErrorCode() . "\n");
+        echo("Error Type: " . $ex->getErrorType() . "\n");
+        echo("Request ID: " . $ex->getRequestId() . "\n");
+        echo("XML: " . $ex->getXML() . "\n");
+        echo("ResponseHeaderMetadata: " . $ex->getResponseHeaderMetadata() . "\n");
+         */
+     }
+
+   return $myarray;
+
+//    print_r($myarray);
+ }
+                    
+ static public  function invokeGetLowestOfferListingsForSKU(MarketplaceWebServiceProducts_Interface $service, $request,
+   array &$myarray)
+ {
+
+   // csotm arra
+   $cuustom["AMAZON_NA"]="amazon";
+   $cuustom["DEFAULT"]="merchant";
+   log_message('info',"inside GetLowestOfferListingsForSKUResult");
+   try {
+     $response = $service->GetLowestOfferListingsForSKU($request);
+     $dom = new DOMDocument();
+     $dom->loadXML($response->toXML());
+     $dom->preserveWhiteSpace = false;
+     $dom->formatOutput = true;        
+     $dom->saveXML();
+     $xml=simplexml_load_string($response->toXML());
+     foreach($xml->GetLowestOfferListingsForSKUResult as $prices)
+     {
+       $sku= trim($prices->attributes()->SellerSKU);
+       $status= trim($prices->attributes()->status);
+       if($status=="Success")
+       {
+         $count=1;
+         foreach($prices->Product->LowestOfferListings->LowestOfferListing as $cprice)
+         {
+           // attributes 
+           $attt=$cprice->Qualifiers;
+
+           if($count>=10)
+             break;
+           if( strcasecmp(trim($attt->ItemCondition),$myarray[$sku]['condition'])==0 &&   strcasecmp(trim($attt->ItemSubcondition),$myarray[$sku]['subcondition'])==0
+             && strcasecmp(trim($attt->FulfillmentChannel),$cuustom[$myarray[$sku]['fulfillment-channel']])==0)
+           {
+             //store the values 
+             $bb_status= trim($cprice->Price->LandedPrice->Amount);
+             $myarray[$sku]['c1'][]="Unknown/".$bb_status;
+             $count+=1;
+           }
+
+         }
+       }
+     }
+//     print_r($myarray);                                   
+
+   } catch (MarketplaceWebServiceProducts_Exception $ex) {
+     log_message('error',$ex->getMessage());
+     /*
+     echo("Caught Exception: " . $ex->getMessage() . "\n");
+     echo("Response Status Code: " . $ex->getStatusCode() . "\n");
+     echo("Error Code: " . $ex->getErrorCode() . "\n");
+     echo("Error Type: " . $ex->getErrorType() . "\n");
+        echo("Request ID: " . $ex->getRequestId() . "\n");
+        echo("XML: " . $ex->getXML() . "\n");
+        echo("ResponseHeaderMetadata: " . $ex->getResponseHeaderMetadata() . "\n");
+      */
+   }
+   return $myarray;
+ }
+ 
+  static public function compare_price(array &$return_array , $myarray)
+  { 
+    $serviceUrl = "https://mws.amazonservices.com/Products/2011-10-01";
+    $config = array ( 'ServiceURL' => $serviceUrl, 'ProxyHost' => null, 'ProxyPort' => -1, 'MaxErrorRetry' => 3,);
+    $service = new MarketplaceWebServiceProducts_Client(
+      AWS_ACCESS_KEY_ID,
+      AWS_SECRET_ACCESS_KEY,
+      APPLICATION_NAME,
+      APPLICATION_VERSION,
+      $config); 
+    $offset=0;
+    $end=(int)count($return_array);
+    if($end > 20)
+    {
+      while($offset<$end)
+      {
+
+        log_message('info','offste value is'.$offset);
+        log_message('info','array  value is'.print_r($return_array,TRUE));
+        $temp_array=array_splice($return_array,$offset,20);
+        $request = new MarketplaceWebServiceProducts_Model_GetLowestOfferListingsForSKURequest();
+        $sku = new MarketplaceWebServiceProducts_Model_SellerSKUListType();
+        call_user_func_array(array($sku,"withSellerSKU"),array_keys($temp_array));  
+        $request->setSellerId($myarray['sellerid']);
+        $request->setMarketplaceId($myarray['marketplaceid']);
+        $request->setMWSAuthToken($myarray['mwsauthtoken']);
+        $request->setSellerSKUList($sku);
+        $request->setExcludeMe(true);
+        //    $request->setItemCondition(true);
+        // object or array of parameters  
+
+        $return_array=array_merge($return_array,self::invokeGetLowestOfferListingsForSKU($service, $request,$temp_array));
+
+        /// for getting my price
+        $request_new = new MarketplaceWebServiceProducts_Model_GetMyPriceForSKURequest();
+        $request_new->setSellerId($myarray['sellerid']);
+        $request_new->setMarketplaceId($myarray['marketplaceid']);
+        $request_new->setMWSAuthToken($myarray['mwsauthtoken']); 
+        $request_new->setSellerSKUList($sku);
+        $return_array=array_merge($return_array,self::invokeGetMyPriceForSKU($service, $request_new,$temp_array));
+
+        /// for getting the bb status 
+        $request_bb = new MarketplaceWebServiceProducts_Model_GetCompetitivePricingForSKURequest();
+        $request_bb->setSellerId($myarray['sellerid']);
+        $request_bb->setMarketplaceId($myarray['marketplaceid']);
+        $request_bb->setMWSAuthToken($myarray['mwsauthtoken']);  
+        $request_bb->setSellerSKUList($sku);    // object or array of parameters
+        $return_array=array_merge($return_array,self::invokeGetCompetitivePricingForSKU($service, $request_bb,$temp_array));
+        $offset+=20;
+        log_message('info','final offset value is'.$offset);
+      }
+    }
+    else
+    {    
+        $request = new MarketplaceWebServiceProducts_Model_GetLowestOfferListingsForSKURequest();
+        $sku = new MarketplaceWebServiceProducts_Model_SellerSKUListType();
+        call_user_func_array(array($sku,"withSellerSKU"),array_keys($return_array));  
+        $request->setSellerId($myarray['sellerid']);
+        $request->setMarketplaceId($myarray['marketplaceid']);
+        $request->setMWSAuthToken($myarray['mwsauthtoken']);
+        $request->setSellerSKUList($sku);
+        $request->setExcludeMe(true);
+        //    $request->setItemCondition(true);
+        // object or array of parameters  
+
+        self::invokeGetLowestOfferListingsForSKU($service, $request,$return_array);
+
+        /// for getting my price
+        $request_new = new MarketplaceWebServiceProducts_Model_GetMyPriceForSKURequest();
+        $request_new->setSellerId($myarray['sellerid']);
+        $request_new->setMarketplaceId($myarray['marketplaceid']);
+        $request_new->setMWSAuthToken($myarray['mwsauthtoken']); 
+        $request_new->setSellerSKUList($sku);
+        self::invokeGetMyPriceForSKU($service, $request_new,$return_array);
+
+        /// for getting the bb status 
+        $request_bb = new MarketplaceWebServiceProducts_Model_GetCompetitivePricingForSKURequest();
+        $request_bb->setSellerId($myarray['sellerid']);
+        $request_bb->setMarketplaceId($myarray['marketplaceid']);
+        $request_bb->setMWSAuthToken($myarray['mwsauthtoken']);  
+        $request_bb->setSellerSKUList($sku);    // object or array of parameters
+        self::invokeGetCompetitivePricingForSKU($service, $request_bb,$return_array);
+    }
+        log_message('info','final offset value is'.$offset);
+
+  }
+ static public function processfile($filename,$sellerid)
+ {
+   log_message('info',"processing the report list  ");
+   $result = array();
+   $fp = fopen($filename,'r');
+   if (($headers = fgetcsv($fp, 0, "\t")) !== FALSE)
+     if ($headers)
+       while (($line = fgetcsv($fp, 0, "\t")) !== FALSE) 
+          if ($line)
+            if (sizeof($line)==sizeof($headers))
+              $result[] = array_combine($headers,$line);
+    fclose($fp);      
+    log_message('info',print_r($result,TRUE));
+    self::$CI =& get_instance();               
+    $log_array=self::$CI->db->get_where("user_settings",array("sellerid"=>$sellerid))->row_array();
+    //garb all the sku and usellowest ogffer lsiitngs anf 
+    $pass_array=array();
+    foreach($result as $row)
+    {                                                                                 
+      list($condition,$subcondition)=check_condition($row['item-condition']); 
+      $pass_array[$row["seller-sku"]]=array("fulfillment-channel"=>$row["fulfillment-channel"],"condition"=>$condition,"subcondition"=>$subcondition);
+    }
+    // now udate me
+    self::compare_price($pass_array,$log_array);
+    log_message('info',"now updated values are  ".print_r($pass_array,TRUE));
+    foreach($result as $row)
+    {
+      if(self::update_on_new($sellerid,$row['seller-sku'])==FALSE)
+      {
+        log_message('info',"FAILED TO UPDATE ");
+        continue;
+      }
+      $new=array(); 
+      $new['sellerid']=$sellerid;
+      $new['itemname']=$row['item-name'];
+      $new['listing_id']=$row['listing-id'];
+      $new['sku']=$row['seller-sku'];
+      $new['price']=$row['price'];
+      $new['qty']=(int)$row['quantity'];
+      $new['marketplace']=$row['item-is-marketplace'];
+      list($tempcon,$tempsub)=check_condition($row['item-condition']);
+      $new['item_condition']=$tempcon;
+      $new['item_subcondition']=$tempsub;
+      $new['asin']=$row['asin1'];
+      $new['product_id']=(int)$row['product-id'];
+      $new['product_id_type']=$row['product-id-type'];
+      $new['fulfillment_channel']=$row['fulfillment-channel'];
+      $new['ship_price']=isset($pass_array[$row['seller-sku']]['ship_price'])?$pass_array[$row['seller-sku']]['ship_price']:'notset';
+      $new['bb']=isset($pass_array[$row['seller-sku']]['bb'])?$pass_array[$row['seller-sku']]['bb']:'no'; 
+      $new['bb_price']=isset($pass_array[$row['seller-sku']]['bb_price'])?$pass_array[$row['seller-sku']]['bb_price']:'notset'; 
+
+      /// now update the c1-c10 prices
+//      for($i=1;$i<=10;$i++)
+      {
+        if(isset($pass_array[$row['seller-sku']]['c1']))
+        {
+          $new['c1']=serialize($pass_array[$row['seller-sku']]['c1']);
+        }
+      }
+      //   $new['beatby']=;
+      //    $new['map_price']=;
+      $new['prevprice']=$row['price']; 
+      //    $new['competitor_price']=;
+      $new['email']=$log_array['email'];
+
+      self::$CI->db_mysql->on_duplicate_key_update()->insert("user_listings",$new);
+    }
+
+  }  
+  static public  function invokeGetReport($sellerid,MarketplaceWebService_Interface $service, $request) 
+  {
+      log_message('info',"Whoos almost reached here Getting the report list  ");
+    try {
+      $response = $service->getReport($request);
+
+      if ($response->isSetGetReportResult()) {
+        $getReportResult = $response->getGetReportResult(); 
+        //                  echo ("            GetReport");
+
+        if ($getReportResult->isSetContentMd5()) {
+          //                  echo ("                ContentMd5");
+          //                echo ("                " . $getReportResult->getContentMd5() . "\n");
+        }
+      }
+      if ($response->isSetResponseMetadata()) { 
+        //              echo("            ResponseMetadata\n");
+        $responseMetadata = $response->getResponseMetadata();
+        if ($responseMetadata->isSetRequestId()) 
+        {
+          //                echo("                RequestId\n");
+          //              echo("                    " . $responseMetadata->getRequestId() . "\n");
+        }
+      }
+
+      //  echo ("        Report Contents\n");
+//      $cur_time=time();
+      $cur_time=mt_rand();
+      $handle = fopen("/tmp/${cur_time}_test_".$sellerid.".csv", "w"); 
+      fwrite($handle, stream_get_contents($request->getReport()));
+      fclose($handle);
+      //  echo (stream_get_contents($request->getReport()) . "\n");
+
+      //    echo("            ResponseHeaderMetadata: " . $response->getResponseHeaderMetadata() . "\n");
+    } catch (MarketplaceWebService_Exception $ex) {
+      /*
+      echo("Caught Exception: " . $ex->getMessage() . "\n");
+      echo("Response Status Code: " . $ex->getStatusCode() . "\n");
+      echo("Error Code: " . $ex->getErrorCode() . "\n");
+         echo("Error Type: " . $ex->getErrorType() . "\n");
+         echo("Request ID: " . $ex->getRequestId() . "\n");
+         echo("XML: " . $ex->getXML() . "\n");
+         echo("ResponseHeaderMetadata: " . $ex->getResponseHeaderMetadata() . "\n");
+       */
+      log_message('error',"oops failed writing the csv file"); 
+    }
+
+    self::processfile("/tmp/${cur_time}_test_".$sellerid.".csv",$sellerid);
+    // now can we insert into my sql db 
+//    $CI =& get_instance();
+    //    $log_array=$CI->db->get_where("user_settings",array("sellerid"=>$data['sellerid']))->row_array();
+  //  $CI->db_mysql->on_duplicate_key_update()->insert("user_listings",array('email'=>$var,'name'=> $_POST["name"],'companyname'=> $_POST["companyname"],'phone'=> $_POST["phone"]));
+
+    // now insert the data
+
+  }                                                 
+  static public function maxprice_update($sellerid,$sku,$mapprice)  
+  {   
+    $serviceUrl="https://mws.amazonservices.com";
+    $config = array (
+      'ServiceURL' => $serviceUrl,
+      'ProxyHost' => null,
+      'ProxyPort' => -1,
+      'MaxErrorRetry' => 3
+    );
+
+//    $awskey='AKIAIPGAVOI4KG2HPRZA';
+  ///  $secret='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';
+    $service = new  MarketplaceWebService_Client(AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY,$config,self::$appname,self::$appversion);                      
+    $log2_array=self::$CI->db->get_where("user_listings",array("sellerid"=>$sellerid,"sku"=>$sku))->row_array();
+    $current_price=$log2_array['price'];
+    $feed = <<<EOD
+<?xml version="1.0" encoding="UTF-8"?>
+<AmazonEnvelope xsi:noNamespaceSchemaLocation="amznenvelope. xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
+<Header> 
+<DocumentVersion>1.01</DocumentVersion> 
+<MerchantIdentifier>$sellerid</MerchantIdentifier> 
+</Header> 
+<MessageType>Price</MessageType> 
+<Message> <MessageID>1</MessageID> 
+<Price> 
+<SKU>$sku</SKU> 
+<StandardPrice currency="USD">$current_price</StandardPrice> 
+<MaximumSellerAllowedPrice currency="USD">$mapprice</MaximumSellerAllowedPrice>
+</Price> 
+</Message> 
+</AmazonEnvelope>
+EOD;
+
+    $feedHandle = @fopen('php://memory', 'rw+');
+    fwrite($feedHandle, $feed);
+    rewind($feedHandle);
+
+    $request = new MarketplaceWebService_Model_SubmitFeedRequest();
+    $request->setMerchant($sellerid);
+    $request->setMarketplaceIdList(self::$marketplaceIdArray);
+    $request->setFeedType('_POST_PRODUCT_PRICING_DATA_');
+    //$request->setFeedType('_POST_PRODUCT_DATA_');
+    $request->setContentMd5(base64_encode(md5(stream_get_contents($feedHandle), true)));
+    rewind($feedHandle);
+    $request->setPurgeAndReplace(false);
+    $request->setFeedContent($feedHandle);
+    self::$CI =& get_instance();               
+    $log_array=self::$CI->db->get_where("user_settings",array("sellerid"=>$sellerid))->row_array();
+    $request->setMWSAuthToken($log_array['mwsauthtoken']); // Optional
+
+    rewind($feedHandle);
+
+    log_message('info','About to send the feeds');                                 
+   self::invokeSubmitFeed($service, $request);                                     
+  }
+  static public function minprice_update($sellerid,$sku,$mapprice) 
+  {         
+    //. get th current price 
+     $serviceUrl="https://mws.amazonservices.com";
+    $config = array (
+      'ServiceURL' => $serviceUrl,
+      'ProxyHost' => null,
+      'ProxyPort' => -1,
+      'MaxErrorRetry' => 3
+    );
+
+//    $awskey='AKIAIPGAVOI4KG2HPRZA';
+  ///  $secret='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';
+    $service = new  MarketplaceWebService_Client(AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY,$config,self::$appname,self::$appversion);      
+    $log2_array=self::$CI->db->get_where("user_listings",array("sellerid"=>$sellerid,"sku"=>$sku))->row_array();
+    $current_price=$log2_array['price'];
+    $feed = <<<EOD
+<?xml version="1.0" encoding="UTF-8"?>
+<AmazonEnvelope xsi:noNamespaceSchemaLocation="amznenvelope. xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
+<Header> 
+<DocumentVersion>1.01</DocumentVersion> 
+<MerchantIdentifier>$sellerid</MerchantIdentifier> 
+</Header> 
+<MessageType>Price</MessageType> 
+<Message> <MessageID>1</MessageID> 
+<Price> 
+<SKU>$sku</SKU> 
+<StandardPrice currency="USD">$current_price</StandardPrice> 
+<MinimumSellerAllowedPrice currency="USD">$mapprice</MinimumSellerAllowedPrice>
+</Price> 
+</Message> 
+</AmazonEnvelope>
+EOD;
+
+    $feedHandle = @fopen('php://memory', 'rw+');
+    fwrite($feedHandle, $feed);
+    rewind($feedHandle);
+
+    $request = new MarketplaceWebService_Model_SubmitFeedRequest();
+    $request->setMerchant($sellerid);
+    $request->setMarketplaceIdList(self::$marketplaceIdArray);
+    $request->setFeedType('_POST_PRODUCT_PRICING_DATA_');
+    //$request->setFeedType('_POST_PRODUCT_DATA_');
+    $request->setContentMd5(base64_encode(md5(stream_get_contents($feedHandle), true)));
+    rewind($feedHandle);
+    $request->setPurgeAndReplace(false);
+    $request->setFeedContent($feedHandle);
+    self::$CI =& get_instance();               
+    $log_array=self::$CI->db->get_where("user_settings",array("sellerid"=>$sellerid))->row_array();
+    $request->setMWSAuthToken($log_array['mwsauthtoken']); // Optional
+
+    rewind($feedHandle);
+
+    log_message('info','About to send the feeds');                                 
+    self::invokeSubmitFeed($service, $request);                                     
+    // log thre results in database
+  }  
+  static function invokeSubmitFeed(MarketplaceWebService_Interface $service, $request) 
+  {
+
+    if(self::invokeSubmitFeed_after($service, $request)=="tryagain")
+    {
+      // \try once again else drop it
+      log_message('info',"trying again ".print_r($request,TRUE));
+      sleep(120);
+      self::invokeSubmitFeed_after($service,$request);
+    } 
+  }
+  static function invokeSubmitFeed_after(MarketplaceWebService_Interface $service, $request) 
+  {
+    try {
+      $response = $service->submitFeed($request);
+
+      //    echo ("Service Response\n");
+      //   echo ("=============================================================================\n");
+
+      //   echo("        SubmitFeedResponse\n");
+      if ($response->isSetSubmitFeedResult()) { 
+        //        echo("            SubmitFeedResult\n");
+        $submitFeedResult = $response->getSubmitFeedResult();
+        if ($submitFeedResult->isSetFeedSubmissionInfo()) { 
+          //          echo("                FeedSubmissionInfo\n");
+          $feedSubmissionInfo = $submitFeedResult->getFeedSubmissionInfo();
+          if ($feedSubmissionInfo->isSetFeedSubmissionId()) 
+          {
+            log_message('info',$feedSubmissionInfo->getFeedSubmissionId());
+            return $feedSubmissionInfo->getFeedSubmissionId();
+
+
+            //              echo("                    FeedSubmissionId\n");
+            //             echo("                        " . $feedSubmissionInfo->getFeedSubmissionId() . "\n");
+          }
+          if ($feedSubmissionInfo->isSetFeedType()) 
+          {
+            //           echo("                    FeedType\n");
+            //          echo("                        " . $feedSubmissionInfo->getFeedType() . "\n");
+          }
+          if ($feedSubmissionInfo->isSetSubmittedDate()) 
+          {
+            //        echo("                    SubmittedDate\n");
+            ///      echo("                        " . $feedSubmissionInfo->getSubmittedDate()->format(DATE_FORMAT) . "\n");
+          }
+          if ($feedSubmissionInfo->isSetFeedProcessingStatus()) 
+          {
+            //    echo("                    FeedProcessingStatus\n");
+            //   echo("                        " . $feedSubmissionInfo->getFeedProcessingStatus() . "\n");
+          }
+          if ($feedSubmissionInfo->isSetStartedProcessingDate()) 
+          {
+            //   echo("                    StartedProcessingDate\n");
+            //  echo("                        " . $feedSubmissionInfo->getStartedProcessingDate()->format(DATE_FORMAT) . "\n");
+          }
+          if ($feedSubmissionInfo->isSetCompletedProcessingDate()) 
+          {
+            //   echo("                    CompletedProcessingDate\n");
+            //  echo("                        " . $feedSubmissionInfo->getCompletedProcessingDate()->format(DATE_FORMAT) . "\n");
+          }
+        } 
+      } 
+      if ($response->isSetResponseMetadata()) { 
+        //       echo("            ResponseMetadata\n");
+        $responseMetadata = $response->getResponseMetadata();
+        if ($responseMetadata->isSetRequestId()) 
+        {
+          //         echo("                RequestId\n");
+          //        echo("                    " . $responseMetadata->getRequestId() . "\n");
+        }
+      } 
+
+      //   echo("            ResponseHeaderMetadata: " . $response->getResponseHeaderMetadata() . "\n");
+    } catch (MarketplaceWebService_Exception $ex) {
+      log_message('error',$ex->getMessage());
+      log_message('error',$ex->getErrorCode());
+      self::$CI =& geinstance();             
+      $new['service']=serialize($service);
+      $new['request']=serialize($request);
+      $new['error']=serialize($ex->getMessage());
+      $new['response']=serialize($response);
+        if($ex->getErrorCode()=="QuotaExceeded" || $ex->getErrorCode()=="RequestThrottled")
+        {
+          // upat ethe mysql  table this hould not happen ok  
+
+          self::$CI->db_mysql->on_duplicate_key_update()->insert("feeds503",$new);
+           if($ex->getErrorCode()=="QuotaExceeded" )
+          {
+          }
+          else
+          {
+            return "tryagain";
+          } 
+        }
+        else
+        {
+          self::$CI->db_mysql->on_duplicate_key_update()->insert("feeds_error",$new);
+        }
+       /*
+         echo("Caught Exception: " . $ex->getMessage() . "\n");
+         echo("Response Status Code: " . $ex->getStatusCode() . "\n");
+         echo("Error Code: " . $ex->getErrorCode() . "\n");
+         echo("Error Type: " . $ex->getErrorType() . "\n");
+         echo("Request ID: " . $ex->getRequestId() . "\n");
+         echo("XML: " . $ex->getXML() . "\n");
+         echo("ResponseHeaderMetadata: " . $ex->getResponseHeaderMetadata() . "\n");
+        */
+    }
+    return "good";
+  }                                                              
+  static public function mapprice_update($sellerid,$sku,$mapprice)
+  {            
+    $serviceUrl="https://mws.amazonservices.com";
+    $config = array (
+      'ServiceURL' => $serviceUrl,
+      'ProxyHost' => null,
+      'ProxyPort' => -1,
+      'MaxErrorRetry' => 3
+    );
+
+//    $awskey='AKIAIPGAVOI4KG2HPRZA';
+  ///  $secret='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';
+    $service = new  MarketplaceWebService_Client(AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY,$config,self::$appname,self::$appversion);       
+               
+    $log2_array=self::$CI->db->get_where("user_listings",array("sellerid"=>$sellerid,"sku"=>$sku))->row_array();
+    $current_price=$log2_array['price'];
+
+    $feed = <<<EOD
+<?xml version="1.0" encoding="UTF-8"?>
+<AmazonEnvelope xsi:noNamespaceSchemaLocation="amznenvelope. xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
+<Header> 
+<DocumentVersion>1.01</DocumentVersion> 
+<MerchantIdentifier>$sellerid</MerchantIdentifier> 
+</Header> 
+<MessageType>Price</MessageType> 
+<Message> <MessageID>1</MessageID> 
+<Price> 
+<SKU>$sku</SKU> 
+<StandardPrice currency="USD">$current_price</StandardPrice> 
+<MAP currency="USD">$mapprice</MAP> 
+</Price> 
+</Message> 
+</AmazonEnvelope>
+EOD;
+
+    $feedHandle = @fopen('php://memory', 'rw+');
+    fwrite($feedHandle, $feed);
+    rewind($feedHandle);
+
+    $request = new MarketplaceWebService_Model_SubmitFeedRequest();
+    $request->setMerchant($sellerid);
+    $request->setMarketplaceIdList(self::$marketplaceIdArray);
+    $request->setFeedType('_POST_PRODUCT_PRICING_DATA_');
+    //$request->setFeedType('_POST_PRODUCT_DATA_');
+    $request->setContentMd5(base64_encode(md5(stream_get_contents($feedHandle), true)));
+    rewind($feedHandle);
+    $request->setPurgeAndReplace(false);
+    $request->setFeedContent($feedHandle);
+    self::$CI =& get_instance();               
+    $log_array=self::$CI->db->get_where("user_settings",array("sellerid"=>$sellerid))->row_array();
+    $request->setMWSAuthToken($log_array['mwsauthtoken']); // Optional
+    //$request->setMWSAuthToken('<MWS Auth Token>'); // Optional
+
+    rewind($feedHandle);
+
+    log_message('info','About to send the feeds');                                 
+    self::invokeSubmitFeed($service, $request);                                        
+  } 
+  static public function shipprice_update($sellerid, $sku , $mapprice)
+  {
+      $serviceUrl="https://mws.amazonservices.com";
+    $config = array (
+      'ServiceURL' => $serviceUrl,
+      'ProxyHost' => null,
+      'ProxyPort' => -1,
+      'MaxErrorRetry' => 3
+    );
+
+//    $awskey='AKIAIPGAVOI4KG2HPRZA';
+  ///  $secret='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';
+    $service = new  MarketplaceWebService_Client(AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY,$config,self::$appname,self::$appversion);       
+         $feed = <<<EOD
+<?xml version="1.0" encoding="utf-8"?>
+<AmazonEnvelope xsi:noNamespaceSchemaLocation="amznenvelope. xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
+<Header> 
+<DocumentVersion>1.01</DocumentVersion> 
+<MerchantIdentifier>$sellerid</MerchantIdentifier> 
+</Header> 
+<MessageType>Override</MessageType>
+ <Message>
+ <MessageID>1</MessageID>
+ <OperationType>Update</OperationType>
+ <Override>
+<SKU>$sku</SKU>
+ <ShippingOverride>
+ <ShipOption>Same US</ShipOption>
+ <Type>Exclusive</Type>
+<ShipAmount currency="USD">$mapprice</ShipAmount>
+ </ShippingOverride>
+ </Override>
+ </Message>
+</AmazonEnvelope>
+EOD;
+
+    $feedHandle = @fopen('php://memory', 'rw+');
+    fwrite($feedHandle, $feed);
+    rewind($feedHandle);
+
+    $request = new MarketplaceWebService_Model_SubmitFeedRequest();
+    $request->setMerchant($sellerid);
+    $request->setMarketplaceIdList(self::$marketplaceIdArray);
+    $request->setFeedType('_POST_PRODUCT_OVERRIDES_DATA_');
+    //$request->setFeedType('_POST_PRODUCT_DATA_');
+    $request->setContentMd5(base64_encode(md5(stream_get_contents($feedHandle), true)));
+    rewind($feedHandle);
+    $request->setPurgeAndReplace(false);
+    $request->setFeedContent($feedHandle);
+    self::$CI =& get_instance();               
+    $log_array=self::$CI->db->get_where("user_settings",array("sellerid"=>$sellerid))->row_array();
+    $request->setMWSAuthToken($log_array['mwsauthtoken']); // Optional
+
+    rewind($feedHandle);
+
+    log_message('info','About to send the feeds');
+    self::invokeSubmitFeed($service, $request);                                         
+  }        
+  static public function maxorderqty_update($sellerid,$sku,$mapprice)
+  {   
+    $serviceUrl="https://mws.amazonservices.com";
+    $config = array (
+      'ServiceURL' => $serviceUrl,
+      'ProxyHost' => null,
+      'ProxyPort' => -1,
+      'MaxErrorRetry' => 3
+    );
+
+//    $awskey='AKIAIPGAVOI4KG2HPRZA';
+  ///  $secret='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';
+    $service = new  MarketplaceWebService_Client(AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY,$config,self::$appname,self::$appversion);        
+    $log2_array=self::$CI->db->get_where("user_listings",array("sellerid"=>$sellerid,"sku"=>$sku))->row_array();
+    $current_title=trim($log2_array['itemname']);
+    $feed = <<<EOD
+<?xml version="1.0" encoding="utf-8"?>
+<AmazonEnvelope xsi:noNamespaceSchemaLocation="amznenvelope. xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
+<Header> 
+<DocumentVersion>1.01</DocumentVersion> 
+<MerchantIdentifier>$sellerid</MerchantIdentifier> 
+</Header> 
+<MessageType>Product</MessageType>
+<PurgeAndReplace>false</PurgeAndReplace>
+<Message>
+<MessageID>1</MessageID>
+<OperationType>PartialUpdate</OperationType>
+<Product>
+<SKU>$sku</SKU>  
+<DescriptionData>
+<Title>$current_title</Title>
+<MaxOrderQuantity>$mapprice</MaxOrderQuantity>
+</DescriptionData>
+</Product>
+</Message>
+</AmazonEnvelope>
+EOD;
+
+    $feedHandle = @fopen('php://memory', 'rw+');
+    fwrite($feedHandle, $feed);
+    rewind($feedHandle);
+
+    $request = new MarketplaceWebService_Model_SubmitFeedRequest();
+    $request->setMerchant($sellerid);
+    $request->setMarketplaceIdList(self::$marketplaceIdArray);
+    $request->setFeedType('_POST_PRODUCT_DATA_');
+    $request->setContentMd5(base64_encode(md5(stream_get_contents($feedHandle), true)));
+    rewind($feedHandle);
+    $request->setPurgeAndReplace(false);
+    $request->setFeedContent($feedHandle);
+    self::$CI =& get_instance();               
+    $log_array=self::$CI->db->get_where("user_settings",array("sellerid"=>$sellerid))->row_array();
+    $request->setMWSAuthToken($log_array['mwsauthtoken']); // Optional
+
+    rewind($feedHandle);
+
+    log_message('info','About to send the feeds');
+    self::invokeSubmitFeed($service, $request);                                        
+  }  
+  static public function qty_update($sellerid,$sku,$mapprice)
+  {    
+    $serviceUrl="https://mws.amazonservices.com";
+    $config = array (
+      'ServiceURL' => $serviceUrl,
+      'ProxyHost' => null,
+      'ProxyPort' => -1,
+      'MaxErrorRetry' => 3
+    );
+
+//    $awskey='AKIAIPGAVOI4KG2HPRZA';
+  ///  $secret='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';
+    $service = new  MarketplaceWebService_Client(AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY,$config,self::$appname,self::$appversion);       
+    $feed = <<<EOD
+<?xml version="1.0" encoding="UTF-8"?>
+<AmazonEnvelope xsi:noNamespaceSchemaLocation="amznenvelope. xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
+<Header> 
+<DocumentVersion>1.01</DocumentVersion> 
+<MerchantIdentifier>$sellerid</MerchantIdentifier> 
+</Header> 
+<MessageType>Inventory</MessageType> 
+<Message> <MessageID>1</MessageID> 
+ <OperationType>Update</OperationType>
+    <Inventory>
+<SKU>$sku</SKU> 
+        <Quantity>$mapprice</Quantity>
+    </Inventory>
+</Message> 
+</AmazonEnvelope>
+EOD;
+
+    $feedHandle = @fopen('php://memory', 'rw+');
+    fwrite($feedHandle, $feed);
+    rewind($feedHandle);
+
+    $request = new MarketplaceWebService_Model_SubmitFeedRequest();
+    $request->setMerchant($sellerid);
+    $request->setMarketplaceIdList(self::$marketplaceIdArray);
+    $request->setFeedType('_POST_INVENTORY_AVAILABILITY_DATA_');
+    //$request->setFeedType('_POST_PRODUCT_DATA_');
+    $request->setContentMd5(base64_encode(md5(stream_get_contents($feedHandle), true)));
+    rewind($feedHandle);
+    $request->setPurgeAndReplace(false);
+    $request->setFeedContent($feedHandle);
+    self::$CI =& get_instance();               
+    $log_array=self::$CI->db->get_where("user_settings",array("sellerid"=>$sellerid))->row_array();
+    $request->setMWSAuthToken($log_array['mwsauthtoken']); // Optional
+
+    rewind($feedHandle);
+
+    log_message('info','About to send the feeds');
+    self::invokeSubmitFeed($service, $request);                                        
+  }         
+//we want key value   
+  static public function mprice_update($sellerid,$sku=array())
+  {              
+    $serviceUrl="https://mws.amazonservices.com";
+    $config = array (
+      'ServiceURL' => $serviceUrl,
+      'ProxyHost' => null,
+      'ProxyPort' => -1,
+      'MaxErrorRetry' => 3
+    );
+
+    $service = new  MarketplaceWebService_Client(AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY,$config,self::$appname,self::$appversion);        
+    $count=1;
+    foreach($sku as $key=>$value)
+    {
+    $feed_body='<Message> <MessageID>'.$count.'</MessageID> 
+      <Price> 
+      <SKU>'.$key.'</SKU> 
+      <StandardPrice currency="USD">'.$value.'</StandardPrice> 
+      </Price> 
+      </Message>';  
+    $count+=1;
+    }
+    $feed_footer='</AmazonEnvelope>';                         
+    $feed_header = <<<EOD
+<?xml version="1.0" encoding="UTF-8"?>
+<AmazonEnvelope xsi:noNamespaceSchemaLocation="amznenvelope. xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
+<Header> 
+<DocumentVersion>1.01</DocumentVersion> 
+<MerchantIdentifier>$sellerid</MerchantIdentifier> 
+</Header> 
+<MessageType>Price</MessageType>$feed_body 
+$feed_footer
+EOD;
+
+
+    $feedHandle = @fopen('php://memory', 'rw+');
+    fwrite($feedHandle, $feed);
+    rewind($feedHandle);
+
+    $request = new MarketplaceWebService_Model_SubmitFeedRequest();
+    $request->setMerchant($sellerid);
+    $request->setMarketplaceIdList(self::$marketplaceIdArray);
+    $request->setFeedType('_POST_PRODUCT_PRICING_DATA_');
+    //$request->setFeedType('_POST_PRODUCT_DATA_');
+    $request->setContentMd5(base64_encode(md5(stream_get_contents($feedHandle), true)));
+    rewind($feedHandle);
+    $request->setPurgeAndReplace(false);
+    $request->setFeedContent($feedHandle);
+    self::$CI =& get_instance();               
+    $log_array=self::$CI->db->get_where("user_settings",array("sellerid"=>$sellerid))->row_array();
+    $request->setMWSAuthToken($log_array['mwsauthtoken']); // Optional
+
+    rewind($feedHandle);
+
+    log_message('info','About to send the feeds');
+    self::invokeSubmitFeed($service, $request);                                        
+  } 
+  static public function price_update($sellerid,$sku,$mapprice)
+  {              
+    $serviceUrl="https://mws.amazonservices.com";
+    $config = array (
+      'ServiceURL' => $serviceUrl,
+      'ProxyHost' => null,
+      'ProxyPort' => -1,
+      'MaxErrorRetry' => 3
+    );
+
+//    $awskey='AKIAIPGAVOI4KG2HPRZA';
+  ///  $secret='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';
+    $service = new  MarketplaceWebService_Client(AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY,$config,self::$appname,self::$appversion);       
+    $feed = <<<EOD
+<?xml version="1.0" encoding="UTF-8"?>
+<AmazonEnvelope xsi:noNamespaceSchemaLocation="amznenvelope. xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
+<Header> 
+<DocumentVersion>1.01</DocumentVersion> 
+<MerchantIdentifier>$sellerid</MerchantIdentifier> 
+</Header> 
+<MessageType>Price</MessageType> 
+<Message> <MessageID>1</MessageID> 
+<Price> 
+<SKU>$sku</SKU> 
+<StandardPrice currency="USD">$mapprice</StandardPrice> 
+</Price> 
+</Message> 
+</AmazonEnvelope>
+EOD;
+
+    $feedHandle = @fopen('php://memory', 'rw+');
+    fwrite($feedHandle, $feed);
+    rewind($feedHandle);
+
+    $request = new MarketplaceWebService_Model_SubmitFeedRequest();
+    $request->setMerchant($sellerid);
+    $request->setMarketplaceIdList(self::$marketplaceIdArray);
+    $request->setFeedType('_POST_PRODUCT_PRICING_DATA_');
+    //$request->setFeedType('_POST_PRODUCT_DATA_');
+    $request->setContentMd5(base64_encode(md5(stream_get_contents($feedHandle), true)));
+    rewind($feedHandle);
+    $request->setPurgeAndReplace(false);
+    $request->setFeedContent($feedHandle);
+    self::$CI =& get_instance();               
+    $log_array=self::$CI->db->get_where("user_settings",array("sellerid"=>$sellerid))->row_array();
+    $request->setMWSAuthToken($log_array['mwsauthtoken']); // Optional
+
+    rewind($feedHandle);
+
+    log_message('info','About to send the feeds');
+    self::invokeSubmitFeed($service, $request);                                        
+  }
+  static public function common()
+  {
+  }
+  // back jobs             
+  static  public function invokeRequestReport_orig(MarketplaceWebService_Interface $service, $request) 
+  {
+    try {
+      $response = $service->requestReport($request);
+
+      //                echo ("Service Response\n");
+      //               echo ("=============================================================================\n");
+
+      //             echo("        RequestReportResponse\n");
+      if ($response->isSetRequestReportResult()) { 
+        //               echo("            RequestReportResult\n");
+        $requestReportResult = $response->getRequestReportResult();
+
+        if ($requestReportResult->isSetReportRequestInfo()) {
+
+          $reportRequestInfo = $requestReportResult->getReportRequestInfo();
+          //                   echo("                ReportRequestInfo\n");
+          if ($reportRequestInfo->isSetReportRequestId()) 
+          {
+            //                echo("                    ReportRequestId\n");
+            //                              echo("                        " . $reportRequestInfo->getReportRequestId() . "\n");
+            return $reportRequestInfo->getReportRequestId();
+          }
+          if ($reportRequestInfo->isSetReportType()) 
+          {
+            //                     echo("                    ReportType\n");
+            //                   echo("                        " . $reportRequestInfo->getReportType() . "\n");
+          }
+                          if ($reportRequestInfo->isSetStartDate()) 
+                          {
+             //                 echo("                    StartDate\n");
+              ///                echo("                        " . $reportRequestInfo->getStartDate()->format(DATE_FORMAT) . "\n");
+                          }
+                          if ($reportRequestInfo->isSetEndDate()) 
+                          {
+                //              echo("                    EndDate\n");
+                 //             echo("                        " . $reportRequestInfo->getEndDate()->format(DATE_FORMAT) . "\n");
+                          }
+                          if ($reportRequestInfo->isSetSubmittedDate()) 
+                          {
+                   //           echo("                    SubmittedDate\n");
+                     //         echo("                        " . $reportRequestInfo->getSubmittedDate()->format(DATE_FORMAT) . "\n");
+                          }
+                          if ($reportRequestInfo->isSetReportProcessingStatus()) 
+                          {
+                     //         echo("                    ReportProcessingStatus\n");
+                      //        echo("                        " . $reportRequestInfo->getReportProcessingStatus() . "\n");
+                          }
+                      }
+                } 
+                if ($response->isSetResponseMetadata()) { 
+//                    echo("            ResponseMetadata\n");
+                    $responseMetadata = $response->getResponseMetadata();
+                    if ($responseMetadata->isSetRequestId()) 
+                    {
+  //                      echo("                RequestId\n");
+   //                     echo("                    " . $responseMetadata->getRequestId() . "\n");
+                    }
+                } 
+
+     //           echo("            ResponseHeaderMetadata: " . $response->getResponseHeaderMetadata() . "\n");
+    } catch (MarketplaceWebService_Exception $ex) {
+      /*
+         echo("Caught Exception: " . $ex->getMessage() . "\n");
+         echo("Response Status Code: " . $ex->getStatusCode() . "\n");
+         echo("Error Code: " . $ex->getErrorCode() . "\n");
+         echo("Error Type: " . $ex->getErrorType() . "\n");
+         echo("Request ID: " . $ex->getRequestId() . "\n");
+         echo("XML: " . $ex->getXML() . "\n");
+         echo("ResponseHeaderMetadata: " . $ex->getResponseHeaderMetadata() . "\n");
+
+       */
+      log_message('error',$ex->getMessage());
+    }
+    return 'error';
+  } 
+  static public function invokeGetReportRequestList(MarketplaceWebService_Interface $service, $request) 
+  {
+    try {
+      $response = $service->getReportRequestList($request);
+
+      ///                echo ("Service Response\n");
+      //             echo ("=============================================================================\n");
+
+      //           echo("        GetReportRequestListResponse\n");
+      if ($response->isSetGetReportRequestListResult()) { 
+        //             echo("            GetReportRequestListResult\n");
+        $getReportRequestListResult = $response->getGetReportRequestListResult();
+        if ($getReportRequestListResult->isSetNextToken()) 
+        {
+          //               echo("                NextToken\n");
+          //             echo("                    " . $getReportRequestListResult->getNextToken() . "\n");
+        }
+        if ($getReportRequestListResult->isSetHasNext()) 
+        {
+          //           echo("                HasNext\n");
+          //         echo("                    " . $getReportRequestListResult->getHasNext() . "\n");
+        }
+        $reportRequestInfoList = $getReportRequestListResult->getReportRequestInfoList();
+        foreach ($reportRequestInfoList as $reportRequestInfo) {
+          //           echo("                ReportRequestInfo\n");
+          if ($reportRequestInfo->isSetReportRequestId()) 
+          {
+            //                              echo("                    ReportRequestId\n");
+            ///                             echo("                        " . $reportRequestInfo->getReportRequestId() . "\n");
+          }
+          if ($reportRequestInfo->isSetReportType()) 
+          {
+            //                echo("                    ReportType\n");
+            //               echo("                        " . $reportRequestInfo->getReportType() . "\n");
+          }
+          if ($reportRequestInfo->isSetStartDate()) 
+          {
+            //              echo("                    StartDate\n");
+            //             echo("                        " . $reportRequestInfo->getStartDate()->format(DATE_FORMAT) . "\n");
+          }
+          if ($reportRequestInfo->isSetEndDate()) 
+          {
+            //           echo("                    EndDate\n");
+            //          echo("                        " . $reportRequestInfo->getEndDate()->format(DATE_FORMAT) . "\n");
+          }
+          // add start
+          if ($reportRequestInfo->isSetScheduled()) 
+          {
+            //       echo("                    Scheduled\n");
+            //        echo("                        " . $reportRequestInfo->getScheduled() . "\n");
+          }
+          // add end
+          if ($reportRequestInfo->isSetSubmittedDate()) 
+          {
+            ///       echo("                    SubmittedDate\n");
+            ///     echo("                        " . $reportRequestInfo->getSubmittedDate()->format(DATE_FORMAT) . "\n");
+          }
+          if ($reportRequestInfo->isSetReportProcessingStatus()) 
+          {
+            //   echo("                    ReportProcessingStatus\n");
+            //  echo("                        " . $reportRequestInfo->getReportProcessingStatus() . "\n");
+          }
+          // add start
+          if ($reportRequestInfo->isSetGeneratedReportId()) 
+          {
+            //      echo("                    GeneratedReportId\n");
+            //    echo("                        " . $reportRequestInfo->getGeneratedReportId() . "\n");
+            return $reportRequestInfo->getGeneratedReportId();
+            //                              break;
+          }
+          if ($reportRequestInfo->isSetStartedProcessingDate()) 
+          {
+            //   echo("                    StartedProcessingDate\n");
+            ///  echo("                        " . $reportRequestInfo->getStartedProcessingDate()->format(DATE_FORMAT) . "\n");
+          }
+          if ($reportRequestInfo->isSetCompletedDate()) 
+          {
+            //        echo("                    CompletedDate\n");
+            //       echo("                        " . $reportRequestInfo->getCompletedDate()->format(DATE_FORMAT) . "\n");
+          }
+          // add end
+
+        }
+      } 
+      if ($response->isSetResponseMetadata()) { 
+        //       echo("            ResponseMetadata\n");
+        $responseMetadata = $response->getResponseMetadata();
+        if ($responseMetadata->isSetRequestId()) 
+        {
+          //             echo("                RequestId\n");
+          //            echo("                    " . $responseMetadata->getRequestId() . "\n");
+        }
+      } 
+
+      //    echo("            ResponseHeaderMetadata: " . $response->getResponseHeaderMetadata() . "\n");
+    } catch (MarketplaceWebService_Exception $ex) {
+      /*
+      echo("Caught Exception: " . $ex->getMessage() . "\n");
+      echo("Response Status Code: " . $ex->getStatusCode() . "\n");
+      echo("Error Code: " . $ex->getErrorCode() . "\n");
+      echo("Error Type: " . $ex->getErrorType() . "\n");
+      echo("Request ID: " . $ex->getRequestId() . "\n");
+      echo("XML: " . $ex->getXML() . "\n");
+      echo("ResponseHeaderMetadata: " . $ex->getResponseHeaderMetadata() . "\n");
+       */
+      log_message("info",$ex->getMessage());
+      return "notfound";
+    }
+    return "notfound";
+  }        
+  public function checking()
+  {
+    $sellerid='A2H709HJFL5E2Z';
+    self::$CI =& get_instance();               
+    $log_array=self::$CI->db->get_where("user_settings",array("sellerid" => $sellerid))->row_array();
+    print_r($log_array);
+
+  }
+  static public function getreportlist($sellerid,$check_id=NULL) // actually get request one
+  {             
+    log_message('info',"Getting the report list  ");
+    $serviceUrl="https://mws.amazonservices.com";
+    $config = array (
+      'ServiceURL' => $serviceUrl,
+      'ProxyHost' => null,
+      'ProxyPort' => -1,
+      'MaxErrorRetry' => 3
+    );
+    //    $awskey='AKIAIPGAVOI4KG2HPRZA';
+    //  $secret='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';
+    $service = new  MarketplaceWebService_Client(AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY,$config,self::$appname,self::$appversion);     
+    $request = new MarketplaceWebService_Model_GetReportRequestListRequest();
+    $request->setMerchant($sellerid);
+    $statusList = new MarketplaceWebService_Model_StatusList();
+    $idList = new MarketplaceWebService_Model_IdList();
+    $typeList = new MarketplaceWebService_Model_TypeList();
+    $request->setReportProcessingStatusList($statusList->withStatus('_DONE_')); 
+    if($check_id!=NULL)
+    {
+      $request->setReportRequestIdList($idList->withId($check_id)); 
+    }
+    $request->setReportTypeList($typeList->withType('_GET_MERCHANT_LISTINGS_DATA_'));
+    self::$CI =& get_instance();               
+    $log_array=self::$CI->db->get_where("user_settings",array("sellerid"=>$sellerid))->row_array();
+    $request->setMWSAuthToken($log_array['mwsauthtoken']); // Optional
+    return self::invokeGetReportRequestList($service, $request);                   
+
+  }   
+
+
+  static public function amazon_report($job)
+  {
+    /// we have sellerid , mkpid , and token
+//    $data = unserialize($job->workload());
+ //   log_message('info',print_r($data,TRUE));
+    log_message('info','printing the secret key');
+    log_message('info',AWS_SECRET_ACCESS_KEY);
+    log_message('info','printing the secret key11');
+    $serviceUrl="https://mws.amazonservices.com";
+    $config = array (
+      'ServiceURL' => $serviceUrl,
+      'ProxyHost' => null,
+      'ProxyPort' => -1,
+      'MaxErrorRetry' => 3
+    );
+
+//    $awskey='AKIAIPGAVOI4KG2HPRZA';
+ ///   $secret='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';
+    //$service = new  MarketplaceWebService_Client(self::$awskey,self::$secret,$config,self::$appname,self::$appversion);  
+    $service = new MarketplaceWebService_Client(
+     AWS_ACCESS_KEY_ID, 
+     AWS_SECRET_ACCESS_KEY, 
+     $config,
+     APPLICATION_NAME,
+     APPLICATION_VERSION);
+                              
+//    $service = new  MarketplaceWebService_Client(AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY,$config,self::$appname,self::$appversion);
+    $request = new MarketplaceWebService_Model_RequestReportRequest();
+    $request->setMarketplaceIdList(self::$marketplaceIdArray);
+//    $request->setMerchant($data['sellerid']);
+    $request->setMerchant(MERCHANT_ID);
+    $request->setReportType('_GET_MERCHANT_LISTINGS_DATA_');
+
+    $res=self::invokeRequestReport($service,$request);
+    while(TRUE)
+    {
+    //  log_message('info',"Sleepin for 120 seconds for ".$data['sellerid']);
+      /*
+      $id=self::getreportlist($data['sellerid']);   
+      if($id=="notfound")
+      {
+        sleep(120);
+        continue;
+      }
+      self::getreport($data['sellerid'],$id);
+      log_message('info',"ok  done populatin the mysql");
+       */
+      // now again refrehs the listing
+      // sleep(300);
+      // $res=self::invokeRequestReport();
+      break;
+      //now udate the mysql tabel
+
+
+    }
+    //now submit the 
+    // create the 
+  }              
+
+  static public function fulfillment_channel($sellerid,$sku,$mapprice)
+  {
+           $serviceUrl="https://mws.amazonservices.com";
+    $config = array (
+      'ServiceURL' => $serviceUrl,
+      'ProxyHost' => null,
+      'ProxyPort' => -1,
+      'MaxErrorRetry' => 3
+    );
+
+//    $awskey='AKIAIPGAVOI4KG2HPRZA';
+  ///  $secret='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';
+    $service = new  MarketplaceWebService_Client(AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY,$config,self::$appname,self::$appversion);       
+  if($mapprice == "AMAZON_NA")
+  {
+   $feed = <<<EOD
+<?xml version="1.0" encoding="utf-8"?>
+<AmazonEnvelope xsi:noNamespaceSchemaLocation="amznenvelope. xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
+<Header> 
+<DocumentVersion>1.01</DocumentVersion> 
+<MerchantIdentifier>$sellerid</MerchantIdentifier> 
+</Header> 
+<MessageType>Inventory</MessageType> 
+<Message> <MessageID>1</MessageID> 
+    <OperationType>Update</OperationType>
+    <Inventory>
+<SKU>$sku</SKU> 
+<FulfillmentCenterID>AMAZON_NA</FulfillmentCenterID>
+<Lookup>FulfillmentNetwork</Lookup>
+<SwitchFulfillmentTo>AFN</SwitchFulfillmentTo>
+    </Inventory>
+</Message> 
+</AmazonEnvelope>
+
+EOD;
+  }
+  else
+  {    
+    // get th aty 
+    $log2_array=self::$CI->db->get_where("user_listings",array("sellerid"=>$sellerid,"sku"=>$sku))->row_array();
+    $current_qty=$log2_array['qty'];
+    $feed = <<<EOD
+<?xml version="1.0" encoding="utf-8"?>
+<AmazonEnvelope xsi:noNamespaceSchemaLocation="amznenvelope. xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
+<Header> 
+<DocumentVersion>1.01</DocumentVersion> 
+<MerchantIdentifier>$sellerid</MerchantIdentifier> 
+</Header> 
+<MessageType>Inventory</MessageType> 
+<Message> <MessageID>1</MessageID> 
+    <OperationType>Update</OperationType>
+    <Inventory>
+<SKU>$sku</SKU> 
+<FulfillmentCenterID>DEFAULT</FulfillmentCenterID>
+<Quantity>$current_qty</Quantity>
+<SwitchFulfillmentTo>MFN</SwitchFulfillmentTo>
+    </Inventory>
+</Message> 
+</AmazonEnvelope>
+
+EOD;
+
+  }
+
+    $feedHandle = @fopen('php://memory', 'rw+');
+    fwrite($feedHandle, $feed);
+    rewind($feedHandle);
+
+    $request = new MarketplaceWebService_Model_SubmitFeedRequest();
+    $request->setMerchant($sellerid);
+    $request->setMarketplaceIdList(self::$marketplaceIdArray);
+    $request->setFeedType('_POST_INVENTORY_AVAILABILITY_DATA_');
+    //$request->setFeedType('_POST_PRODUCT_DATA_');
+    $request->setContentMd5(base64_encode(md5(stream_get_contents($feedHandle), true)));
+    rewind($feedHandle);
+    $request->setPurgeAndReplace(false);
+    $request->setFeedContent($feedHandle);
+    self::$CI =& get_instance();               
+    $log_array=self::$CI->db->get_where("user_settings",array("sellerid"=>$sellerid))->row_array();
+    $request->setMWSAuthToken($log_array['mwsauthtoken']); // Optional
+
+    rewind($feedHandle);
+
+    log_message('info','About to send the feeds');
+    self::invokeSubmitFeed($service, $request);                                         
+  }
+  static  public function amazon_update($job)
+  {   
+    // data contains sellerid, sku , key , value    
+    log_message('info','processing the jobs');
+    $data = unserialize($job->workload());
+    //    print_r($data);
+
+    log_message('info',print_r($data,TRUE));
+    $serviceUrl="https://mws.amazonservices.com";
+    $config = array (
+      'ServiceURL' => $serviceUrl,
+      'ProxyHost' => null,
+      'ProxyPort' => -1,
+      'MaxErrorRetry' => 3
+    );
+
+    log_message('info',"testing");
+    self::$CI =& get_instance();               
+    //$CI =& get_instance();
+    $log_array=self::$CI->db->get_where("user_settings",array("sellerid"=>$data['sellerid']))->row_array();
+//    $awskey='AKIAIPGAVOI4KG2HPRZA';
+ //   $secret='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';
+    log_message('info',"testing1");
+    if($log_array)
+    {
+      $service = new  MarketplaceWebService_Client(AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY,$config,self::$appname,self::$appversion);
+      //     var_dump($service);                     
+
+      log_message('info',"testing11");
+      log_message('info',print_r($service,TRUE));
+      $ret=self::common();
+      if (isset($data['min_price']))
+      {
+        self::minprice_update($data['sellerid'],$data['sku'],$data['min_price']);
+      }
+     if (isset($data['max_price']))
+      {
+        self::maxprice_update($data['sellerid'],$data['sku'],$data['max_price']);
+      }
+      if (isset($data['map_price']))
+      {
+        self::mapprice_update($data['sellerid'],$data['sku'],$data['map_price']);
+      }
+      if (isset($data['maxorderqty']))
+      {
+        self::maxorderqty_update($data['sellerid'],$data['sku'],$data['maxorderqty']);
+      }
+      if (isset($data['qty']))
+      {
+        self::qty_update($data['sellerid'],$data['sku'],$data['qty']);
+      }
+      if (isset($data['ship_price']))
+      {
+        self::shipprice_update($data['sellerid'],$data['sku'],$data['ship_price']);
+      }
+      if (isset($data['fulfillment_channel']))
+      {
+        self::fulfillment_channel($data['sellerid'],$data['sku'],$data['fulfillment_channel']);
+      }
+      if (isset($data['price']))
+      {
+        self::price_update($data['sellerid'],$data['sku'],$data['price']);
+        return FALSE;
+      }                               
+    }                      
+
+    return TRUE;
+  }
+  // back jobs
+
+  // we wnat the receouit handles
+  static public function delete_messages($sellerid,$myarray=array())
+  {       
+    if(count($myarray)>0)
+    {
+      $test=new Sqs('AKIAIBV4GQD2FHN35R5A','iD85Nxujc0y5w7f3ieuZEfLZaWX5tZ8H5sl48xXA',Sqs::ENDPOINT_US_WEST);
+      $result_array=$test->deleteMessageBatch('https://sqs.us-west-2.amazonaws.com/436456621616/'.$sellerid,$myarray);  
+    }
+  }
+  static public function process_messages()
+  {
+  }
+  static public function validate_messages($sellerid)
+  {
+    $log_array=self::$CI->db->get_where("user_settings",array("sellerid"=>$sellerid))->row_array();
+    $return_array=self::$CI->db->get_where("subscription",array("sellerid"=>$sellerid))->row_array();
+    if($return_array['plan']!='free')
+    {
+      // now process the message
+    }
+    else
+    {
+      return FALSE;
+    }
+  }
+  static public function amazon_sqs($job)
+  {
+    $data = unserialize($job->workload());
+    $sellerid=$data['sellerid'];
+    self::$CI =& get_instance();  
+    $attr['WaitTimeSeconds']=20;
+    $receipt=array();
+    while(1)
+    {
+      $result_array=self::$CI->sqs->receiveMessage('https://sqs.us-west-2.amazonaws.com/436456621616/'.$data['sellerid'],10,null,$attr);
+      if($result_array!=null)
+      {
+        log_message('info','processing sqs message for '.print_r($result_array,TRUE));
+        foreach($result_array as $myarray)
+        {
+          //get the receipt handle
+          foreach ($result_array['Messages'] as $mess)
+          {
+            $receipt[]=$mess['ReceiptHandle'];
+            $xml=simplexml_load_string($mess['Body']);
+            $sellerid=trim($xml->NotificationMetaData->SellerId);
+            $mkpid=trim($xml->NotificationMetaData->MarketplaceId);
+            $asin=trim($xml->NotificationPayload->AnyOfferChangedNotification->OfferChangeTrigger->ASIN);
+            $condn=trim($xml->NotificationPayload->AnyOfferChangedNotification->OfferChangeTrigger->ItemCondition);
+            // fetcha all the info based on sleler id and asin
+            $new=array(); 
+            $new['sellerid']=$sellerid;
+            $new['marketplace']=$mkpid;
+            $log_array=self::$CI->db->get_where("user_listings",array("sellerid"=>$sellerid,"asin"=>$asin,"marketplace"=>$mkpid,"item_condition"=>$condn));
+            if($log_array->num_rows()>0)
+            {
+              foreach($log_array->result_array() as $row)
+              {
+//                if((int)$row['qty']==0)
+ //                 continue;
+                if(strcasecmp($condn,$condition)!=0)
+                  continue;
+                // ok got the details
+                $lowest=0;
+                $new['sku']=$row['sku'];
+                $new['asin']=$asin;
+                $new['price']=buybox_formula((int)$lowest,(int)$row['min_price'],(int)$row['max_price'],(int)$row['price'],(int)$row['ship_price']);
+                //            $new['marketplace']=$mkpid;
+                //          $new['asin']=$asin;
+                $new['bb']=isset($pass_array[$row['seller-sku']]['bb'])?$pass_array[$row['seller-sku']]['bb']:'no'; 
+                $new['bb_price']=isset($pass_array[$row['seller-sku']]['bb_price'])?$pass_array[$row['seller-sku']]['bb_price']:'notset'; 
+
+                /// now update the c1-c10 prices
+                for($i=1;$i<=10;$i++)
+                {
+                  if(isset($pass_array[$row['seller-sku']]["c".$i]))
+                  {
+                    $new['c'.$i]=$pass_array[$row['seller-sku']]["c".$i];
+                  }
+
+                }
+              }
+            }
+          }
+        }
+        //   $new['beatby']=;
+          //    $new['map_price']=;
+          $new['prevprice']=$row['price']; 
+          //    $new['competitor_price']=;
+      $new['email']=$log_array['email'];                          
+          }
+
+        // porcess the meesa ge 
+        // submit the feeds reprticing alfo based on beatbby formula or value option ok 
+
+      else
+      {
+        //        log_message('info','sleeping sqs message for '.$data['sellerid']);
+      }
+
+      log_message('info','sleeping sqs message for 10 seconds '.$data['sellerid']);
+      delete_messages($receipt);
+
+      //        sleep(10);
+      sleep(60);
+    }
+    //    $new['436456621616']='*';
+    //   print_r(self::$CI->sqs->createQueue('justtesting',30));
+    //    print_r(self::$CI->sqs->listQueues());
+    //   print_r(self::$CI->sqs->addPermission('https://sqs.us-west-2.amazonaws.com/436456621616/justtesting','justlabel',$new));   
+    //    print_r(self::$CI->sqs->getQueueAttributes('https://sqs.us-west-2.amazonaws.com/436456621616/justtesting'));
+    //    print_r($data);
+  }     
+  public function sendemailnow()
+  {
+
+    if(!$this->input->is_cli_request())
+    {
+      log_message('error',"sendemailnow my only be accessed from the command line");
+      return;
+    }
+
+    log_message('info',"sendemailnow created from the cron jobs");
+    $worker= new GearmanWorker();
+    $worker->addServer("localhost",4730);
+    $worker->addFunction("send_email", "Testing::send_email");
+    while ($worker->work());
+  }        
+  public function pricemap()
+  {
+
+    if(!$this->input->is_cli_request())
+    {
+      log_message('error',"created price map reports my only be accessed from the command line");
+      return;
+    }
+
+    log_message('info',"created pricemap  from the cron jobs");
+    $worker= new GearmanWorker();
+    $worker->addServer("localhost",4730);
+    $worker->addFunction("pricemap_report", "Testing::pricemap_report");
+    while ($worker->work());
+  }                      
+   public function createdynamicreport()
+  {
+
+    if(!$this->input->is_cli_request())
+    {
+      log_message('error',"createdynamicreport my only be accessed from the command line");
+      return;
+    }
+
+    log_message('info',"createdynamicreport created from the cron jobs");
+    $worker= new GearmanWorker();
+    $worker->addServer("localhost",4730);
+    $worker->addFunction("dynamic_report", "Testing::dynamic_report");
+    while ($worker->work());
+  }              
+  public function createamazonupdate_workers()
+  {
+
+    if(!$this->input->is_cli_request())
+    {
+      log_message('error',"createamazonupdate_workers my only be accessed from the command line");
+      return;
+    }
+
+    log_message('info',"createamazonupdate_workers created from the cron jobs");
+    $worker= new GearmanWorker();
+    $worker->addServer("localhost",4730);
+    $worker->addFunction("amazon_update", "Testing::amazon_update");
+    while ($worker->work());
+  }
+  public function createamazonsqs_workers()
+  {
+
+    if(!$this->input->is_cli_request())
+    {
+      log_message('error', "createamazonsqs_workers only be accessed from the command line");
+      return;
+    }       
+    log_message('info',"createamazonsqs_workers created from the cron jobs");
+    $worker= new GearmanWorker();
+    $worker->addServer("localhost",4730);
+    $worker->addFunction("amazon_sqs", "Testing::amazon_sqs");
+    while ($worker->work());        
+  }    
+  public function createamazonreport()
+  {
+
+    if(!$this->input->is_cli_request())
+    {
+      log_message('error', "createamazonraeport only be accessed from the command line");
+      return;
+    }       
+    log_message('info',"createamazonreport created from the cron jobs");
+    $worker= new GearmanWorker();
+    $worker->addServer("localhost",4730);
+    $worker->setTimeout(-1);
+    //$worker->addFunction("amazon_report", "Testing::amazon_report");
+    $worker->addFunction("amazon_report", "Testing::getnewreport");
+    while ($worker->work());        
+  }                                   
+  //this is tehe montioring services
+  public function index()
+  {  
+    //    $this->load->helper('amazon_helper');
+    log_message('info',date('Y-m-d H:i:s')." monitoring index ".dirname(__FILE__));
+    //$this->load->library('gearmanclusteradmin',array('localhost:4730','localhost:4734') );
+    $this->load->library('gearmanclusteradmin',array('localhost:4730') );
+    //    $this->load->library('gearmanclusteradmin');
+
+    //  $test=new GearmanClusterAdmin(array('localhost:4730','localhost:4734'));
+    //    $test=new GearmanClusterAdmin(array('localhost:4730'));
+    $myamazon= $this->gearmanclusteradmin->getAccumaltiveJobs();  
+    if(isset($myamazon['amazon_update']))
+    { 
+      $available=$myamazon['amazon_update']['TOTAL']-$myamazon['amazon_update']['RUNNING'];
+      if($available>$myamazon['amazon_update']['AVAILABLE'])
+      {
+        log_message('info',date('Y-m-d H:i:s')." Created amazon update workeers");
+        exec("nohup /usr/bin/php /var/www/html/index.php testing createamazonupdate_workers >/dev/null &");
+      }
+    }
+    if(isset($myamazon['amazon_sqs']))
+    {
+      $available=$myamazon['amazon_sqs']['TOTAL']-$myamazon['amazon_sqs']['RUNNING'];
+      if($available>$myamazon['amazon_sqs']['AVAILABLE'])
+      {
+        log_message('info',date('Y-m-d H:i:s')." Created amazon sqs workeers");
+        exec("nohup php /var/www/html/index.php testing createamazonsqs_workers >/dev/null &");
+      }
+    } 
+    if(isset($myamazon['amazon_report']))
+    {
+      $available=$myamazon['amazon_report']['TOTAL']-$myamazon['amazon_report']['RUNNING'];
+      if($available>$myamazon['amazon_report']['AVAILABLE'])
+      {
+        log_message('info',date('Y-m-d H:i:s')." Created amazon reports".$myamazon['amazon_report']['TOTAL']." ".$myamazon['amazon_report']['RUNNING']);
+        exec("nohup php /var/www/html/index.php testing createamazonreport >/dev/null &");
+      }                               
+    }    
+    if(isset($myamazon['dynamic_report']))
+    {
+      $available=$myamazon['dynamic_report']['TOTAL']-$myamazon['dynamic_report']['RUNNING'];
+      if($available>$myamazon['dynamic_report']['AVAILABLE'])
+      {
+        log_message('info',date('Y-m-d H:i:s')." Created dynamic amazon reports");
+        exec("nohup php /var/www/html/index.php testing createdynamicreport >/dev/null &");
+      }                               
+    }      
+    if(isset($myamazon['send_email']))
+    {
+      $available=$myamazon['send_email']['TOTAL']-$myamazon['send_email']['RUNNING'];
+      if($available>$myamazon['send_email']['AVAILABLE'])
+      {
+        log_message('info',date('Y-m-d H:i:s')." Created send email reports");
+        exec("nohup php /var/www/html/index.php testing sendemailnow >/dev/null &");
+      }                               
+    }      
+    if(isset($myamazon['price_map']))
+    {
+      $available=$myamazon['price_map']['TOTAL']-$myamazon['price_map']['RUNNING'];
+      if($available>$myamazon['price_map']['AVAILABLE'])
+      {
+        log_message('info',date('Y-m-d H:i:s')." Created price map reports");
+        exec("nohup php /var/www/html/index.php testing pricemap >/dev/null &");
+      }                               
+    }                                                                  
+  }
+}
+
+?>

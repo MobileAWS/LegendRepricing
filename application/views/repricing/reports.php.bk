@@ -1,0 +1,180 @@
+<div class="container-fluid">     
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h2 class="panel-title"><b>Download listings</b></h2>
+    </div>  
+    <br/>
+    <div class="row">
+      <div class="col-md-3">
+        <ul class="nav nav-pills nav-stacked">
+          <li ><a  href="<?php echo base_url("content/activity");?>" >Recent Activity</a></li>
+          <li class="active"><a  href="<?php echo base_url("content/reports");?>">Download Reports</a></li>
+        </ul>
+      </div>
+      <div class="col-md-9">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <div class="row">
+              <div class="col-md-9">
+                <h3 class="panel-title">LISTINGS THAT HAVE THE BUY BOX</h3>
+              </div>
+              <div class="col-md-3">
+                <div class="pull-right">
+ <a id="disable" href="<?php echo base_url("asset/downloads/sample.csv");?>" download="sampleprice.csv"> 
+                  Download <span class="glyphicon glyphicon-download-alt"></span>    </a>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="panel-body">All listings that display Buy Box ownership in legend pricing at the time of export. </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <div class="row">
+              <div class="col-md-9">
+                <h3 class="panel-title">LISTINGS THAT DO NOT HAVE THE BUY BOX</h3>
+              </div>
+              <div class="col-md-3">
+                <div class="pull-right">
+ <a id="disable" href="<?php echo base_url("asset/downloads/sample.csv");?>" download="sampleprice.csv"> 
+                  Download <span class="glyphicon glyphicon-download-alt"></span>    </a>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="panel-body">All listings that do not display Buy Box ownership in legend pricing at the time of export.</div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <div class="row">
+              <div class="col-md-9">
+                <h3 class="panel-title">LISTINGS AT MIN PRICE</h3>
+              </div>
+              <div class="col-md-3">
+                <div class="pull-right">
+ <a id="disable" href="<?php echo base_url("asset/downloads/sample.csv");?>" download="sampleprice.csv"> 
+                  Download <span class="glyphicon glyphicon-download-alt"></span>    </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="panel-body">All listings that are currently at their min price. </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <div class="row">
+              <div class="col-md-9">
+
+                <h3 class="panel-title">LISTINGS AT MAX PRICE</h3>
+              </div>
+              <div class="col-md-3">
+                <div class="pull-right">
+ <a id="disable" href="<?php echo base_url("asset/downloads/sample.csv");?>" download="sampleprice.csv"> 
+                  Download <span class="glyphicon glyphicon-download-alt"></span>    </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-body">All listings that are currently at their max price. </div>
+        </div>
+        <div class="panel panel-default">
+
+          <div class="panel-heading">
+            <div class="row">
+              <div class="col-md-9">
+
+                <h3 class="panel-title">LISTING WITHOUT A MIN PRICE</h3>
+              </div>
+              <div class="col-md-3">
+                <div class="pull-right">
+ <a id="disable" href="<?php echo base_url("asset/downloads/sample.csv");?>" download="sampleprice.csv"> 
+                  Download <span class="glyphicon glyphicon-download-alt"></span>    </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="panel-body">All listings without a min price set.</div>
+        </div> 
+        <div class="panel panel-default">
+          <div class="panel-heading">
+
+            <div class="row">
+              <div class="col-md-9">
+
+                <h3 class="panel-title">LISTINGS THAT ARE BEING BEATEN</h3>
+              </div>
+              <div class="col-md-3">
+                <div class="pull-right">
+ <a id="disable" href="<?php echo base_url("asset/downloads/sample.csv");?>" download="sampleprice.csv"> 
+                  Download <span class="glyphicon glyphicon-download-alt"></span>    </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-body">All listings where the competitors total price is below your total current price. </div>
+        </div>                         
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <div class="row">
+              <div class="col-md-9">
+
+                <h3 class="panel-title">COMPETITOR SUMMARY</h3>
+              </div>
+
+              <div class="col-md-3">
+                <div class="pull-right">
+ <a id="disable" href="<?php echo base_url("asset/downloads/sample.csv");?>" download="sampleprice.csv"> 
+                  Download <span class="glyphicon glyphicon-download-alt"></span>    </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-body">Brief report containing competitor names, the number of listings you are competing with them on, the number of listings you are beating them on and listings you own the Buy Box on. </div>
+        </div> 
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <div class="row">
+              <div class="col-md-9">
+
+                <h3 class="panel-title">OUT OF STOCK ITEMS</h3>
+              </div>
+              <div class="col-md-3">
+                <div class="pull-right">
+ <a id="disable" href="<?php echo base_url("asset/downloads/sample.csv");?>" download="sampleprice.csv"> 
+                  Download <span class="glyphicon glyphicon-download-alt"></span>    </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-body">All listings with 0 inventory in legend pricing. Please keep in mind that this report is only kept up to date when Quantity Sync is enabled. </div>
+        </div>   
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <div class="row">
+              <div class="col-md-9">
+
+
+                <h3 class="panel-title">COMPETITION BELOW MIN PRICE</h3>
+              </div>
+              <div class="col-md-3">
+                <div class="pull-right">
+ <a id="disable" href="<?php echo base_url("asset/downloads/sample.csv");?>" download="sampleprice.csv"> 
+                  Download <span class="glyphicon glyphicon-download-alt"></span>    </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-body">All listings where your competitor's price is below the min price you've set. </div>
+        </div>  
+      </div>
+    </div>
+  </div>

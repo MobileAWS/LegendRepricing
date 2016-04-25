@@ -1,0 +1,371 @@
+@font-face {
+    font-family: 'LeagueGothicRegular';
+    src: url('fonts/league_gothic-webfont.eot');
+    src: url('fonts/league_gothic-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/league_gothic-webfont.woff') format('woff'),
+         url('fonts/league_gothic-webfont.ttf') format('truetype'),
+         url('fonts/league_gothic-webfont.svg#LeagueGothicRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+@font-face {
+	font-family: 'ChevinLight';
+	src: url('fonts/chevinlight.eot');
+	src: url('fonts/chevinlight.eot?#iefix') format('embedded-opentype'),  url('fonts/chevinlight.woff') format('woff'),  url('fonts/chevinlight.ttf') format('truetype'),  url('fonts/chevinlight.svg#chevinlight') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+body {
+	background:url(images/bg.jpg) center top repeat;
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+}
+#container	{
+	width:100%;
+	height:auto;
+	overflow:hidden;
+	background:url(images/full-bk.jpg) center top no-repeat;
+}
+#wrapper	{
+	width:980px;
+	height:auto;
+	overflow:hidden;
+	margin:0 auto;
+	margin-bottom:30px;
+}
+#logo	{
+	width:485px;
+	height:124px;
+	overflow:hidden;
+	margin:0 auto;
+	margin-top:35px;
+}
+#wht-mn-bx	{
+	width:910px;
+	height:auto;
+	overflow:hidden;
+	-moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    border-radius: 5px;
+	-moz-box-shadow: 0 0 5px 5px #07889d;
+	-webkit-box-shadow: 0 0 5px 5px #07889d;
+	box-shadow: 0 0 5px 3px #3cabbe;
+	margin:0 auto;
+	margin-bottom:10px;
+	background:url(images/code.jpg) 675px 0px no-repeat #FFF;
+	padding-left:25px;
+	padding-right:25px;
+}
+#header	{
+	width:910px;
+	height:auto;
+	overflow:hidden;
+	margin-top:25px;
+}
+#bnr	{
+	width:auto;
+	height:auto;
+	overflow:hidden;
+}
+#bnr-shadow	{
+	width:auto;
+	height:auto;
+	overflow:hidden;
+}
+#steps-main	{
+	width:auto;
+	height:auto;
+	overflow:hidden;
+}
+#step1-sec	{
+	width:410px;
+	height:auto;
+	overflow:hidden;
+	float:left;
+}
+h1	{
+	font:normal 47px 'LeagueGothicRegular';
+	text-decoration:none;
+	color:#34063e;
+	text-transform:uppercase;
+	margin-bottom:-14px;
+	margin-top:15px;
+}
+h1 span	{
+	color:#510e60;
+}
+#step1-bx	{
+	width:auto;
+	height:200px;
+	overflow:hidden;
+	background-color:#34063e;
+	padding:15px 25px;
+}
+h3	{
+	font:normal 20px 'ChevinLight';
+	text-decoration:none;
+	color:#fff;
+	text-transform:uppercase;
+	background:url(images/hor-double-bdr.png) center bottom repeat-x;
+	padding-bottom:10px;
+	margin-top:0px;
+	margin-bottom:0px;
+}
+
+#step1-bx ul	{
+	list-style:none;
+	padding:0px;
+	margin:0px;
+	margin-top:22px;
+}
+#step1-bx ul li	{
+	float:left;
+	padding:0px;
+	width:108px;
+	font:normal 18px 'ChevinLight';
+	text-decoration:none;
+	color:#fff;
+	text-transform:uppercase;
+	text-align:center;
+	margin-right:5px;
+}
+.fb-icon	{
+	padding:0px;
+	float:left;
+	margin-right:5px;
+}
+.fb-icon a	{
+	background-color:#fff !important;
+	display:inline-block;
+    -moz-transition: all 0.4s ease-in;
+    -webkit-transition: all 0.4s ease-in;
+    -o-transition: all 0.4s ease-in;
+    transition: all 0.4s ease-in;
+	-moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    border-radius: 5px;
+}
+.fb-icon a:hover	{
+	background-color:#5273cc !important;
+	display:inline-block;
+}
+
+.tw-icon	{
+	padding:0px;
+	float:left;
+	margin-right:5px;
+}
+.tw-icon a	{
+	background-color:#fff !important;
+	display:inline-block;
+    -moz-transition: all 0.4s ease-in;
+    -webkit-transition: all 0.4s ease-in;
+    -o-transition: all 0.4s ease-in;
+    transition: all 0.4s ease-in;
+	-moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    border-radius: 5px;
+}
+.tw-icon a:hover	{
+	background-color:#62bbf0 !important;
+	display:inline-block;
+}
+.tum-icon	{
+	padding:0px;
+	float:left;
+}
+.tum-icon a	{
+	background-color:#fff !important;
+	display:inline-block;
+    -moz-transition: all 0.4s ease-in;
+    -webkit-transition: all 0.4s ease-in;
+    -o-transition: all 0.4s ease-in;
+    transition: all 0.4s ease-in;
+	-moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    border-radius: 5px;
+}
+.tum-icon a:hover	{
+	background-color:#4a65a3 !important;
+	display:inline-block;
+}
+
+#step2-sec	{
+	width:500px;
+	height:auto;
+	overflow:hidden;
+	float:left;
+}
+#step2-bx	{
+	width:auto;
+	height:200px;
+	overflow:hidden;
+	background-color:#510e60;
+	padding:15px 25px;
+}
+.smal-txt	{
+	font:normal 11px Arial, Helvetica, sans-serif;
+	text-decoration:none;
+	color:#c490d0;
+}
+#contents-main	{
+	width:auto;
+	height:auto;
+	overflow:hidden;
+}
+#ver-double-bdr	{
+	width:525px;
+	height:auto;
+	overflow:hidden;
+	background:url(images/ver-double-bdr.jpg) right top repeat-y;
+	margin-top:25px;
+	margin-bottom:25px;
+	float:left;
+}
+#testi-lft-sec	{
+	width:495px;
+	height:auto;
+	overflow:hidden;
+	float:left;
+	font:normal 12px Arial, Helvetica, sans-serif;
+	text-decoration:none;
+	color:#000;
+}
+#testi-lft-sec ul	{
+	list-style:none;
+	padding:0px;
+	margin:0px;
+}
+#testi-lft-sec ul li	{
+	padding:10px 0 10px 0;
+	border-bottom:#eeeeee solid 1px;
+}
+#post-main	{
+	width:auto;
+	height:auto;
+	overflow:hidden;
+}
+.t-pics	{
+	width:50px;
+	height:auto;
+	overflow:hidden;
+	float:left;
+}
+.post-info	{
+	width:425px;
+	height:auto;
+	overflow:hidden;
+	float:left;
+	margin-left:15px;
+}
+#title	{
+	width:auto;
+	height:auto;
+	overflow:hidden;
+	font:bold 12px Arial, Helvetica, sans-serif;
+	text-decoration:none;
+	color:#34063e;
+}
+#title span	{
+	font:normal 10px Arial, Helvetica, sans-serif;
+	text-decoration:none;
+	color:#808080;
+}
+#post-detail	{
+	width:auto;
+	height:auto;
+	overflow:hidden;
+	font:normal 11px Arial, Helvetica, sans-serif;
+	text-decoration:none;
+	color:#333;
+	line-height:20px;
+}
+#post-detail a	{
+	font:normal 10px Arial, Helvetica, sans-serif;
+	text-decoration:none;
+	color:#036575;
+}
+#post-detail a:hover	{
+	text-decoration:underline;
+	color:#333;
+}
+h2	{
+	font:normal 38px 'LeagueGothicRegular';
+	text-decoration:none;
+	color:#510e60;
+	text-transform:uppercase;
+	border-bottom:#1a0120 solid 2px;
+	margin-top:0px;
+	margin-bottom:0px;
+}
+#grey-bx	{
+	width:418px;
+	height:auto;
+	overflow:hidden;
+	background-color:#f2f2f2;
+	border:#cccccc solid 1px;
+	float:left;
+	font:normal 12px Arial, Helvetica, sans-serif;
+	text-decoration:none;
+	color:#333333;
+	padding:10px;
+}
+#grey-bx span	{
+	font:bold 12px Arial, Helvetica, sans-serif;
+	text-decoration:none;
+	color:#036575;
+}
+.text-area	{
+	width:406px;
+	height:auto;
+	font:normal 12px Arial, Helvetica, sans-serif;
+	text-decoration:none;
+	color:#666;
+	border:#bfc8d7 solid 1px;
+	margin-top:5px;
+	padding:5px;
+}
+#admin-com	{
+	width:200px;
+	height:auto;
+	overflow:hidden;
+	text-align:right;
+	font:bold 11px Arial, Helvetica, sans-serif;
+	text-decoration:none;
+	color:#036575;
+	float:right;
+}
+#admin-com a	{
+	font:bold 11px Arial, Helvetica, sans-serif;
+	text-decoration:none;
+	color:#036575;
+}
+#admin-com a:hover	{
+	text-decoration:underline;
+	color:#000;
+}
+
+
+#right-sec	{
+	width:360px;
+	height:auto;
+	overflow:hidden;
+	float:right;
+}
+#ituns-bxs	{
+	width:auto;
+	height:auto;
+	overflow:hidden;
+}
+#ituns-crd	{
+	width:auto;
+	height:auto;
+	overflow:hidden;
+}
