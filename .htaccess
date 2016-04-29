@@ -1,5 +1,5 @@
 RewriteEngine on
-RewriteBase /maws_dev
+RewriteBase /
 RewriteCond %{HTTPS} !=on
 RewriteRule ^.*$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 RewriteCond %{REQUEST_FILENAME} !-f

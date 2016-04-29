@@ -11,7 +11,7 @@
  *
  * @author 
  */
-class LegendRepricing {
+class LegendRepricer {
 
     //put your code here
     private $product;
@@ -20,6 +20,8 @@ class LegendRepricing {
     private $buyBox = null;
     private $hasBuyBox;
     private $ourPrice;
+    private $matchedOffers = array();
+    private $lowestOffer;
     private $channelList = array(
         'DEFAULT' => array('all', 'amazon', 'fba', 'amazonandfba', 'amazonandfba'),
         'AMAZON_NA' => array('all', 'nonfba')
@@ -30,13 +32,24 @@ class LegendRepricing {
         $this->rules = $rules;
         $this->checkOurPrice();
         $this->checkBuyBox();
-        $this->isMatched();
+        $this->matchOffers();
     }
 
     /**
     * Reprice product based on settings
     */
     function reprice() {
+//        debug($this);exit();
+        debug('Nmae: '.$this->rules['itemname']);
+        $link = "<a href='http://www.amazon.com/gp/product/{$this->product->identifiers['MarketplaceASIN']['ASIN']}' target='_blank'>view</a>";
+        debug('SKU: '.$this->rules['sku'].' '.$link);
+        debug('Our Price: '.$this->ourPrice->landed);
+        $hasBuyBox = $this->hasBuyBox->landed ? 'Yes':'No';
+        debug('Buy Box: '.$this->buyBox->landed.' ('.$hasBuyBox.')');
+//        debug('Competitive Price'); debug($this->product->competitivePrices);
+        debug('Lowest Offer: '.$this->lowestOffer['Price']->landed);
+        debug($this->matchedOffers);
+        exit();
         $bb_price = $this->buyBox->listing;
         $bb_shipping = $this->buyBox->shipping;
         $price = $this->rules['price'];
@@ -121,7 +134,7 @@ class LegendRepricing {
     /**
     * Check if product is matched in lowest offerings
     */
-    public function isMatched() {
+    public function matchOffers() {
         if ($this->matched !== null) {
             return $this->matched;
         }
@@ -130,7 +143,15 @@ class LegendRepricing {
         $items = $this->product->lowestOffers;
         foreach ($items as $item) {
             $tmpPrice = new MWS_Price($itemp['Price']);
-
+            $condition = strcasecmp($item['Qualifiers']['ItemCondition'],$this->product->myOffer['ItemCondition']) === 0 &&
+                    strcasecmp($item['Qualifiers']['ItemSubcondition'], $this->product->myOffer['ItemSubCondition']) === 0;
+            
+            if( $condition ){
+                $this->matchedOffers[] = $item;
+            }
+            
+            
+            
             $condition = strcasecmp($item['condition'], $this->rules['item_condition']) === 0 &&
                     strcasecmp($item['subcondition'], $this->rules['item_subcondition']) === 0 &&
                     $tmpPrice->listing == $this->buyBox->listing &&
@@ -141,12 +162,13 @@ class LegendRepricing {
             }
 
             if (in_array($this->rules['comp_type'], $this->channelList[$channel])) {
-                debug($this->ourPrice);
-                debug($item);
-                die('matched');
                 $this->matched = true;
             }
         }
+        $lowestOffer = $this->matchedOffers[0];
+        $lowestOffer['Price'] = new MWS_Price($lowestOffer['Price']);
+        $this->lowestOffer = $lowestOffer;
+//        debug($this->lowestOffer);exit();
     }
     
     /**

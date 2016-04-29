@@ -127,6 +127,7 @@ class MWS_Seller {
             $products = $amz->getProduct();
             foreach ($products as $product) {
                 $tmp = $product->getData();
+//                debug($tmp);exit();
                 $results[$tmp['Identifiers']['SKUIdentifier']['SellerSKU']]['LowestOfferListings'] = $tmp['LowestOfferListings'];
             }
             $start +=  $limit;
