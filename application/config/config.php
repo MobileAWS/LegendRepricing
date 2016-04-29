@@ -277,7 +277,7 @@ $config['sess_time_to_update']	= 300;
 */
 $config['cookie_prefix']	= "";
 $config['cookie_domain']	= "";
-$config['cookie_path']		= "/";
+$config['cookie_path']		= "/maws_dev";
 $config['cookie_secure']	= FALSE;
 
 /*
