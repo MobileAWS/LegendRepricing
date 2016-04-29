@@ -74,7 +74,7 @@ class Listings extends CI_Controller {
                     $myList[ $sku ]['new_price'] = $lr->newPrice;
                     $myList[ $sku ]['bb'] = $lr->hasBuyBox ? 'yes' : 'no';
                     $myList[ $sku ]['bb_price'] = $lr->buyBox->landed;
-                    $myList[ $sku ]['bb'] = 'yes';
+//                    $myList[ $sku ]['bb'] = 'yes';
                     
                 }
             }
