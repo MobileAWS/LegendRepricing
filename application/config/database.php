@@ -51,11 +51,9 @@ $active_record = TRUE;
 
 
 $db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'root';
-//$db['default']['password'] = 'harekrishnaharekrishna1594';
-//$db['default']['database'] = 'amazon';
-$db['default']['password'] = 'mysql';
-$db['default']['database'] = 'legendpricing';
+$db['default']['username'] = 'devlp';
+$db['default']['password'] = 'kahnaika7y65';
+$db['default']['database'] = 'dev_legendrepricing';
 
 
 $db['default']['dbdriver'] = 'mysql';
