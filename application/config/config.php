@@ -19,7 +19,7 @@ error_reporting(E_ALL-E_NOTICE);
 	$root                  = str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']);
 	$proto                 = "http" .((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "s" : "") . "://";
 	$server                = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
- $config['base_url']    = 'https://' . $server.$root.'maws_dev';
+ $config['base_url']    = 'https://' . $server.$root;
 	
 	define('ROOT_DIR',dirname(dirname(dirname(__FILE__))));
 	define('PRO_NAME', 'Deck');
