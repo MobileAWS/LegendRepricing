@@ -13,4 +13,12 @@ function debug($v){
     print_r('</pre>');
 }
 
+function cli_echo($string,$nl=true){
+    if (php_sapi_name() != 'cli') {
+        return;
+    }
+    $pnl =$nl ? "\n":'';
+    echo $string.$pnl;
+}
+
 ?>

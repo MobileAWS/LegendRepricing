@@ -58,32 +58,36 @@ class LegendRepricer {
         $min = (float) $this->rules['min_price'];
         $max = (float) $this->rules['max_price'];
         $beatBy = $this->rules['beatby'];
-        $beatBy = 'formula';
+//        $beatBy = 'formula';
         $beatByValue = (float) $this->rules['beatbyvalue'];
         if( $min <= 0 ){
             $this->newPrice = false;
             return;
         }
-        
+//        debug($beatBy);
         switch($beatBy){
             case 'formula':
                 $nlanding = $this->buybox_formula($bb_price, $bb_shipping, $price, $shipping);
                 break;
             case 'beatby':
-                $nlanding = $this->beatBy($bb_price, $bb_shipping, $price, $shipping);
+                $nlanding = $this->beatBy($bb_price, $bb_shipping, $beatByValue);
                 break;
             case 'beatmeby':
-                $nlanding = $this->beatMeBy($bb_price, $bb_shipping, $price, $shipping);
+                $nlanding = $this->beatMeBy($bb_price, $bb_shipping, $beatByValue);
                 break;
             case 'matchprice':
-                $nlanding = $this->matchPrice($bb_price, $bb_shipping, $price, $shipping);
+                $nlanding = $this->matchPrice($bb_price, $bb_shipping, $price);
                 break;
             
         }
-        
-        $new_price = $price;
+//        debug($nlanding.' ('.$min.' - '.$max.')');
+        $new_price = null;
         if( $nlanding <= $min ){
             $new_price = $min-$shipping;
+            debug('if '.$new_price);
+        }else if( $nlanding - $shipping >= $max ){
+            $new_price = $max-$shipping;
+            debug('else '.$new_price);
         }else{
             $new_price = $nlanding-$shipping;
         }
@@ -96,21 +100,21 @@ class LegendRepricer {
         $bb_landing = $bb_price + $bb_shipping;
         $landing = $price + $shipping;
         $i=0;
-        while($landing > $bb_landing && $i++<100){
-            $landing = $landing - $landing*0.01;
+        while($landing >= $bb_landing && $i++<100){
+            $landing = round($landing - $landing*0.01,2);
         }
-        return round($landing,2);
+        return $landing;
     }
 
     private function beatBy($bb_price, $bb_shipping, $beatByPrice ) {
         $bb_landing = $bb_price + $bb_shipping;
-        return $landing - $beatByPrice;
+        return $bb_landing - $beatByPrice;
     }
     
     // need to change it
-    private function beatMeBy($bb_price, $bb_shipping, $price, $shipping) {
+    private function beatMeBy($bb_price, $bb_shipping, $beatByPrice) {
         $bb_landing = $bb_price + $bb_shipping;
-        return $landing + $beatByPrice;
+        return $bb_landing + $beatByPrice;
     }
     
     // need to change it

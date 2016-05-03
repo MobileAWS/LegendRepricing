@@ -65,7 +65,10 @@ $forumulas = array('formula','beatby','beatmeby','matchprice');
                                         <?php if($reprice) {?>
                                         <td><?php 
                                         if( $val['new_price'] ){
-                                            echo sprintf('%.2f', $val['new_price']); 
+                                            $shipping_cost = $va['ship_price'] == 0 ? 'free' : sprintf('%.2f', $val['ship_price']);
+                                            echo '<div style="text-align: center;">'.sprintf('%.2f', $val['new_price']+$val['ship_price']).'</div>';
+                                            echo '<div style="text-align: center;"><span style="color:GREEN;font-weight:bold">'.sprintf('%.2f', $val['new_price']).'</span> + <span style="font-size:10px">'.$shipping_cost.' shipping</span></div>';
+                                            
                                         }else{
                                             echo "--";
                                         }

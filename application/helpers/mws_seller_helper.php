@@ -28,6 +28,7 @@ class MWS_Seller {
     * communitcate with Amazon
     */
     function __construct($seller_id, $marketplace_id = null) {
+        cli_echo('Initializing seller..'.$seller_id);
         $CI = & get_instance();
         $this->db = $CI->db;
         if ($marketplace_id == null) {
@@ -45,6 +46,7 @@ class MWS_Seller {
     * 
     */
     function getListings($status = null) {
+        cli_echo('Fetching seller listings');
         $conditions = array(
             "sellerid" => $this->seller['sellerid'],
             "marketplaceid" => $this->seller['marketplaceid']
@@ -97,10 +99,12 @@ class MWS_Seller {
         $results = array();
         $limit = 20;
         $start =  0;
+        cli_echo('Fetching listing from amazon...');
         while ($skuList = array_slice($skuArray, $start, $limit)) {
             // get my pricing
             $amz = new AmazonProductInfo();
             $amz->setSKUs($skuList);
+            cli_echo('fetchMyPrice for '. implode(', ',$skuList));
             $amz->fetchMyPrice();
             $products = $amz->getProduct();
             foreach ($products as $product) {
@@ -113,6 +117,7 @@ class MWS_Seller {
             // get competitive pricing
             $amz = new AmazonProductInfo();
             $amz->setSKUs($skuList);
+            cli_echo('fetchCompetitivePricing for '. implode(', ',$skuList));
             $amz->fetchCompetitivePricing();
             $products = $amz->getProduct();
             foreach ($products as $product) {
@@ -123,6 +128,7 @@ class MWS_Seller {
             // get competitive pricing
             $amz = new AmazonProductInfo();
             $amz->setSKUs($skuList);
+            cli_echo('fetchLowestOffer for '. implode(', ',$skuList));
             $amz->fetchLowestOffer();
             $products = $amz->getProduct();
             foreach ($products as $product) {
