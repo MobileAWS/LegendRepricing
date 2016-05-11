@@ -33,8 +33,36 @@ class legend_pricing {
         
         
         $products = $seller->getMWSProductsListing($skuList);
-        
         return $products;
+    }
+    
+    function reprice_product($sellerID,$sku){
+        $seller = new MWS_Seller($sellerID);
+        $product = $seller->LocalGetProduct($sku);
+        $item = $seller->MWSGetProduct( $sku );
+        
+        if( !$item['Offers'] ){
+            $product['status'] = 'inactive';
+        }
+        
+        $lr = new LegendRepricer($item, $product);
+        $lr->reprice();
+        
+        if( !$lr->newPrice ){
+            $product['price'] = $lr->ourPrice->listing;
+        }
+        
+        if( $lr->hasBuyBox ){
+            $product['price'] = $lr->ourPrice->listing;
+        }
+        
+        $product['bb'] = $lr->hasBuyBox ? 'yes' : 'no';
+        $product['bb_price'] = $lr->buyBox->landed;
+        $product['c1'] = round($lr->lowestOffer['Price']->landed,2);
+        $product['qty'] = $item['qty'];
+        debug($item);
+        debug($product);exit();
+        $seller->LocalUpdateProduct($product);
     }
 
 }

@@ -14,7 +14,28 @@ class Listings extends CI_Controller {
         if (!$this->session->userdata("logged_in"))
             redirect("home");
     }
-
+    var $sku = 'LH-F8UN-9CLQ';
+    
+    var $sellerId = 'A1ERLGARDFTEUE';
+    
+    function get_feed(){
+        $this->load->helper('mws_seller');
+        $seller = new MWS_Seller($this->sellerId);
+        $seller->MWSGetFeed();
+    }
+    function update_price(){
+        $this->load->helper('mws_seller');
+        $seller = new MWS_Seller($this->sellerId);
+        $price = 6.51;
+        $seller->MWSUpdatePrice($this->sku, $price);
+        
+    }
+    function reprice(){
+        $this->load->helper('legend_pricing');
+        $lp = new legend_pricing();
+        $lp->reprice_product($this->sellerId, $this->sku);
+    }
+    
     public function index() {
         $this->load->helper('mws_seller');
         $this->load->helper('mws_reprice');

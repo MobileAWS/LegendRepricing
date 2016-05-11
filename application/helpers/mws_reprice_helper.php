@@ -84,10 +84,10 @@ class LegendRepricer {
         $new_price = null;
         if( $nlanding <= $min ){
             $new_price = $min-$shipping;
-            debug('if '.$new_price);
+//            debug('if '.$new_price);
         }else if( $nlanding - $shipping >= $max ){
             $new_price = $max-$shipping;
-            debug('else '.$new_price);
+//            debug('else '.$new_price);
         }else{
             $new_price = $nlanding-$shipping;
         }
@@ -146,20 +146,18 @@ class LegendRepricer {
                 $this->matchedOffers[] = $item;
             }
             
-            
-            
-            $condition = strcasecmp($item['condition'], $this->rules['item_condition']) === 0 &&
-                    strcasecmp($item['subcondition'], $this->rules['item_subcondition']) === 0 &&
-                    $tmpPrice->listing == $this->buyBox->listing &&
-                    $tmpPrice->shipping == $this->buyBox->shipping;
-
-            if (!$condition || !isset($this->channelList[$channel])) {
-                continue;
-            }
-
-            if (in_array($this->rules['comp_type'], $this->channelList[$channel])) {
-                $this->matched = true;
-            }
+//            $condition = strcasecmp($item['condition'], $this->rules['item_condition']) === 0 &&
+//                    strcasecmp($item['subcondition'], $this->rules['item_subcondition']) === 0 &&
+//                    $tmpPrice->listing == $this->buyBox->listing &&
+//                    $tmpPrice->shipping == $this->buyBox->shipping;
+//
+//            if (!$condition || !isset($this->channelList[$channel])) {
+//                continue;
+//            }
+//
+//            if (in_array($this->rules['comp_type'], $this->channelList[$channel])) {
+//                $this->matched = true;
+//            }
         }
         $lowestOffer = $this->matchedOffers[0];
         $lowestOffer['Price'] = new MWS_Price($lowestOffer['Price']);
@@ -174,7 +172,6 @@ class LegendRepricer {
         $this->hasBuyBox = false;
         $items = $this->product->competitivePrices;
         foreach ($items as $item) {
-//            debug($item);exit();
             $condition = strcasecmp($item['condition'], $this->rules['item_condition']) === 0;
             $condition = $condition && strcasecmp($item['subcondition'], $this->rules['item_subcondition']) === 0;
             $condition = strcasecmp($item['condition'],$this->product->myOffer['ItemCondition']) === 0;
