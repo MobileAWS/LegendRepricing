@@ -14,28 +14,62 @@ class Listings extends CI_Controller {
         if (!$this->session->userdata("logged_in"))
             redirect("home");
     }
+
     var $sku = 'LH-F8UN-9CLQ';
-    
     var $sellerId = 'A1ERLGARDFTEUE';
-    
-    function get_feed(){
+
+    function get_report() {
+        if (!isset($_GET['rid'])) {
+            die('no report id');
+        }
         $this->load->helper('mws_seller');
         $seller = new MWS_Seller($this->sellerId);
-        $seller->MWSGetFeed();
+        $report = $seller->MWSGetReportByRequestID($_GET['rid']);
+        debug($report);
+        exit();
     }
-    function update_price(){
+
+    function get_listings() {
+        $this->load->helper('legend_pricing');
+        $lp = new legend_pricing();
+        $lp->importListingsFromMWS($this->sellerId);
+    }
+
+    function get_product() {
         $this->load->helper('mws_seller');
         $seller = new MWS_Seller($this->sellerId);
-        $price = 6.51;
-        $seller->MWSUpdatePrice($this->sku, $price);
-        
+        $product = $seller->getMWSProducts($this->sku);
+        debug($product);
+        exit();
     }
-    function reprice(){
+
+    function get_feed() {
+        $this->load->helper('mws_seller');
+        $seller = new MWS_Seller($this->sellerId);
+        $feed = $seller->MWSGetFeed($_GET['fid']);
+        debug($feed);exit();
+    }
+
+    function update_price() {
+        $this->load->helper('mws_seller');
+        $seller = new MWS_Seller($this->sellerId);
+        $price = 5.73;
+        $min_price = null; //4.0;
+        $max_price = null; //7.51;
+        $map_price = 4.0;
+        $shipping = 0;
+//        $response = $seller->MWSShipPriceUpdate($this->sku, $shipping);
+        $response = $seller->MWSPriceUpdate($this->sku, $price);
+        debug($response);
+        exit();
+    }
+
+    function reprice() {
         $this->load->helper('legend_pricing');
         $lp = new legend_pricing();
         $lp->reprice_product($this->sellerId, $this->sku);
     }
-    
+
     public function index() {
         $this->load->helper('mws_seller');
         $this->load->helper('mws_reprice');
@@ -80,7 +114,7 @@ class Listings extends CI_Controller {
                 $myList[$v['sku']] = $v;
             }
 //            debug($myList);exit();
-            
+
             if (!empty($items)) {
 //                $ck = md5(serialize($skuList));
 //                if (!$products = $this->cache->file->get($ck)) {
@@ -92,11 +126,10 @@ class Listings extends CI_Controller {
                     $lr = new LegendRepricer($product, $myList[$sku]);
                     $lr->reprice();
 //                    debug($lr);exit();
-                    $myList[ $sku ]['new_price'] = $lr->newPrice;
-                    $myList[ $sku ]['bb'] = $lr->hasBuyBox ? 'yes' : 'no';
-                    $myList[ $sku ]['bb_price'] = $lr->buyBox->landed;
+                    $myList[$sku]['new_price'] = $lr->newPrice;
+                    $myList[$sku]['bb'] = $lr->hasBuyBox ? 'yes' : 'no';
+                    $myList[$sku]['bb_price'] = $lr->buyBox->landed;
 //                    $myList[ $sku ]['bb'] = 'yes';
-                    
                 }
             }
             $data['reprice'] = $reprice;

@@ -5,48 +5,7 @@
  *
  * @author 
  */
-define('GearmanHost','localhost');
-define('GearmanPort',4730);
 
-class LPGM_Task{
-    public $fn,$data;
-    function __construct($fn,$data) {
-        $this->fn = $fn;
-        $this->data = $data;
-    }
-}
-
-class LPGM_Client extends GearmanClient{
-    private $client;
-    function __construct($host=null,$port=null) {
-        parent::__construct();
-        $this->client = new GearmanClient();
-        if( $host == null ){
-            $host = GearmanHost;
-        }
-        if( $port == null ){
-            $port = GearmanPort;
-        }
-        // Add a server
-        $this->client->addServer($host,$port); // by default host/port will be "localhost" & 4730
-    }
-    
-    function addTask($task){
-//        debug($task);
-//        debug(serialize($task));
-        $job = $this->client->addTaskBackground('runTask',  serialize($task));
-        $this->client->runTasks();
-        
-        $this->logJob($jobId,'added');
-        if ($jobId) {
-            //echo "Job added: $jobId§\n";
-        }
-    }
-    
-    private function logJob($jobId,$status){
-        //todo
-    }
-}
 
 class legendpricing_jobs extends CI_Controller {
     private $client;
@@ -55,11 +14,32 @@ class legendpricing_jobs extends CI_Controller {
         if (php_sapi_name() !== 'cli') {
             show_404();
         }
+        $this->load->helper('mws_common');
+        $this->load->helper('mws_seller');
         $this->client = new LPGM_Client();
+        
     }
 
     public function update_listings($seller_id) {
         $this->client->addTask( new LPGM_Task('update_listings',$seller_id) );
+    }
+    
+    public function import_listings($seller_id) {
+        $this->client->addTask( new LPGM_Task('importListings',$seller_id) );
+    }
+    
+    public function reprice_product(){
+        $sellerId = 'A1ERLGARDFTEUE';
+        $data['seller_id'] = $sellerId;
+        $seller = new MWS_Seller($sellerId);
+        $products = $seller->getListings('active');
+        foreach($products as $row){
+            $data['sku'] = $row['sku'];
+            $task = new LPGM_Task('reprice_product',$data);
+            $this->client->addTask( $task );
+        }
+        
+        
     }
 
 }

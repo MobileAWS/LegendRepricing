@@ -37,8 +37,8 @@ class LegendRepricer {
     }
 
     /**
-    * Reprice product based on settings
-    */
+     * Reprice product based on settings
+     */
     function reprice() {
 //        debug($this);exit();
 //        debug('Nmae: '.$this->rules['itemname']);
@@ -60,65 +60,67 @@ class LegendRepricer {
         $beatBy = $this->rules['beatby'];
 //        $beatBy = 'formula';
         $beatByValue = (float) $this->rules['beatbyvalue'];
-        if( $min <= 0 ){
+        if ($min <= 0) {
             $this->newPrice = false;
             return;
         }
 //        debug($beatBy);
-        switch($beatBy){
+        switch ($beatBy) {
             case 'formula':
-                $nlanding = $this->buybox_formula($bb_price, $bb_shipping, $price, $shipping);
+                $nlanding = $this->buybox_formula($this->hasBuyBox,$bb_price, $bb_shipping, $price, $shipping);
                 break;
             case 'beatby':
-                $nlanding = $this->beatBy($bb_price, $bb_shipping, $beatByValue);
+                $nlanding = $this->beatBy($this->hasBuyBox, $bb_price, $bb_shipping, $beatByValue);
                 break;
             case 'beatmeby':
-                $nlanding = $this->beatMeBy($bb_price, $bb_shipping, $beatByValue);
+                $nlanding = $this->beatMeBy($this->hasBuyBox, $bb_price, $bb_shipping, $beatByValue);
                 break;
             case 'matchprice':
-                $nlanding = $this->matchPrice($bb_price, $bb_shipping, $price);
+                $nlanding = $this->matchPrice($this->hasBuyBox, $bb_price, $bb_shipping, $price);
                 break;
-            
         }
 //        debug($nlanding.' ('.$min.' - '.$max.')');
         $new_price = null;
-        if( $nlanding <= $min ){
-            $new_price = $min-$shipping;
+        if ($nlanding <= $min) {
+            $new_price = $min - $shipping;
 //            debug('if '.$new_price);
-        }else if( $nlanding - $shipping >= $max ){
-            $new_price = $max-$shipping;
+        } else if ($nlanding - $shipping >= $max) {
+            $new_price = $max - $shipping;
 //            debug('else '.$new_price);
-        }else{
-            $new_price = $nlanding-$shipping;
+        } else {
+            $new_price = $nlanding - $shipping;
         }
-        
+
         $this->newPrice = $new_price;
     }
-    
+
     // need to change it
-    private function buybox_formula($bb_price, $bb_shipping, $price, $shipping) {
+    private function buybox_formula($hasBuyBox, $bb_price, $bb_shipping, $price, $shipping) {
         $bb_landing = $bb_price + $bb_shipping;
         $landing = $price + $shipping;
-        $i=0;
-        while($landing >= $bb_landing && $i++<100){
-            $landing = round($landing - $landing*0.01,2);
+        
+        if( $hasBuyBox ){
+            $landing = round($landing + $landing * 0.01, 2);
+        }else{
+            $landing = round($landing - $landing * 0.01, 2);
         }
+        
         return $landing;
     }
 
-    private function beatBy($bb_price, $bb_shipping, $beatByPrice ) {
+    private function beatBy($hasBuyBox, $bb_price, $bb_shipping, $beatByPrice) {
         $bb_landing = $bb_price + $bb_shipping;
         return $bb_landing - $beatByPrice;
     }
-    
+
     // need to change it
-    private function beatMeBy($bb_price, $bb_shipping, $beatByPrice) {
+    private function beatMeBy($hasBuyBox, $bb_price, $bb_shipping, $beatByPrice) {
         $bb_landing = $bb_price + $bb_shipping;
         return $bb_landing + $beatByPrice;
     }
-    
+
     // need to change it
-    private function matchPrice($bb_price, $bb_shipping) {
+    private function matchPrice($hasBuyBox, $bb_price, $bb_shipping) {
         return $bb_price + $bb_shipping;
     }
 
@@ -126,26 +128,26 @@ class LegendRepricer {
         $this->ourPrice = new MWS_Price($this->product->myOffer['BuyingPrice']);
         //debug($this->product->myOffer);exit();
     }
-    
+
     /**
-    * Check if product is matched in lowest offerings
-    */
+     * Check if product is matched in lowest offerings
+     */
     public function matchOffers() {
         if ($this->matched !== null) {
             return $this->matched;
         }
 
         $channel = $this->rules['fulfillment_channel'];
-        $items = $this->product->lowestOffers;
+        $items = isset($this->product->lowestOffers) ? $this->product->lowestOffers : array();
         foreach ($items as $item) {
             $tmpPrice = new MWS_Price($itemp['Price']);
-            $condition = strcasecmp($item['Qualifiers']['ItemCondition'],$this->product->myOffer['ItemCondition']) === 0;
-                    //&& strcasecmp($item['Qualifiers']['ItemSubcondition'], $this->product->myOffer['ItemSubCondition']) === 0;
-            
-            if( $condition ){
+            $condition = strcasecmp($item['Qualifiers']['ItemCondition'], $this->rules['item_condition']) === 0;
+            //&& strcasecmp($item['Qualifiers']['ItemSubcondition'], $this->product->myOffer['ItemSubCondition']) === 0;
+
+            if ($condition) {
                 $this->matchedOffers[] = $item;
             }
-            
+
 //            $condition = strcasecmp($item['condition'], $this->rules['item_condition']) === 0 &&
 //                    strcasecmp($item['subcondition'], $this->rules['item_subcondition']) === 0 &&
 //                    $tmpPrice->listing == $this->buyBox->listing &&
@@ -159,22 +161,24 @@ class LegendRepricer {
 //                $this->matched = true;
 //            }
         }
-        $lowestOffer = $this->matchedOffers[0];
-        $lowestOffer['Price'] = new MWS_Price($lowestOffer['Price']);
-        $this->lowestOffer = $lowestOffer;
-//        debug($this->lowestOffer);exit();
+         $this->lowestOffer = null;
+        if (count($items)) {
+            $lowestOffer = $this->matchedOffers[0];
+            $lowestOffer['Price'] = new MWS_Price($lowestOffer['Price']);
+            $this->lowestOffer = $lowestOffer;
+        }
     }
-    
+
     /**
-    * check if we have the buy box
-    */
+     * check if we have the buy box
+     */
     public function checkBuyBox() {
         $this->hasBuyBox = false;
-        $items = $this->product->competitivePrices;
+        $items = isset($this->product->competitivePrices) ? $this->product->competitivePrices : array();
         foreach ($items as $item) {
             $condition = strcasecmp($item['condition'], $this->rules['item_condition']) === 0;
-            $condition = $condition && strcasecmp($item['subcondition'], $this->rules['item_subcondition']) === 0;
-            $condition = strcasecmp($item['condition'],$this->product->myOffer['ItemCondition']) === 0;
+//            $condition = $condition && strcasecmp($item['subcondition'], $this->rules['item_subcondition']) === 0;
+//            $condition = strcasecmp($item['condition'],$this->product->myOffer['ItemCondition']) === 0;
             if (!$condition) {
                 continue;
             }
@@ -188,8 +192,8 @@ class LegendRepricer {
 }
 
 /**
-* MWS Product wrapper
-*/
+ * MWS Product wrapper
+ */
 class MWS_Product {
 
     public $sku, $identifiers, $myOffer, $lowestOffers, $competitivePrices;
@@ -205,8 +209,8 @@ class MWS_Product {
 }
 
 /**
-* MWS Price wraper
-*/
+ * MWS Price wraper
+ */
 class MWS_Price {
 
     public $landed, $listing, $shipping;

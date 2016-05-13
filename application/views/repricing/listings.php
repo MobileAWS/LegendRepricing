@@ -396,7 +396,7 @@
               <td><?php echo $val['fees'];?></td>
               <td><input maxlength="10" class="list-change" style="width:100px" <?php if($val['fulfillment_channel']=='AMAZON_NA') {echo 'disabled value="'.$val['qty'].'"';} else {echo 'value="'.$val['qty'].'"';}?> name="qty" type="text"></td>
               <td><?php if($val['bb']=='yes') echo 'You have buybox';
-else echo unserialize($val['c1']); ?></td>
+else echo sprintf('%.2f',$val['c1']); ?></td>
               <td><?php echo sprintf('%.2f',$val['bb_price']); ?></td>
               <!--      <td><input style="width:100px" name="maxorderqty" type="text" value="<?php echo $val['maxorderqty']; ?>"></td>
                 <td><input style="width:100px" name="map_price" type="text" value="<?php echo sprintf('%.2f',$val['map_price']); ?>"></td>    -->

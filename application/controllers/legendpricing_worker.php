@@ -37,6 +37,7 @@ class legendpricing_worker extends CI_Controller {
     
     static public function runTask( $job ){
         $task = (array) unserialize($job->workload());
+//        debug($task);exit();
         $fn = $task['fn'];
         $data = $task['data'];
         $jobId = $job->handle();
@@ -54,11 +55,23 @@ class legendpricing_worker extends CI_Controller {
         //todo
     }
     
-    function update_listings( $seller_id ) {
+    static function update_listings( $seller_id ) {
         $lp = new legend_pricing();
         $results = $lp->update_listings($seller_id);
         cli_echo(count($results)." products fetched.");
-        
+    }
+    
+    static function importListings( $seller_id ){
+        $lp = new legend_pricing();
+        $lp->importListingsFromMWS($seller_id);
+    }
+    
+    static function reprice_product( $data ){
+        $sellerId = $data['seller_id'];
+        $sku = $data['sku'];
+        $lp = new legend_pricing();
+        $lp->reprice_product($sellerId, $sku);
+        return;
     }
 
 }

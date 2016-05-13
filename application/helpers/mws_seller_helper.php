@@ -17,11 +17,21 @@ $MWS_seller_id = '';
 $MWS_marketplace_id = '';
 $MWS_auth_token = '';
 
+class MWSLogs extends AmazonCore {
+
+    function __construct($s = null, $mock = false, $m = null, $config = null) {
+        parent::__construct($s, $mock, $m, $config);
+    }
+
+}
+
 class MWS_Seller {
 
     //put your code here
-    private $db;
+    private $db, $db_mysql;
     private $seller;
+    private $currency_code;
+    private $tmp_path;
 
     /**
      * Initialize MWS_Seller with correct credentials
@@ -38,19 +48,35 @@ class MWS_Seller {
         }
         $conditons = array("sellerid" => $seller_id, "marketplaceid" => $marketplace_id);
         $this->seller = $this->db->get_where("user_settings", $conditons)->row_array();
+
         if (!$this->seller) {
             throw new Exception("Seller $seller_id not found in " . $marketplace_id . ' Market Place');
         }
+
+        $this->currency_code = $this->CI->config->item($this->getMarketPlaceId(), 'gl_currency');
+        $this->tmp_path = sys_get_temp_dir();
+        $this->mws_logs = new MWSLogs();
     }
-    
-    function getSellerId(){
+
+    function log($message, $level = null) {
+        if (!$level) {
+            $level = 'info';
+        }
+        $this->mws_logs->log($message, $level);
+    }
+
+    function getSellerId() {
         return $this->seller['sellerid'];
     }
     
-    function getMarketPlaceId(){
+    function getEmail() {
+        return $this->seller['email'];
+    }
+
+    function getMarketPlaceId() {
         return $this->seller['marketplaceid'];
     }
-    
+
     /**
      * Get local listing from database
      * 
@@ -93,6 +119,9 @@ class MWS_Seller {
      * Get products from amazon based on SKUs
      */
     function getMWSProducts($skuArray) {
+        if (!is_array($skuArray)) {
+            $skuArray = array($skuArray);
+        }
         $this->setStore();
         $products = array();
         $amz = new AmazonProductList();
@@ -112,7 +141,7 @@ class MWS_Seller {
     /**
      * Get products Offer, LowestOffer and CompetitivePricing from amazon based on SKUs
      */
-    function getMWSProductsListing($skuArray) {
+    function MWSProductListingData($skuArray) {
         $this->setStore();
         $results = array();
         $limit = 20;
@@ -158,6 +187,7 @@ class MWS_Seller {
                 $results[$tmp['Identifiers']['SKUIdentifier']['SellerSKU']]['LowestOfferListings'] = $tmp['LowestOfferListings'];
             }
 
+            // get inventory
             $amz = new AmazonInventoryList();
             $amz->setSellerSkus($skuList);
             $amz->fetchInventoryList();
@@ -255,56 +285,198 @@ class MWS_Seller {
         return $mws_product;
     }
 
-    function MWSUpdatePrice($sku, $price) {
+    private function _MWSSubmitFeed($feed_type, $feed) {
         $this->setStore();
-        $sellerid = $this->getSellerId();
-        $currency_code = $this->CI->config->item($this->getMarketPlaceId(),'gl_currency');;
-        $feed = <<<EOD
-<?xml version="1.0" encoding="UTF-8"?>
-<AmazonEnvelope xsi:noNamespaceSchemaLocation="amznenvelope. xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
-<Header> 
-<DocumentVersion>1.01</DocumentVersion> 
-<MerchantIdentifier>$sellerid</MerchantIdentifier> 
-</Header> 
-<MessageType>Price</MessageType> 
-<Message> <MessageID>1</MessageID> 
-<Price> 
-<SKU>$sku</SKU> 
-<StandardPrice currency="$currency_code">$price</StandardPrice> 
-</Price> 
-</Message> 
-</AmazonEnvelope>
-EOD;
         $amz = new AmazonFeed();
         $amz->setMarketplaceIds($this->getMarketPlaceId());
-        $amz->setFeedType('_POST_PRODUCT_PRICING_DATA_');
+        $amz->setFeedType($feed_type);
         $amz->setFeedContent($feed);
-        debug($amz);exit();
-        $status = $amz->submitFeed();
-        $respose = $amz->getResponse();
+//        debug($amz);exit();
         debug($feed);
-        debug($respose);
-        return $respose;
+        $amz->submitFeed();
+        $status = $amz->getResponse();
+        debug($status);
+        return $status;
     }
 
-    function MWSUpdateShipping($sku, $shipping) {
-        
+    function MWSShipPriceUpdate($sku, $ship_pirce) {
+        $feed = '<?xml version="1.0" encoding="utf-8"?>
+            <AmazonEnvelope xsi:noNamespaceSchemaLocation="amznenvelope. xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
+            <Header> 
+            <DocumentVersion>1.01</DocumentVersion> 
+            <MerchantIdentifier>' . $this->seller['sellerid'] . '</MerchantIdentifier> 
+            </Header> 
+            <MessageType>Override</MessageType>
+             <Message>
+             <MessageID>1</MessageID>
+             <OperationType>Update</OperationType>
+             <Override>
+            <SKU>' . $sku . '</SKU>
+             <ShippingOverride>
+             <ShipOption>Same US</ShipOption>
+             <Type>Exclusive</Type>
+            <ShipAmount currency="' . $this->currency_code . '">' . $ship_pirce . '</ShipAmount>
+             </ShippingOverride>
+             </Override>
+             </Message>
+            </AmazonEnvelope>';
+
+        $response = $this->_MWSSubmitFeed(_POST_PRODUCT_OVERRIDES_DATA_, $feed);
+        return $response;
     }
 
-    function MWSUpdateMAPPrice($sku, $map_price) {
-        
+    function MWSPriceUpdate($sku, $price = null, $min_price = null, $max_price = null, $map_price = null) {
+        $stdPriceXML = '';
+        $minPriceXML = '';
+        $maxPriceXML = '';
+        $mapPriceXML = '';
+
+        if ($price && $price > 0) {
+            $stdPriceXML = '<StandardPrice currency="' . $this->currency_code . '">' . $price . '</StandardPrice> ';
+        }
+
+        if ($min_price && $min_price > 0) {
+            $minPriceXML = '<MinimumSellerAllowedPrice currency="' . $this->currency_code . '">' . $min_price . '</MinimumSellerAllowedPrice>';
+        }
+
+        if ($max_price && $max_price > 0) {
+            $maxPriceXML = '<MaximumSellerAllowedPrice currency="' . $this->currency_code . '">' . $max_price . '</MaximumSellerAllowedPrice>';
+        }
+
+        if ($map_price && $map_price > 0) {
+            $mapPriceXML = '<MAP currency="' . $this->currency_code . '">' . $map_price . '</MAP> ';
+        }
+
+        $feed = '<?xml version="1.0" encoding="UTF-8"?>
+            <AmazonEnvelope xsi:noNamespaceSchemaLocation="amznenvelope. xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
+            <Header> 
+            <DocumentVersion>1.01</DocumentVersion> 
+            <MerchantIdentifier>' . $this->seller['sellerid'] . '</MerchantIdentifier> 
+            </Header> 
+            <MessageType>Price</MessageType> 
+            <Message> <MessageID>1</MessageID> 
+            <Price> 
+             <SKU>' . $sku . '</SKU>'
+                . $stdPriceXML
+                . $minPriceXML
+                . $maxPriceXML
+                . $mapPriceXML
+                . '</Price> 
+            </Message> 
+            </AmazonEnvelope>';
+
+        $response = $this->_MWSSubmitFeed(_POST_PRODUCT_PRICING_DATA_, $feed);
+        return $response;
     }
-    
-    function MWSGetFeed(){
+
+    function MWSGetFeed( $feed_id ) {
         $this->setStore();
         $amz = new AmazonFeedList();
-//        $amz->setFeedTypes('_POST_PRODUCT_PRICING_DATA_');
-        if( isset($_GET['fid']) && !empty($_GET['fid']) ){
-            $amz->setFeedIds($_GET['fid']);
-        }
+        $amz->setFeedIds($feed_id);
         $amz->fetchFeedSubmissions();
         $list = $amz->getFeedList();
-        debug($list);exit();
+        return $list;
     }
+
+    private function _MWSGetReportID($request_id) {
+//        $request_id = 50535016933;
+        $this->setStore();
+        $amz = new AmazonReportRequestList();
+        $amz->setRequestIds($request_id);
+        $amz->fetchRequestList();
+        $list = $amz->getList();
+        return $list;
+    }
+
+    private function _MWSRequestReport($type, $past_days = null) {
+        $this->setStore();
+        $amz = new AmazonReportRequest();
+        $amz->setReportType($type);
+        if ($past_days) {
+            $s = date('Y-m-d\TH:i:s', strtotime("-$past_days days"));
+            $amz->setTimeLimits($s);
+        }
+        $amz->requestReport();
+        $response = $amz->getResponse();
+        return $response;
+    }
+
+    private function _MWSGetReport($report_id) {
+        $this->setStore();
+        $amz = new AmazonReport();
+        $amz->setReportId($report_id);
+        $amz->fetchReport();
+        $path = $this->tmp_path . 'mws_report_' . $report_id . '.csv';
+        $amz->saveReport($path);
+        $fp = fopen($path, 'r');
+        if (($headers = fgetcsv($fp, 0, "\t")) !== FALSE) {
+            if ($headers) {
+                while (($line = fgetcsv($fp, 0, "\t")) !== FALSE) {
+                    if ($line) {
+                        if (sizeof($line) == sizeof($headers)) {
+                            $result[] = array_combine($headers, array_map("utf8_encode", $line));
+                        }
+                    }
+                }
+            }
+        }
+        unlink($path);
+        return $result;
+    }
+
+    function MWSGetReportByRequestID($request_id = null) {
+
+        return $this->_MWSGetReportID($request_id);
+    }
+
+    function MWSGetReport($type, $past_days = null) {
+        $r = $this->_MWSRequestReport($type, $past_days);
+        if (!isset($r['ReportRequestId'])) {
+            die('ERROR: ' . $r['ReportProcessingStatus']);
+        }
+        $sleep_time = 20;
+        $counter = 0;
+        $this->log(++$counter . ". Sleeping for $sleep_time seconds");
+        sleep($sleep_time);
+        while ($counter <= 5) {
+            $this->log('Checking for Request ID ' . $r['ReportRequestId'], 'info');
+            $result = $this->_MWSGetReportID($r['ReportRequestId']);
+            $report = null;
+            foreach ($result as $list) {
+                if ($list['ReportRequestId'] == $r['ReportRequestId']) {
+                    $report = $list;
+                    break;
+                }
+            }
+
+            if ($report['ReportProcessingStatus'] == '_CANCELLED_') {
+                throw new Exception("Request Cancelled for " . $report['ReportRequestId']);
+            }
+
+            if (empty($report['GeneratedReportId'])) {
+                $this->log(++$counter . ". Sleeping for $sleep_time seconds");
+                sleep($sleep_time);
+                continue;
+            }
+
+            break;
+        }
+        if (empty($report['GeneratedReportId'])) {
+            die('could not find report');
+            return false;
+        }
+        $report = $this->_MWSGetReport($report['GeneratedReportId']);
+        return $report;
+    }
+
+    function MWSGetFBAFee() {
+        try {
+            return $this->MWSGetReport(_GET_FBA_ESTIMATED_FBA_FEES_TXT_DATA_, 61);
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    
 
 }
