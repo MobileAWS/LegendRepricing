@@ -326,6 +326,12 @@ private function gen_uuid() {
   }                               
   private function amazon_report($option)
   {
+    $this->load->helper('mws_common');
+    $client = new LPGM_Client();
+    $option['update_fbafees'] = true;
+    $client->addTask( new LPGM_Task('syncListings',$option) );
+    return true;
+   
     // add the clients jobss
     // we have the seelr id , mkplace id and token
     if(checkservers()==0)
@@ -962,7 +968,21 @@ private function backup_link($option,$function_name)
 
 
   }
-
+  
+  public function deletesqs($seller_id){
+      $queues = $this->sqs->listQueues($seller_id);
+      foreach($queues['Queues'] as $q){
+        $ok = $this->sqs->deleteQueue($q);
+        if( $ok == null ){
+            error_log('unable to delete sqs for '.$seller_id);
+            return false;
+        }
+      }
+      
+      $this->db->query("DELETE FROM pollingtbl WHERE sqs_id={$seller_id}");
+      return true;
+  }
+  
   public  function createsqs($details)
 
   {           
@@ -1147,7 +1167,7 @@ private function backup_link($option,$function_name)
           // geanrate the reports in  the backend
           if($this->amazon_report($_POST)==TRUE)
           {
-              $this->createsqs($_POST);
+            $this->createsqs($_POST);
             echo 'Success';
             return;
           }
@@ -1183,6 +1203,7 @@ private function backup_link($option,$function_name)
           $this->db->update("user_settings",array("nickname"=>$_POST['nickname'],'exclude_seller'=> $_POST["exclude_seller"],'include_seller'=> $_POST["include_seller"],'beatby'=>$_POST['gbs'],'beatbyvalue'=>'0.0','reports'=>$_POST['reports']),array('email' => $this->session->userdata("logged_in"),'sellerid'=>$_POST['sellerid'],'marketplaceid'=>$_POST['marketplaceid']));     
         if($_POST['gbs']=='formula')
           $this->db->update("user_settings",array("nickname"=>$_POST['nickname'],'exclude_seller'=> $_POST["exclude_seller"],'include_seller'=> $_POST["include_seller"],'beatby'=>$_POST['gbs'],'beatbyvalue'=>'Use our secret formula','reports'=>$_POST['reports']), array('email' => $this->session->userdata("logged_in"),'sellerid'=>$_POST['sellerid'],'marketplaceid'=>$_POST['marketplaceid']));                       
+        
         // might be updation case
         echo 'Success';
         return;
@@ -1198,7 +1219,17 @@ private function backup_link($option,$function_name)
 
     echo "Some error occured .. Please try again later";
   }
-
+  
+  function delete_settings($sellerid){
+      if( !$this->deletesqs($sellerid) ){
+        echo "error - unable to delete sqs";
+        return;
+      }
+      $this->db->query("DELETE FROM user_listings WHERE sellerid='{$sellerid}'");
+      $this->db->query("DELETE FROM user_settings WHERE sellerid='{$sellerid}'");
+      echo "Deleted";
+  }
+  
   public function save_subscriptions()
   {
     // add vlaidationss if u can  

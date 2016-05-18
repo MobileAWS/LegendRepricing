@@ -2136,6 +2136,7 @@ EOD;
     rewind($feedHandle);
 
     log_message('info','About to send the feeds');
+//    debug($request);exit();
   return  self::invokeSubmitFeed($service, $request);                                        
   }
   static public function common()
@@ -3194,7 +3195,9 @@ EOD;
 
     //  $test=new GearmanClusterAdmin(array('localhost:4730','localhost:4734'));
     //    $test=new GearmanClusterAdmin(array('localhost:4730'));
-    $myamazon= $this->gearmanclusteradmin->getAccumaltiveJobs();  
+    $myamazon= $this->gearmanclusteradmin->getAccumaltiveJobs();
+    debug($myamazon);
+    $base = '/Applications/AMPPS/www/legendpricing';
     if(isset($myamazon['amazon_update']))
     { 
       $available=$myamazon['amazon_update']['TOTAL']-$myamazon['amazon_update']['RUNNING'];
@@ -3202,9 +3205,22 @@ EOD;
       if($available>0)
       {
         log_message('info',date('Y-m-d H:i:s')." Created amazon update workeers");
-        exec("nohup php /var/www/html/index.php  testing createamazonupdate_workers >/dev/null &");
+        exec("nohup php $base/index.php  testing createamazonupdate_workers >/dev/null &");
       }
-    } 
+    }
+    
+    if(isset($myamazon['runLegendPricingTask']))
+    { 
+      $available=$myamazon['runLegendPricingTask']['TOTAL']-$myamazon['runLegendPricingTask']['RUNNING'];
+     // if($available>$myamazon['amazon_update']['AVAILABLE'])
+      if($available>0)
+      {
+        log_message('info',date('Y-m-d H:i:s')." Created runLegendPricingTask workeers");
+        $log_date = date('Y-m-d');
+        exec("nohup php $base/index.php  legendpricing_worker init > $base/application/logs/lp-worker-$log_date.logs &");
+      }
+    }
+    
     if(isset($myamazon['dynamic_repricing']))
     {
       $available=$myamazon['dynamic_repricing']['TOTAL']-$myamazon['dynamic_repricing']['RUNNING'];

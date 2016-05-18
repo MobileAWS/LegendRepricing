@@ -56,23 +56,31 @@ class legend_pricing {
             $product['price'] = $lr->ourPrice->listing;
         }
         
-        if ($lr->hasBuyBox) {
+        $product['price'] = (float) $product['price'];
+        if ($lr->hasBuyBox || $product['price'] != $lr->ourPrice->listing) {
             $product['price'] = $lr->ourPrice->listing;
         }
 //        debug($lr->buyBox);exit();
+//        var_dump($lr->ourPrice->listing);
+//        var_dump($lr->newPrice);
+//        var_dump($product['price']);
         if( $lr->newPrice && $lr->newPrice != $lr->ourPrice->listing ){
+            cli_echo('going to reprice');
             $seller->MWSPriceUpdate($product['sku'], $lr->newPrice);
+            
 //            $product['price'] = $lr->newPrice;
         }
         $product['bb'] = $lr->hasBuyBox ? 'yes' : 'no';
         $product['bb_price'] = $lr->buyBox->landed;
+//        debug($lr->lowestOffer);
         $product['c1'] = round($lr->lowestOffer['Price']->landed, 2);
         $product['qty'] = $item['qty'];
-        debug($product);
+//        debug($product);
         $seller->LocalUpdateProduct($product);
     }
 
-    function importListingsFromMWS($sellerId, $fba_fees = false, $replace_list = false) {
+    function syncListingsFromMWS($sellerId, $fba_fees = false ) {
+        var_dump($fba_fees);
         $seller = new MWS_Seller($sellerId);
         $report = $seller->MWSGetReport(_GET_MERCHANT_LISTINGS_DATA_);
         $skuList = array();
@@ -130,7 +138,7 @@ class legend_pricing {
         }
 
         $this->db->trans_start();
-        $this->db->query('delete FROM user_listings WHERE sellerid = ? AND marketplaceid = ? ', array('sellerid' => $seller->getSellerId(), 'marketplaceid' => $seller->getMarketPlaceId()));
+//        $this->db->query('delete FROM user_listings WHERE sellerid = ? AND marketplaceid = ? ', array('sellerid' => $seller->getSellerId(), 'marketplaceid' => $seller->getMarketPlaceId()));
         foreach ($results as $item) {
             $seller->LocalUpdateProduct($item);
         }

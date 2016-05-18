@@ -32,13 +32,16 @@ class MWS_Seller {
     private $seller;
     private $currency_code;
     private $tmp_path;
+    public $mws_logs;
 
     /**
      * Initialize MWS_Seller with correct credentials
      * communitcate with Amazon
      */
     function __construct($seller_id, $marketplace_id = null) {
-        cli_echo('Initializing seller..' . $seller_id);
+        $this->mws_logs = new MWSLogs();
+        
+        $this->log('Initializing seller..' . $seller_id);
         $CI = & get_instance();
         $this->CI = $CI;
         $this->db = $CI->db;
@@ -55,20 +58,22 @@ class MWS_Seller {
 
         $this->currency_code = $this->CI->config->item($this->getMarketPlaceId(), 'gl_currency');
         $this->tmp_path = sys_get_temp_dir();
-        $this->mws_logs = new MWSLogs();
     }
 
     function log($message, $level = null) {
         if (!$level) {
             $level = 'info';
         }
-        $this->mws_logs->log($message, $level);
+        $datetime = date('Y-m-d H:i:s');
+        $sellerid = $this->seller['sellerid'];
+        cli_echo("[$datetime] - $sellerid - ".$message);
+        $this->mws_logs->log($sellerid.' - '.$message, $level);
     }
 
     function getSellerId() {
         return $this->seller['sellerid'];
     }
-    
+
     function getEmail() {
         return $this->seller['email'];
     }
@@ -82,7 +87,7 @@ class MWS_Seller {
      * 
      */
     function getListings($status = null) {
-        cli_echo('Fetching seller listings');
+        $this->log('Fetching seller listings');
         $conditions = array(
             "sellerid" => $this->seller['sellerid'],
             "marketplaceid" => $this->seller['marketplaceid']
@@ -146,12 +151,12 @@ class MWS_Seller {
         $results = array();
         $limit = 20;
         $start = 0;
-        cli_echo('Fetching listing from amazon...');
+        $this->log('Fetching listing from amazon...');
         while ($skuList = array_slice($skuArray, $start, $limit)) {
             // get my pricing
             $amz = new AmazonProductInfo();
             $amz->setSKUs($skuList);
-            cli_echo('fetchMyPrice for ' . implode(', ', $skuList));
+            $this->log('fetchMyPrice for ' . implode(', ', $skuList));
             $amz->fetchMyPrice();
             $products = $amz->getProduct();
             foreach ($products as $product) {
@@ -167,7 +172,7 @@ class MWS_Seller {
             // get competitive pricing
             $amz = new AmazonProductInfo();
             $amz->setSKUs($skuList);
-            cli_echo('fetchCompetitivePricing for ' . implode(', ', $skuList));
+            $this->log('fetchCompetitivePricing for ' . implode(', ', $skuList));
             $amz->fetchCompetitivePricing();
             $products = $amz->getProduct();
             foreach ($products as $product) {
@@ -178,7 +183,7 @@ class MWS_Seller {
             // get competitive pricing
             $amz = new AmazonProductInfo();
             $amz->setSKUs($skuList);
-            cli_echo('fetchLowestOffer for ' . implode(', ', $skuList));
+            $this->log('fetchLowestOffer for ' . implode(', ', $skuList));
             $amz->fetchLowestOffer();
             $products = $amz->getProduct();
             foreach ($products as $product) {
@@ -190,6 +195,7 @@ class MWS_Seller {
             // get inventory
             $amz = new AmazonInventoryList();
             $amz->setSellerSkus($skuList);
+            $this->log('fetching inventory for ' . implode(', ', $skuList));
             $amz->fetchInventoryList();
             $supplies = $amz->getSupply();
             foreach ($supplies as $supply) {
@@ -215,6 +221,15 @@ class MWS_Seller {
     }
 
     function LocalUpdateProduct($data) {
+        try {
+            if (!isset($data['id'])) {
+                $tmp = $this->LocalGetProduct($data['sku']);
+                $tmp['id'];
+                $data['id'] = $tmp['id'];
+            }
+        } catch (Exception $e) {
+            // do nothing - new item will be inserted
+        }
         unset($data['last_modified']);
 //        debug($data);exit();
         $this->db_mysql->on_duplicate_key_update()->insert("user_listings", $data);
@@ -224,7 +239,7 @@ class MWS_Seller {
         if (empty($sku)) {
             throw new Exception('SKU is empty');
         }
-        cli_echo('Fetching local product ' . $sku);
+        $this->log('Fetching local product ' . $sku);
         $conditions = array(
             "sellerid" => $this->seller['sellerid'],
             "marketplaceid" => $this->seller['marketplaceid'],
@@ -246,7 +261,7 @@ class MWS_Seller {
         // get my pricing
         $amz = new AmazonProductInfo();
         $amz->setSKUs($sku);
-        cli_echo('fetchMyPrice for ' . $sku);
+        $this->log('fetchMyPrice for ' . $sku);
         $amz->fetchMyPrice();
         $product = $amz->getProduct()[0];
         if (!is_object($product)) {
@@ -257,11 +272,10 @@ class MWS_Seller {
         if (!isset($tmp['Offers'])) {
             $mws_product['Offers'] = null;
         }
-
         // get competitive pricing
         $amz = new AmazonProductInfo();
         $amz->setSKUs($sku);
-        cli_echo('fetchCompetitivePricing for ' . $sku);
+        $this->log('fetchCompetitivePricing for ' . $sku);
         $amz->fetchCompetitivePricing();
         $product = $amz->getProduct()[0];
         $tmp = $product->getData();
@@ -270,7 +284,7 @@ class MWS_Seller {
         // get competitive pricing
         $amz = new AmazonProductInfo();
         $amz->setSKUs($sku);
-        cli_echo('fetchLowestOffer for ' . $sku);
+        $this->log('fetchLowestOffer for ' . $sku);
         $amz->fetchLowestOffer();
         $product = $amz->getProduct()[0];
         $tmp = $product->getData();
@@ -278,6 +292,7 @@ class MWS_Seller {
 
         $amz = new AmazonInventoryList();
         $amz->setSellerSkus($sku);
+        $this->log('fetching inventory for ' . $sku);
         $amz->fetchInventoryList();
         $supply = $amz->getSupply()[0];
         $mws_product['qty'] = $supply['InStockSupplyQuantity'];
@@ -291,8 +306,7 @@ class MWS_Seller {
         $amz->setMarketplaceIds($this->getMarketPlaceId());
         $amz->setFeedType($feed_type);
         $amz->setFeedContent($feed);
-//        debug($amz);exit();
-        debug($feed);
+        $this->log("Submitting Feed ".$feed);
         $amz->submitFeed();
         $status = $amz->getResponse();
         debug($status);
@@ -326,6 +340,7 @@ class MWS_Seller {
     }
 
     function MWSPriceUpdate($sku, $price = null, $min_price = null, $max_price = null, $map_price = null) {
+        $this->log("Updating $sku Price to $price");
         $stdPriceXML = '';
         $minPriceXML = '';
         $maxPriceXML = '';
@@ -369,7 +384,7 @@ class MWS_Seller {
         return $response;
     }
 
-    function MWSGetFeed( $feed_id ) {
+    function MWSGetFeed($feed_id) {
         $this->setStore();
         $amz = new AmazonFeedList();
         $amz->setFeedIds($feed_id);
@@ -402,6 +417,7 @@ class MWS_Seller {
     }
 
     private function _MWSGetReport($report_id) {
+        $this->log("Fetching report ".$report_id);
         $this->setStore();
         $amz = new AmazonReport();
         $amz->setReportId($report_id);
@@ -430,13 +446,14 @@ class MWS_Seller {
     }
 
     function MWSGetReport($type, $past_days = null) {
+        $this->log("Requesting report ".$type);
         $r = $this->_MWSRequestReport($type, $past_days);
         if (!isset($r['ReportRequestId'])) {
             die('ERROR: ' . $r['ReportProcessingStatus']);
         }
         $sleep_time = 20;
         $counter = 0;
-        $this->log(++$counter . ". Sleeping for $sleep_time seconds");
+        $this->log( ++$counter . ". Sleeping for $sleep_time seconds");
         sleep($sleep_time);
         while ($counter <= 5) {
             $this->log('Checking for Request ID ' . $r['ReportRequestId'], 'info');
@@ -454,7 +471,7 @@ class MWS_Seller {
             }
 
             if (empty($report['GeneratedReportId'])) {
-                $this->log(++$counter . ". Sleeping for $sleep_time seconds");
+                $this->log( ++$counter . ". Sleeping for $sleep_time seconds");
                 sleep($sleep_time);
                 continue;
             }
@@ -462,7 +479,7 @@ class MWS_Seller {
             break;
         }
         if (empty($report['GeneratedReportId'])) {
-            die('could not find report');
+            throw new Exception("Timedout for " . $report['ReportRequestId']);
             return false;
         }
         $report = $this->_MWSGetReport($report['GeneratedReportId']);
@@ -476,7 +493,5 @@ class MWS_Seller {
             return false;
         }
     }
-
-    
 
 }

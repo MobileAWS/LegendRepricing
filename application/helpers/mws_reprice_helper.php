@@ -99,12 +99,14 @@ class LegendRepricer {
         $bb_landing = $bb_price + $bb_shipping;
         $landing = $price + $shipping;
         
+//        var_dump($landing * 0.01);
+//        var_dump($landing);
+//        var_dump(round($landing - $landing * 0.01, 2));
         if( $hasBuyBox ){
             $landing = round($landing + $landing * 0.01, 2);
         }else{
             $landing = round($landing - $landing * 0.01, 2);
         }
-        
         return $landing;
     }
 

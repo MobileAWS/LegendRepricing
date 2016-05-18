@@ -5,41 +5,36 @@
  *
  * @author 
  */
-
-
 class legendpricing_jobs extends CI_Controller {
+
     private $client;
+    public $db;
+
     public function __construct() {
         parent::__construct();
         if (php_sapi_name() !== 'cli') {
-            show_404();
+            //show_404();
         }
+        $CI = & get_instance();
+        $this->db = $CI->db;
         $this->load->helper('mws_common');
         $this->load->helper('mws_seller');
         $this->client = new LPGM_Client();
-        
     }
 
-    public function update_listings($seller_id) {
-        $this->client->addTask( new LPGM_Task('update_listings',$seller_id) );
+    public function sync_listings($seller_id) {
+        $this->client->addTask(new LPGM_Task('syncListings', $seller_id));
     }
-    
-    public function import_listings($seller_id) {
-        $this->client->addTask( new LPGM_Task('importListings',$seller_id) );
-    }
-    
-    public function reprice_product(){
-        $sellerId = 'A1ERLGARDFTEUE';
-        $data['seller_id'] = $sellerId;
-        $seller = new MWS_Seller($sellerId);
-        $products = $seller->getListings('active');
-        foreach($products as $row){
-            $data['sku'] = $row['sku'];
-            $task = new LPGM_Task('reprice_product',$data);
-            $this->client->addTask( $task );
+
+    public function reprice_products() {
+        //$conditions = array('sellerid' => 'ANF2DSU3YZFVJ');
+//        $conditions = array();
+        $results = $this->db->get_where("user_settings",$conditions)->result();
+        foreach ($results as $row) {
+            $task = new LPGM_Task('reprice_products', $row->sellerid );
+            $this->client->addTask($task);
+            //break;
         }
-        
-        
     }
 
 }
