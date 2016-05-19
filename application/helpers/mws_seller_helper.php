@@ -463,7 +463,7 @@ class MWS_Seller {
         $this->log("Requesting report ".$type);
         $r = $this->_MWSRequestReport($type, $past_days);
         if (!isset($r['ReportRequestId'])) {
-            die('ERROR: ' . $r['ReportProcessingStatus']);
+            $this->log('ERROR: ' . $r['ReportProcessingStatus']);
         }
         $sleep_time = 20;
         $counter = 0;
