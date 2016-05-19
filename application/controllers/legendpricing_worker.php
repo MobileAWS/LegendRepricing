@@ -39,10 +39,10 @@ class legendpricing_worker extends CI_Controller {
 
     static public function runlegendPricingTask($job) {
         $task = (array) unserialize($job->workload());
+//        return;
         $fn = $task['fn'];
         $data = $task['data'];
         $jobId = $job->handle();
-
         cli_echo("======Starting job $fn with id " . $jobId . '======');
 
         if (!method_exists('legendpricing_worker', $fn)) {
@@ -76,11 +76,21 @@ class legendpricing_worker extends CI_Controller {
     static function reprice_products($sellerId) {
         $lp = new legend_pricing();
         $seller = new MWS_Seller($sellerId);
+        $updated_minutes = $seller->getSinceUpdatedMins();
+        if( $updated_minutes > 60*6 ){
+            $lp->syncListingsFromMWS($sellerId,true);
+            $seller->updateLastModified();
+        }
         $products = $seller->getListings('active');
         foreach ($products as $row) {
             $lp->reprice_product($sellerId, $row['sku']);
         }
         return true;
+    }
+    
+    static function mws_sqs($sqs_pool){
+        $lp = new legend_pricing();
+        $lp->mwsSqs($sqs_pool);
     }
 
 }

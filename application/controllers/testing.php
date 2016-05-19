@@ -3197,7 +3197,7 @@ EOD;
     //    $test=new GearmanClusterAdmin(array('localhost:4730'));
     $myamazon= $this->gearmanclusteradmin->getAccumaltiveJobs();
     debug($myamazon);
-    $base = '/Applications/AMPPS/www/legendpricing';
+    $base = BASEPATH.'../';
     if(isset($myamazon['amazon_update']))
     { 
       $available=$myamazon['amazon_update']['TOTAL']-$myamazon['amazon_update']['RUNNING'];

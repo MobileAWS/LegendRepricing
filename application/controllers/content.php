@@ -979,7 +979,7 @@ private function backup_link($option,$function_name)
         }
       }
       
-      $this->db->query("DELETE FROM pollingtbl WHERE sqs_id={$seller_id}");
+      $this->db->query("DELETE FROM pollingtbl WHERE sqs_id='{$seller_id}'");
       return true;
   }
   

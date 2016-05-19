@@ -84,20 +84,19 @@
             <div class="row">
               <div class="col-md-4">
                 <div class="form-group">
-                  <label >Change Fulfilment channel:</label>
+                    <label> Fulfilment channel:</label>
                   <select class="form-control" name="fulfillment_channel">
                     <option value='AMAZON_NA' <?php if ($val['fulfillment_channel'] == 'AMAZON_NA') { echo "selected"; } ?>>FBA</option>
                     <option value='DEFAULT' <?php if ($val['fulfillment_channel']== 'DEFAULT') { echo "selected"; } ?>>Seller</option>
                   </select>
                   <!--      <input type="text" name="fulfillment_channel" class="form-control" value="<?php echo $val['fulfillment_channel'];?>"> -->
                 </div> 
-              </div>                                          
-            </div>           
-            <div class="row">
+              </div>
+                
               <div class="col-md-4">
                 <div class="form-group">
                   <label >Competition Type:</label>
-                  <select class="form-control" name="comp_type">
+                  <select class="form-control" name="comp_type" disabled="disabled">
                     <option value='all' <?php if ($val['comp_type'] == 'all') { echo "selected"; } ?>>All Sellers</option>
                     <option value='amazon' <?php if ($val['comp_type'] == 'amazon') { echo "selected"; } ?>>Amazon</option>
                     <option value='fba' <?php if ($val['comp_type'] == 'fba') { echo "selected"; } ?>>FBA</option>
@@ -106,13 +105,18 @@
                   </select>
                   <!--      <input type="text" name="fulfillment_channel" class="form-control" value="<?php echo $val['fulfillment_channel'];?>"> -->
                 </div> 
-              </div>                                          
+              </div>
+                
+            </div>           
+            <div class="row">
+                                                        
             </div>   
             <div class="row">
               <div class="col-md-4">
                 <div class="form-group">
-                  <label>Beat amazon:</label>     
-                  <select class="form-control beat_amazon_flag" name="beat_amazon_flag" >
+                    <label>Beat amazon:</label>
+                  <?php $val['beat_amazon_flag'] = 'no'; ?>  
+                  <select class="form-control beat_amazon_flag" name="beat_amazon_flag" disabled="disabled">
                     <option value='yes'  <?php if ($val['beat_amazon_flag']=='yes') { echo "selected"; } ?>>Yes</option>
                     <option value='no'  <?php if ($val['beat_amazon_flag']=='no') { echo "selected"; } ?>>No</option>
                   </select>                                
@@ -121,7 +125,7 @@
               <div class="col-md-4">
                 <div class="form-group">
                   <label >Value:</label>     
-                  <input type="text" value="<?php echo $val['beat_amazon'];?>" <?php if ($val['beat_amazon_flag']=='no') {echo 'disabled';}?> name="beat_amazon" class="form-control beat_amazon" placeholder="0.0"/>
+                  <input  type="text" value="<?php echo $val['beat_amazon'];?>" <?php if ($val['beat_amazon_flag']=='no') {echo 'disabled';}?> name="beat_amazon" class="form-control beat_amazon" placeholder="0.0"/>
                 </div> 
               </div>                     
             </div>                      
@@ -129,7 +133,7 @@
               <div class="col-md-8">
                 <div class="form-group"> 
                   <label for="inputPassword3">Exclude seller id : (Optional)</label>      
-                  <textarea name="exclude_seller" class="form-control" rows="3" placeholder="Enter seller ids separated by semicolon"><?php echo preg_replace('/\s+/', ' ', $val['exclude_seller']);?></textarea> </div> </div>
+                  <textarea disabled="disabled" name="exclude_seller" class="form-control" rows="3" placeholder="Enter seller ids separated by semicolon"><?php echo preg_replace('/\s+/', ' ', $val['exclude_seller']);?></textarea> </div> </div>
             </div>
           </div>
         </div>

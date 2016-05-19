@@ -17,11 +17,22 @@ class legend_pricing {
         include_once APPPATH . 'helpers/mws_common_helper.php';
         include_once APPPATH . 'helpers/mws_reprice_helper.php';
         include_once APPPATH . 'helpers/mws_seller_helper.php';
-        
+        $this->mws_logs = new MWSLogs();
         $CI = & get_instance();
+        $this->sqs = $CI->sqs;
         $this->db = $CI->db;
     }
-
+    
+    function log($message, $level = null) {
+        if (!$level) {
+            $level = 'info';
+        }
+        $datetime = date('Y-m-d H:i:s');
+        $sellerid = $this->seller['sellerid'];
+        cli_echo("[$datetime] - $sellerid - ".$message);
+        $this->mws_logs->log($sellerid.' - '.$message, $level);
+    }
+    
     function update_listings($seller_id) {
 
         $seller = new MWS_Seller($seller_id);
@@ -40,7 +51,8 @@ class legend_pricing {
         return $products;
     }
 
-    function reprice_product($sellerId,$sku){
+    function reprice_product($sellerId, $sku) {
+        $this->log("**repricing product $sku**\n");
         $seller = new MWS_Seller($sellerId);
         $product = $seller->LocalGetProduct($sku);
         $item = $seller->MWSGetProduct($sku);
@@ -55,32 +67,24 @@ class legend_pricing {
         if (!$lr->newPrice) {
             $product['price'] = $lr->ourPrice->listing;
         }
-        
+
         $product['price'] = (float) $product['price'];
         if ($lr->hasBuyBox || $product['price'] != $lr->ourPrice->listing) {
             $product['price'] = $lr->ourPrice->listing;
         }
-//        debug($lr->buyBox);exit();
-//        var_dump($lr->ourPrice->listing);
-//        var_dump($lr->newPrice);
-//        var_dump($product['price']);
-        if( $lr->newPrice && $lr->newPrice != $lr->ourPrice->listing ){
+        if ($lr->newPrice && $lr->newPrice != $lr->ourPrice->listing) {
             cli_echo('going to reprice');
             $seller->MWSPriceUpdate($product['sku'], $lr->newPrice);
-            
-//            $product['price'] = $lr->newPrice;
         }
         $product['bb'] = $lr->hasBuyBox ? 'yes' : 'no';
         $product['bb_price'] = $lr->buyBox->landed;
-//        debug($lr->lowestOffer);
         $product['c1'] = round($lr->lowestOffer['Price']->landed, 2);
         $product['qty'] = $item['qty'];
-//        debug($product);
         $seller->LocalUpdateProduct($product);
     }
 
-    function syncListingsFromMWS($sellerId, $fba_fees = false ) {
-        var_dump($fba_fees);
+    function syncListingsFromMWS($sellerId, $fba_fees = false) {
+        $this->log("**syncing amazong listings**\n");
         $seller = new MWS_Seller($sellerId);
         $report = $seller->MWSGetReport(_GET_MERCHANT_LISTINGS_DATA_);
         $skuList = array();
@@ -109,8 +113,10 @@ class legend_pricing {
         $products = $seller->MWSProductListingData($skuArr);
         if ($fba_fees) {
             $fba_feed_data = $seller->MWSGetFBAFee();
-            foreach ($fba_feed_data as $row) {
-                $skuList[$row['sku']]['fees'] = $row['estimated-fee-total'];
+            if ($fba_feed_data) {
+                foreach ($fba_feed_data as $row) {
+                    $skuList[$row['sku']]['fees'] = $row['estimated-fee-total'];
+                }
             }
         }
 
@@ -138,12 +144,24 @@ class legend_pricing {
         }
 
         $this->db->trans_start();
-//        $this->db->query('delete FROM user_listings WHERE sellerid = ? AND marketplaceid = ? ', array('sellerid' => $seller->getSellerId(), 'marketplaceid' => $seller->getMarketPlaceId()));
         foreach ($results as $item) {
             $seller->LocalUpdateProduct($item);
         }
         $this->db->trans_complete();
         return;
+    }
+
+    function mwsSqs($sqs_pool) {
+        $attr['WaitTimeSeconds'] = 20;
+        while (1) {
+            foreach ($sqs_pool as $sqs) {
+                $messages = $this->sqs->receiveMessage('https://sqs.us-west-2.amazonaws.com/436456621616/' . $sqs['sqs_id'], 9, null, $attr);
+                cli_echo($sqs['sqs_id'] . ' ' . count($messages) . " messages(s)\n");
+                if (count($messages) > 0) {
+                    print_r($messages);
+                }
+            }
+        }
     }
 
 }

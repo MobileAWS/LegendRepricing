@@ -69,7 +69,20 @@ class MWS_Seller {
         cli_echo("[$datetime] - $sellerid - ".$message);
         $this->mws_logs->log($sellerid.' - '.$message, $level);
     }
-
+    
+    function getSinceUpdatedMins(){
+        $sellerid = $this->getSellerId();
+        $query = "SELECT TIMESTAMPDIFF(MINUTE, last_modified, now()) minutes FROM user_settings WHERE sellerid='{$sellerid}'";
+        $result = $this->db->query($query)->row_array();
+        return $result['minutes'];
+    }
+    
+    function updateLastModified(){
+        $sellerid = $this->getSellerId();
+        $query = "UPDATE user_settings SET last_modified=now() WHERE sellerid='{$sellerid}'";
+        $this->db->query($query)->row_array();
+    }
+    
     function getSellerId() {
         return $this->seller['sellerid'];
     }
@@ -265,7 +278,8 @@ class MWS_Seller {
         $amz->fetchMyPrice();
         $product = $amz->getProduct()[0];
         if (!is_object($product)) {
-            die('not a product');
+//            debug($product);
+            $this->log('not a product');
         }
         $tmp = $product->getData();
         $mws_product = $tmp;

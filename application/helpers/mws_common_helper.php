@@ -38,8 +38,6 @@ class LPGM_Client extends GearmanClient{
     }
     
     function addTask($task){
-//        debug($task);
-//        debug(serialize($task));
         $job = $this->client->addTaskBackground('runLegendPricingTask',  serialize($task));
         $this->client->runTasks();
         
