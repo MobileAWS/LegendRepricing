@@ -74,7 +74,7 @@ class legend_pricing {
         }
         if ($lr->newPrice && $lr->newPrice != $lr->ourPrice->listing) {
             cli_echo('going to reprice');
-            $seller->MWSPriceUpdate($product['sku'], $lr->newPrice);
+            //$seller->MWSPriceUpdate($product['sku'], $lr->newPrice);
         }
         $product['bb'] = $lr->hasBuyBox ? 'yes' : 'no';
         $product['bb_price'] = $lr->buyBox->landed;
