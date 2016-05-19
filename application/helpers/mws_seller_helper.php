@@ -174,7 +174,7 @@ class MWS_Seller {
             $products = $amz->getProduct();
             foreach ($products as $product) {
                 if (!is_object($product)) {
-                    die('not a product');
+                    $this->log('not a product');
                 }
                 $tmp = $product->getData();
                 $results[$tmp['Identifiers']['SKUIdentifier']['SellerSKU']] = $tmp;
