@@ -29,7 +29,7 @@ class legendpricing_jobs extends CI_Controller {
     }
 
     public function reprice_products() {
-        $conditions = array('sellerid' => 'ANF2DSU3YZFVJ');
+//        $conditions = array('sellerid' => 'ANF2DSU3YZFVJ');
 //        $conditions = array();
         $results = $this->db->get_where("user_settings", $conditions)->result();
         foreach ($results as $row) {
