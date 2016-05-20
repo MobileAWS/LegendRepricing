@@ -40,7 +40,7 @@ class MWS_Seller {
      */
     function __construct($seller_id, $marketplace_id = null) {
         $this->mws_logs = new MWSLogs();
-        
+
         $this->log('Initializing seller..' . $seller_id);
         $CI = & get_instance();
         $this->CI = $CI;
@@ -66,23 +66,23 @@ class MWS_Seller {
         }
         $datetime = date('Y-m-d H:i:s');
         $sellerid = $this->seller['sellerid'];
-        cli_echo("[$datetime] - $sellerid - ".$message);
-        $this->mws_logs->log($sellerid.' - '.$message, $level);
+        cli_echo("[$datetime] - $sellerid - " . $message);
+        $this->mws_logs->log($sellerid . ' - ' . $message, $level);
     }
-    
-    function getSinceUpdatedMins(){
+
+    function getSinceUpdatedMins() {
         $sellerid = $this->getSellerId();
         $query = "SELECT TIMESTAMPDIFF(MINUTE, last_modified, now()) minutes FROM user_settings WHERE sellerid='{$sellerid}'";
         $result = $this->db->query($query)->row_array();
         return $result['minutes'];
     }
-    
-    function updateLastModified(){
+
+    function updateLastModified() {
         $sellerid = $this->getSellerId();
         $query = "UPDATE user_settings SET last_modified=now() WHERE sellerid='{$sellerid}'";
         $this->db->query($query)->row_array();
     }
-    
+
     function getSellerId() {
         return $this->seller['sellerid'];
     }
@@ -108,10 +108,30 @@ class MWS_Seller {
 
         if ($status) {
             $conditions['status'] = $status;
-            $conditions['qty >'] = 0;
+//            $conditions['qty >'] = 0;
         }
         $listings = $this->db->get_where("user_listings", $conditions)->result_array();
         return $listings;
+    }
+    
+    /**
+     * Get local listing from database
+     * 
+     */
+    function getNewListings() {
+        $this->log('Fetching seller new listings');
+        $conditions = array(
+            "sellerid" => $this->seller['sellerid'],
+            "marketplaceid" => $this->seller['marketplaceid']
+        );
+
+        $conditions['last_repriced'] = NULL;
+        $listings = $this->db->get_where("user_listings", $conditions)->result_array();
+        $results = array();
+        foreach($listings as $row){
+            $results[ $row['sku'] ] = $row;
+        }
+        return $results;
     }
 
     /**
@@ -164,8 +184,10 @@ class MWS_Seller {
         $results = array();
         $limit = 20;
         $start = 0;
-        $this->log('Fetching listing from amazon...');
+        $count = count($skuArray);
+        $this->log("Fetching listing $count from amazon...");
         while ($skuList = array_slice($skuArray, $start, $limit)) {
+            $this->log("Fetching listing {$start} of {$count} from amazon...");
             // get my pricing
             $amz = new AmazonProductInfo();
             $amz->setSKUs($skuList);
@@ -175,6 +197,7 @@ class MWS_Seller {
             foreach ($products as $product) {
                 if (!is_object($product)) {
                     $this->log('not a product');
+                    continue;
                 }
                 $tmp = $product->getData();
                 $results[$tmp['Identifiers']['SKUIdentifier']['SellerSKU']] = $tmp;
@@ -212,7 +235,8 @@ class MWS_Seller {
             $amz->fetchInventoryList();
             $supplies = $amz->getSupply();
             foreach ($supplies as $supply) {
-                $results[$supply['SellerSKU']]['qty'] = $supply['InStockSupplyQuantity'];
+                if (isset($results[$tmp['Identifiers']['SKUIdentifier']['SellerSKU']]['Offers'][0]['FulfillmentChannel']) && $results[$tmp['Identifiers']['SKUIdentifier']['SellerSKU']]['Offers'][0]['FulfillmentChannel'] == 'AMAZON')
+                    $results[$supply['SellerSKU']]['qty'] = $supply['InStockSupplyQuantity'];
             }
 
 
@@ -245,6 +269,7 @@ class MWS_Seller {
         }
         unset($data['last_modified']);
 //        debug($data);exit();
+        $this->log('Updating local product ' . $sku);
         $this->db_mysql->on_duplicate_key_update()->insert("user_listings", $data);
     }
 
@@ -280,6 +305,7 @@ class MWS_Seller {
         if (!is_object($product)) {
 //            debug($product);
             $this->log('not a product');
+            return false;
         }
         $tmp = $product->getData();
         $mws_product = $tmp;
@@ -304,12 +330,15 @@ class MWS_Seller {
         $tmp = $product->getData();
         $mws_product['LowestOfferListings'] = $tmp['LowestOfferListings'];
 
-        $amz = new AmazonInventoryList();
-        $amz->setSellerSkus($sku);
-        $this->log('fetching inventory for ' . $sku);
-        $amz->fetchInventoryList();
-        $supply = $amz->getSupply()[0];
-        $mws_product['qty'] = $supply['InStockSupplyQuantity'];
+        if (isset($mws_product['Offers'][0]['FulfillmentChannel']) && $mws_product['Offers'][0]['FulfillmentChannel'] == 'AMAZON') {
+            $amz = new AmazonInventoryList();
+            $amz->setSellerSkus($sku);
+            $this->log('fetching inventory for ' . $sku);
+            $amz->fetchInventoryList();
+            $supply = $amz->getSupply()[0];
+            $mws_product['qty'] = $supply['InStockSupplyQuantity'];
+        }
+
 
         return $mws_product;
     }
@@ -320,7 +349,7 @@ class MWS_Seller {
         $amz->setMarketplaceIds($this->getMarketPlaceId());
         $amz->setFeedType($feed_type);
         $amz->setFeedContent($feed);
-        $this->log("Submitting Feed ".$feed);
+        $this->log("Submitting Feed " . $feed);
         $amz->submitFeed();
         $status = $amz->getResponse();
         debug($status);
@@ -431,7 +460,7 @@ class MWS_Seller {
     }
 
     private function _MWSGetReport($report_id) {
-        $this->log("Fetching report ".$report_id);
+        $this->log("Fetching report " . $report_id);
         $this->setStore();
         $amz = new AmazonReport();
         $amz->setReportId($report_id);
@@ -450,7 +479,7 @@ class MWS_Seller {
                 }
             }
         }
-        unlink($path);
+//        unlink($path);
         return $result;
     }
 
@@ -460,14 +489,14 @@ class MWS_Seller {
     }
 
     function MWSGetReport($type, $past_days = null) {
-        $this->log("Requesting report ".$type);
+        $this->log("Requesting report " . $type);
         $r = $this->_MWSRequestReport($type, $past_days);
         if (!isset($r['ReportRequestId'])) {
             $this->log('ERROR: ' . $r['ReportProcessingStatus']);
         }
         $sleep_time = 20;
         $counter = 0;
-        $this->log( ++$counter . ". Sleeping for $sleep_time seconds");
+        $this->log(++$counter . ". Sleeping for $sleep_time seconds");
         sleep($sleep_time);
         while ($counter <= 5) {
             $this->log('Checking for Request ID ' . $r['ReportRequestId'], 'info');
@@ -485,7 +514,7 @@ class MWS_Seller {
             }
 
             if (empty($report['GeneratedReportId'])) {
-                $this->log( ++$counter . ". Sleeping for $sleep_time seconds");
+                $this->log(++$counter . ". Sleeping for $sleep_time seconds");
                 sleep($sleep_time);
                 continue;
             }
@@ -497,12 +526,45 @@ class MWS_Seller {
             return false;
         }
         $report = $this->_MWSGetReport($report['GeneratedReportId']);
+        $this->log(count($report)." rows found in report");
         return $report;
     }
+    
+    function getMerchantListingsData(){
+        try {
+            $report = $this->MWSGetReport(_GET_MERCHANT_LISTINGS_DATA_,1);
+        } catch (Exception $e) {
+            return false;
+        }
+        
+        $skuList = array();
+        foreach ($report as $row) {
+            $new['sellerid'] = $this->getSellerId();
+            $new['marketplaceid'] = $this->getMarketPlaceId();
+            $new['itemname'] = htmlentities($row['item-name']);
+            $new['listing_id'] = $row['listing-id'];
+            $new['sku'] = $row['seller-sku'];
+            $new['price'] = $row['price'];
+            $new['marketplace'] = $row['item-is-marketplace'];
+            list($tempcon, $tempsub) = parse_condition($row['item-condition']);
+            $new['item_condition'] = $tempcon;
+            $new['item_subcondition'] = $tempsub;
+            $new['asin'] = $row['asin1'];
+            $new['product_id'] = $row['product-id'];
+            $new['product_id_type'] = $row['product-id-type'];
+            $new['fulfillment_channel'] = $row['fulfillment-channel'];
+            $new['prevprice'] = $row['price'];
+            $new['email'] = $this->getEmail();
 
+            $skuList[$row['seller-sku']] = $new;
+        }
+        
+        return $skuList;
+    }
+    
     function MWSGetFBAFee() {
         try {
-            return $this->MWSGetReport(_GET_FBA_ESTIMATED_FBA_FEES_TXT_DATA_, 61);
+            return $this->MWSGetReport(_GET_FBA_ESTIMATED_FBA_FEES_TXT_DATA_,60);
         } catch (Exception $e) {
             return false;
         }

@@ -1,0 +1,2 @@
+gearadmin --shutdown
+gearmand -d

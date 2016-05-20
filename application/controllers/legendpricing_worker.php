@@ -38,7 +38,7 @@ class legendpricing_worker extends CI_Controller {
     }
 
     static public function runlegendPricingTask($job) {
-        $task = (array) unserialize($job->workload());
+        $task = (array) unserialize($job->workload()); 
 //        return;
         $fn = $task['fn'];
         $data = $task['data'];
@@ -72,7 +72,10 @@ class legendpricing_worker extends CI_Controller {
         $lp = new legend_pricing();
         $lp->syncListingsFromMWS($sellerId, $update_fbafees);
     }
-
+    static function updateProductData( $data ){
+        $lp = new legend_pricing();
+        $lp->updateLocalProducts($data['sellerId'],$data['skuList']);
+    }
     static function reprice_products($sellerId) {
         $lp = new legend_pricing();
         $seller = new MWS_Seller($sellerId);

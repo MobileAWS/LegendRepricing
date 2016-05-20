@@ -21,6 +21,7 @@ class legend_pricing {
         $CI = & get_instance();
         $this->sqs = $CI->sqs;
         $this->db = $CI->db;
+        $this->client = new LPGM_Client();
     }
     
     function log($message, $level = null) {
@@ -56,7 +57,7 @@ class legend_pricing {
         $seller = new MWS_Seller($sellerId);
         $product = $seller->LocalGetProduct($sku);
         $item = $seller->MWSGetProduct($sku);
-
+        
         if (!$item['Offers']) {
             $product['status'] = 'inactive';
         }
@@ -82,35 +83,16 @@ class legend_pricing {
         $product['qty'] = $item['qty'];
         $seller->LocalUpdateProduct($product);
     }
-
-    function syncListingsFromMWS($sellerId, $fba_fees = false) {
-        $this->log("**syncing amazong listings**\n");
+    
+    
+    function syncListingsFromMWS( $sellerId, $fba_fees = false ){
         $seller = new MWS_Seller($sellerId);
-        $report = $seller->MWSGetReport(_GET_MERCHANT_LISTINGS_DATA_);
-        $skuList = array();
-        $rows = array();
-        foreach ($report as $row) {
-            $new['sellerid'] = $seller->getSellerId();
-            $new['marketplaceid'] = $seller->getMarketPlaceId();
-            $new['itemname'] = htmlentities($row['item-name']);
-            $new['listing_id'] = $row['listing-id'];
-            $new['sku'] = $row['seller-sku'];
-            $new['price'] = $row['price'];
-            $new['marketplace'] = $row['item-is-marketplace'];
-            list($tempcon, $tempsub) = parse_condition($row['item-condition']);
-            $new['item_condition'] = $tempcon;
-            $new['item_subcondition'] = $tempsub;
-            $new['asin'] = $row['asin1'];
-            $new['product_id'] = $row['product-id'];
-            $new['product_id_type'] = $row['product-id-type'];
-            $new['fulfillment_channel'] = $row['fulfillment-channel'];
-            $new['prevprice'] = $row['price'];
-            $new['email'] = $seller->getEmail();
-
-            $skuArr[] = $row['seller-sku'];
-            $skuList[$row['seller-sku']] = $new;
+        $skuList = $seller->getMerchantListingsData();
+        if( !$skuList ){
+            $this->log('Could not get merchant lsitings data');
+            return false;
         }
-        $products = $seller->MWSProductListingData($skuArr);
+        
         if ($fba_fees) {
             $fba_feed_data = $seller->MWSGetFBAFee();
             if ($fba_feed_data) {
@@ -119,7 +101,33 @@ class legend_pricing {
                 }
             }
         }
-
+        foreach($skuList as $sku=>$product){
+            $seller->LocalUpdateProduct($product);
+        }
+        
+        $skuArray = $seller->getNewListings();
+        $start = 0;
+        $limit = 1000;
+//        $this->log( count($skuArray) . ' total skues' );
+        while ($skuList = array_slice($skuArray, $start, $limit,true)) {
+            $data['sellerId'] = $seller->getSellerId();
+            $data['skuList'] = $skuList;
+//            $this->log( count($skuList) . ' skus for this job' );
+            $task = new LPGM_Task('updateProductData', $data);
+            $this->client->addTask($task);
+            $start += $limit;
+        }
+        
+        return true;
+    }
+    
+    function updateLocalProducts( $sellerId, $skuList ) {
+//        debug($skuArr);exit();
+//        debug($skuList);exit();
+        $skuArr = array_keys($skuList);
+        
+        $seller = new MWS_Seller($sellerId);
+        $products = $seller->MWSProductListingData($skuArr);
         $results = array();
         foreach ($products as $sku => $product) {
             $item = $skuList[$sku];
@@ -139,6 +147,7 @@ class legend_pricing {
             $item['bb_price'] = $lr->buyBox->landed;
             $item['c1'] = round($lr->lowestOffer['Price']->landed, 2);
             $item['qty'] = $product['qty'];
+            $item['last_repriced'] = date('Y-m-d H:i:s');
 //            $seller->LocalUpdateProduct($product);
             $results[] = $item;
         }
