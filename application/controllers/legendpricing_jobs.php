@@ -23,22 +23,19 @@ class legendpricing_jobs extends CI_Controller {
     }
 
     public function test() {
-        $seller = new MWS_Seller('A3NP85KUD0UI05');
-        $skuArray = $seller->getNewListings();
-        $start = 0;
-        $limit = 1000;
-        while ($skuList = array_slice($skuArray, $start, $limit)) {
-            $data['sellerId'] = $seller->getSellerId();
-            $data['skuList'] = $skuList;
-            $task = new LPGM_Task('updateProductData', $data);
-//            debug($task);
-            $this->client->addTask($task);
-            $start += $limit;
-        }
+        $seller = new MWS_Seller('ANF2DSU3YZFVJ');
+        //$seller = new MWS_Seller('A3NP85KUD0UI05');
+        
+//        $data = $seller->MWSGetReport(_GET_MERCHANT_LISTINGS_DATA_,1);
+        $data = $seller->MWSProductListingData(array('13-pink'));
+        debug($data);
+        exit();
     }
 
     public function sync_listings($sellerId) {
-        $data['update_fbafees'] = true;
+        $query = "UPDATE user_listings SET last_repriced=null WHERE sellerid='{$sellerId}'";
+        $this->db->query($query);
+        $data['update_fbafees'] = false;
         $data['sellerid'] = $sellerId; //'ANF2DSU3YZFVJ';
         $this->client->addTask(new LPGM_Task('syncListings', $data));
     }

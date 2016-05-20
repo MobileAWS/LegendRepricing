@@ -113,7 +113,7 @@ class MWS_Seller {
         $listings = $this->db->get_where("user_listings", $conditions)->result_array();
         return $listings;
     }
-    
+
     /**
      * Get local listing from database
      * 
@@ -126,10 +126,11 @@ class MWS_Seller {
         );
 
         $conditions['last_repriced'] = NULL;
+//        $conditions['sku'] = 'DW-GSJD-B67U';
         $listings = $this->db->get_where("user_listings", $conditions)->result_array();
         $results = array();
-        foreach($listings as $row){
-            $results[ $row['sku'] ] = $row;
+        foreach ($listings as $row) {
+            $results[$row['sku']] = $row;
         }
         return $results;
     }
@@ -203,6 +204,9 @@ class MWS_Seller {
                 $results[$tmp['Identifiers']['SKUIdentifier']['SellerSKU']] = $tmp;
                 if (!isset($tmp['Offers'])) {
                     $results[$tmp['Identifiers']['SKUIdentifier']['SellerSKU']]['Offers'] = null;
+                    $results[$tmp['Identifiers']['SKUIdentifier']['SellerSKU']]['qty'] = 0;
+                } else {
+//                    debug($results[$tmp['Identifiers']['SKUIdentifier']['SellerSKU']]['Offers']);
                 }
             }
             // get competitive pricing
@@ -235,8 +239,11 @@ class MWS_Seller {
             $amz->fetchInventoryList();
             $supplies = $amz->getSupply();
             foreach ($supplies as $supply) {
-                if (isset($results[$tmp['Identifiers']['SKUIdentifier']['SellerSKU']]['Offers'][0]['FulfillmentChannel']) && $results[$tmp['Identifiers']['SKUIdentifier']['SellerSKU']]['Offers'][0]['FulfillmentChannel'] == 'AMAZON')
+                if (isset($results[$supply['SellerSKU']]['Offers'][0]['FulfillmentChannel']) && $results[$supply['SellerSKU']]['Offers'][0]['FulfillmentChannel'] != 'MERCHANT') {
                     $results[$supply['SellerSKU']]['qty'] = $supply['InStockSupplyQuantity'];
+                } else {
+                    //debug($results[$supply['SellerSKU']]['Offers']);
+                }
             }
 
 
@@ -259,17 +266,20 @@ class MWS_Seller {
 
     function LocalUpdateProduct($data) {
         try {
-            if (!isset($data['id'])) {
-                $tmp = $this->LocalGetProduct($data['sku']);
-                $tmp['id'];
-                $data['id'] = $tmp['id'];
+            $tmp = $this->LocalGetProduct($data['sku']);
+            $tmp['id'];
+            $data['id'] = $tmp['id'];
+            if ($tmp['fulfillment_channel'] == 'DEFAULT') {
+                $data['qty'] = $tmp['qty'];
             }
         } catch (Exception $e) {
             // do nothing - new item will be inserted
         }
+
+//        debug($data);
         unset($data['last_modified']);
 //        debug($data);exit();
-        $this->log('Updating local product ' . $sku);
+        $this->log('Updating local product ' . $data['sku']);
         $this->db_mysql->on_duplicate_key_update()->insert("user_listings", $data);
     }
 
@@ -311,6 +321,7 @@ class MWS_Seller {
         $mws_product = $tmp;
         if (!isset($tmp['Offers'])) {
             $mws_product['Offers'] = null;
+            $mws_product['qty'] = 0;
         }
         // get competitive pricing
         $amz = new AmazonProductInfo();
@@ -330,7 +341,7 @@ class MWS_Seller {
         $tmp = $product->getData();
         $mws_product['LowestOfferListings'] = $tmp['LowestOfferListings'];
 
-        if (isset($mws_product['Offers'][0]['FulfillmentChannel']) && $mws_product['Offers'][0]['FulfillmentChannel'] == 'AMAZON') {
+        if (isset($mws_product['Offers'][0]['FulfillmentChannel']) && $mws_product['Offers'][0]['FulfillmentChannel'] != 'MERCHANT') {
             $amz = new AmazonInventoryList();
             $amz->setSellerSkus($sku);
             $this->log('fetching inventory for ' . $sku);
@@ -496,7 +507,7 @@ class MWS_Seller {
         }
         $sleep_time = 20;
         $counter = 0;
-        $this->log(++$counter . ". Sleeping for $sleep_time seconds");
+        $this->log( ++$counter . ". Sleeping for $sleep_time seconds");
         sleep($sleep_time);
         while ($counter <= 5) {
             $this->log('Checking for Request ID ' . $r['ReportRequestId'], 'info');
@@ -514,7 +525,7 @@ class MWS_Seller {
             }
 
             if (empty($report['GeneratedReportId'])) {
-                $this->log(++$counter . ". Sleeping for $sleep_time seconds");
+                $this->log( ++$counter . ". Sleeping for $sleep_time seconds");
                 sleep($sleep_time);
                 continue;
             }
@@ -526,17 +537,17 @@ class MWS_Seller {
             return false;
         }
         $report = $this->_MWSGetReport($report['GeneratedReportId']);
-        $this->log(count($report)." rows found in report");
+        $this->log(count($report) . " rows found in report");
         return $report;
     }
-    
-    function getMerchantListingsData(){
+
+    function getMerchantListingsData() {
         try {
-            $report = $this->MWSGetReport(_GET_MERCHANT_LISTINGS_DATA_,1);
+            $report = $this->MWSGetReport(_GET_MERCHANT_LISTINGS_DATA_, 1);
         } catch (Exception $e) {
             return false;
         }
-        
+
         $skuList = array();
         foreach ($report as $row) {
             $new['sellerid'] = $this->getSellerId();
@@ -558,13 +569,13 @@ class MWS_Seller {
 
             $skuList[$row['seller-sku']] = $new;
         }
-        
+
         return $skuList;
     }
-    
+
     function MWSGetFBAFee() {
         try {
-            return $this->MWSGetReport(_GET_FBA_ESTIMATED_FBA_FEES_TXT_DATA_,60);
+            return $this->MWSGetReport(_GET_FBA_ESTIMATED_FBA_FEES_TXT_DATA_, 50);
         } catch (Exception $e) {
             return false;
         }

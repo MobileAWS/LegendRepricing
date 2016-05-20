@@ -122,8 +122,6 @@ class legend_pricing {
     }
     
     function updateLocalProducts( $sellerId, $skuList ) {
-//        debug($skuArr);exit();
-//        debug($skuList);exit();
         $skuArr = array_keys($skuList);
         
         $seller = new MWS_Seller($sellerId);
@@ -148,7 +146,6 @@ class legend_pricing {
             $item['c1'] = round($lr->lowestOffer['Price']->landed, 2);
             $item['qty'] = $product['qty'];
             $item['last_repriced'] = date('Y-m-d H:i:s');
-//            $seller->LocalUpdateProduct($product);
             $results[] = $item;
         }
 
