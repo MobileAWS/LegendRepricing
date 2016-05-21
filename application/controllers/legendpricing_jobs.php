@@ -26,12 +26,24 @@ class legendpricing_jobs extends CI_Controller {
         $seller = new MWS_Seller('ANF2DSU3YZFVJ');
         //$seller = new MWS_Seller('A3NP85KUD0UI05');
         
-//        $data = $seller->MWSGetReport(_GET_MERCHANT_LISTINGS_DATA_,1);
-        $data = $seller->MWSProductListingData(array('13-pink'));
-        debug($data);
+        $data = $seller->MWSGetReport(_GET_MERCHANT_LISTINGS_DATA_,1);
+//        $data = $seller->MWSProductListingData(array('KZ-9ZL2-J7MT'));
+        debug($data[2]);
+        debug($data[7]);
         exit();
     }
-
+    
+    function sync_inventory(){
+        $query = 'SELECT sellerid FROM user_settings';
+        $sellers = $this->db->query($query)->result_array();
+        foreach($sellers as $row ){
+            $sellerId = $row['sellerid'];
+            $data['update_fbafees'] = true;
+            $data['sellerid'] = $sellerId;
+            $this->client->addTask(new LPGM_Task('syncListings', $data));
+        }
+    }
+    
     public function sync_listings($sellerId) {
         $query = "UPDATE user_listings SET last_repriced=null WHERE sellerid='{$sellerId}'";
         $this->db->query($query);

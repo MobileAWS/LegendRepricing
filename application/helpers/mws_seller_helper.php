@@ -59,7 +59,16 @@ class MWS_Seller {
         $this->currency_code = $this->CI->config->item($this->getMarketPlaceId(), 'gl_currency');
         $this->tmp_path = sys_get_temp_dir();
     }
-
+    function isAuthrized(){
+        $this->setStore();
+        $amz = new AmazonParticipationList();
+        $amz->fetchParticipationList();
+        $part = $amz->getParticipationList();
+        if( count($part) == 0 ){
+            return false;
+        }
+        return true;
+    }
     function log($message, $level = null) {
         if (!$level) {
             $level = 'info';
@@ -108,10 +117,14 @@ class MWS_Seller {
 
         if ($status) {
             $conditions['status'] = $status;
-//            $conditions['qty >'] = 0;
         }
+        
         $listings = $this->db->get_where("user_listings", $conditions)->result_array();
-        return $listings;
+        $results = array();
+        foreach ($listings as $row) {
+            $results[$row['sku']] = $row;
+        }
+        return $results;
     }
 
     /**
@@ -241,6 +254,7 @@ class MWS_Seller {
             foreach ($supplies as $supply) {
                 if (isset($results[$supply['SellerSKU']]['Offers'][0]['FulfillmentChannel']) && $results[$supply['SellerSKU']]['Offers'][0]['FulfillmentChannel'] != 'MERCHANT') {
                     $results[$supply['SellerSKU']]['qty'] = $supply['InStockSupplyQuantity'];
+//                    debug($results[$supply['SellerSKU']]);
                 } else {
                     //debug($results[$supply['SellerSKU']]['Offers']);
                 }
@@ -269,9 +283,6 @@ class MWS_Seller {
             $tmp = $this->LocalGetProduct($data['sku']);
             $tmp['id'];
             $data['id'] = $tmp['id'];
-            if ($tmp['fulfillment_channel'] == 'DEFAULT') {
-                $data['qty'] = $tmp['qty'];
-            }
         } catch (Exception $e) {
             // do nothing - new item will be inserted
         }
@@ -555,6 +566,7 @@ class MWS_Seller {
             $new['itemname'] = htmlentities($row['item-name']);
             $new['listing_id'] = $row['listing-id'];
             $new['sku'] = $row['seller-sku'];
+            $new['qty'] = $row['quantity'];
             $new['price'] = $row['price'];
             $new['marketplace'] = $row['item-is-marketplace'];
             list($tempcon, $tempsub) = parse_condition($row['item-condition']);

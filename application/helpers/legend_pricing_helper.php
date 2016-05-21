@@ -87,6 +87,9 @@ class legend_pricing {
     
     function syncListingsFromMWS( $sellerId, $fba_fees = false ){
         $seller = new MWS_Seller($sellerId);
+        if( !$seller->isAuthrized() ){
+            return;
+        }
         $skuList = $seller->getMerchantListingsData();
         if( !$skuList ){
             $this->log('Could not get merchant lsitings data');
@@ -105,7 +108,7 @@ class legend_pricing {
             $seller->LocalUpdateProduct($product);
         }
         
-        $skuArray = $seller->getNewListings();
+        $skuArray = $seller->getListings();
         $start = 0;
         $limit = 1000;
 //        $this->log( count($skuArray) . ' total skues' );
@@ -144,7 +147,11 @@ class legend_pricing {
             $item['bb'] = $lr->hasBuyBox ? 'yes' : 'no';
             $item['bb_price'] = $lr->buyBox->landed;
             $item['c1'] = round($lr->lowestOffer['Price']->landed, 2);
-            $item['qty'] = $product['qty'];
+            
+            if( $item['fulfillment_channel'] != 'DEFAULT' ){
+                $item['qty'] = $product['qty'];
+            }
+            
             $item['last_repriced'] = date('Y-m-d H:i:s');
             $results[] = $item;
         }
