@@ -23,13 +23,12 @@ class legendpricing_jobs extends CI_Controller {
     }
 
     public function test() {
-        $seller = new MWS_Seller('ANF2DSU3YZFVJ');
+        $seller = new MWS_Seller('A1ERLGARDFTEUE');
         //$seller = new MWS_Seller('A3NP85KUD0UI05');
         
-        $data = $seller->MWSGetReport(_GET_MERCHANT_LISTINGS_DATA_,1);
-//        $data = $seller->MWSProductListingData(array('KZ-9ZL2-J7MT'));
-        debug($data[2]);
-        debug($data[7]);
+//        $data = $seller->MWSGetReport(_GET_MERCHANT_LISTINGS_DATA_,1);
+        $data = $seller->MWSProductListingData(array('QHDC gray'));
+        debug($data);
         exit();
     }
     

@@ -97,9 +97,10 @@ class legend_pricing {
         }
         
         if ( $product['price'] != $lr->ourPrice->listing) {
-            $product['price'] = $lr->ourPrice->listing;
             $product['last_repriced'] = $this->GetMySQLNowTime();
         }
+        
+        $product['price'] = $lr->ourPrice->listing;
         
         $product['bb'] = $lr->hasBuyBox ? 'yes' : 'no';
         $product['bb_price'] = $lr->buyBox->landed;
