@@ -64,7 +64,6 @@ class LegendRepricer {
             $this->newPrice = false;
             return;
         }
-//        debug($beatBy);
         switch ($beatBy) {
             case 'formula':
                 $nlanding = $this->buybox_formula($this->hasBuyBox,$bb_price, $bb_shipping, $price, $shipping);

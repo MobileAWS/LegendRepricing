@@ -51,7 +51,6 @@ class MWS_Seller {
         }
         $conditons = array("sellerid" => $seller_id, "marketplaceid" => $marketplace_id);
         $this->seller = $this->db->get_where("user_settings", $conditons)->row_array();
-
         if (!$this->seller) {
             throw new Exception("Seller $seller_id not found in " . $marketplace_id . ' Market Place');
         }

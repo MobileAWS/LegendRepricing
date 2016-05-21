@@ -76,7 +76,16 @@ class legendpricing_worker extends CI_Controller {
         $lp = new legend_pricing();
         $lp->updateLocalProducts($data['sellerId'],$data['skuList']);
     }
-    static function reprice_products($sellerId) {
+    
+    static function reprice_products( $products ){
+        $lp = new legend_pricing();
+        foreach($products as $row){
+            $lp->reprice_product($row['sellerid'], $row['sku']);
+        }
+        return true;
+    }
+    
+    static function reprice_products2($sellerId) {
         $lp = new legend_pricing();
         $seller = new MWS_Seller($sellerId);
         $updated_minutes = $seller->getSinceUpdatedMins();

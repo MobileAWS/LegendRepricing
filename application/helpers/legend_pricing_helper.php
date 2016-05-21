@@ -53,9 +53,23 @@ class legend_pricing {
     }
 
     function reprice_product($sellerId, $sku) {
-        $this->log("**repricing product $sku**\n");
-        $seller = new MWS_Seller($sellerId);
+        $this->log("\n\n\t\t**repricing product $sku**\n");
+        try{
+            $seller = new MWS_Seller($sellerId);
+        }catch(Exception $e){
+            $this->log($e->getMessage());
+            return false;
+        }
+        
+        if( !$seller->isAuthrized() ){
+            $this->log('seller is not authorized');
+            return false;
+        }
+        
+        
         $product = $seller->LocalGetProduct($sku);
+        $last_repriced = $product['last_repriced'];
+        
         $item = $seller->MWSGetProduct($sku);
         
         if (!$item['Offers']) {
@@ -65,22 +79,34 @@ class legend_pricing {
         $lr = new LegendRepricer($item, $product);
         $lr->reprice();
 
-        if (!$lr->newPrice) {
-            $product['price'] = $lr->ourPrice->listing;
+        if( $lr->hasBuyBox ){
+            $this->log("####BuyBox###");
         }
-
+        
         $product['price'] = (float) $product['price'];
-        if ($lr->hasBuyBox || $product['price'] != $lr->ourPrice->listing) {
-            $product['price'] = $lr->ourPrice->listing;
-        }
+//        $this->log('###'.$lr->newPrice.' = '.$lr->ourPrice->listing.' from '.$product['price']);
+        $mins = $this->GetMinutesSinceRepriced( $last_repriced );
         if ($lr->newPrice && $lr->newPrice != $lr->ourPrice->listing) {
-            cli_echo('going to reprice');
-            //$seller->MWSPriceUpdate($product['sku'], $lr->newPrice);
+            if( $lr->hasBuyBox ){
+                $mins = $this->GetMinutesSinceRepriced( $product['last_repriced']);
+//                debug($mins);
+            }
+            $this->log('### Reprcing to '.$lr->newPrice.' from '.$product['price']);
+            $seller->MWSPriceUpdate($product['sku'], $lr->newPrice);
+//            $product['last_repriced'] = $this->GetMySQLNowTime();
         }
+        
+        if ( $product['price'] != $lr->ourPrice->listing) {
+            $product['price'] = $lr->ourPrice->listing;
+            $product['last_repriced'] = $this->GetMySQLNowTime();
+        }
+        
         $product['bb'] = $lr->hasBuyBox ? 'yes' : 'no';
         $product['bb_price'] = $lr->buyBox->landed;
         $product['c1'] = round($lr->lowestOffer['Price']->landed, 2);
-        $product['qty'] = $item['qty'];
+        if( $product['fulfillment_channel'] != 'DEFAULT' ){
+            $product['qty'] = $item['qty'];
+        }
         $seller->LocalUpdateProduct($product);
     }
     
@@ -152,7 +178,7 @@ class legend_pricing {
                 $item['qty'] = $product['qty'];
             }
             
-            $item['last_repriced'] = date('Y-m-d H:i:s');
+//            $item['last_repriced'] = $this->GetMySQLNowTime();
             $results[] = $item;
         }
 
@@ -175,6 +201,19 @@ class legend_pricing {
                 }
             }
         }
+    }
+    
+    
+    function GetMySQLNowTime(){
+        $query = "SELECT now() now";
+        $now = $this->db->query($query)->result_array();
+        return $now[0]['now'];
+    }
+    
+    function GetMinutesSinceRepriced($last_repriced){
+        $now = $this->GetMySQLNowTime();
+        $mins = round(abs(strtotime($now) - strtotime($last_repriced)) / 60);
+        return $mins;
     }
 
 }
