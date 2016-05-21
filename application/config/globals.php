@@ -1,24 +1,31 @@
 <?php
 
 // Create customized config variables
-$config['web_Address']= 'http://www.formget.com/blog';
-$config['title']= 'Legend Repricing';
-$config['currency']= '';
-$config['amazon_url']= 'http://www.amazon.com/gp/product/';
-$config['seller_url']= 'http://www.amazon.com/gp/aag/main?ie=UTF8&seller=';
+$config['web_Address'] = 'http://www.formget.com/blog';
+$config['title'] = 'Legend Repricing';
+$config['currency'] = '';
+$config['amazon_url'] = 'http://www.amazon.com/gp/product/';
+$config['seller_url'] = 'http://www.amazon.com/gp/aag/main?ie=UTF8&seller=';
 
-function debug($v){
-    print_r('<pre>');
-    print_r($v);
-    print_r('</pre>');
-}
+if (!function_exists('debug')) {
 
-function cli_echo($string,$nl=true){
-    if (php_sapi_name() != 'cli') {
-        return;
+    function debug($v) {
+        print_r('<pre>');
+        print_r($v);
+        print_r('</pre>');
     }
-    $pnl =$nl ? "\n":'';
-    echo $string.$pnl;
+
 }
 
+if (!function_exists('cli_echo')) {
+
+    function cli_echo($string, $nl = true) {
+        if (php_sapi_name() != 'cli') {
+            return;
+        }
+        $pnl = $nl ? "\n" : '';
+        echo $string . $pnl;
+    }
+
+}
 ?>
