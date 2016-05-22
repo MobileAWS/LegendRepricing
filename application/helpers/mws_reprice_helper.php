@@ -53,8 +53,8 @@ class LegendRepricer {
 //        exit();
         $bb_price = $this->buyBox->listing;
         $bb_shipping = $this->buyBox->shipping;
-        $price = (float) $this->rules['price'];
-        $shipping = (float) $this->rules['ship_price'];
+        $price = (float) $this->ourPrice->listing;
+        $shipping = (float) $this->ourPrice->shipping;
         $min = (float) $this->rules['min_price'];
         $max = (float) $this->rules['max_price'];
         $beatBy = $this->rules['beatby'];
