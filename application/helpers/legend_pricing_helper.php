@@ -82,18 +82,24 @@ class legend_pricing {
         if( $lr->hasBuyBox ){
             $this->log("####BuyBox###");
         }
-        
+        $do_reprice = false;
         $product['price'] = (float) $product['price'];
 //        $this->log('###'.$lr->newPrice.' = '.$lr->ourPrice->listing.' from '.$product['price']);
         $mins = $this->GetMinutesSinceRepriced( $last_repriced );
         if ($lr->newPrice && $lr->newPrice != $lr->ourPrice->listing) {
-            if( $lr->hasBuyBox ){
+            if( $lr->hasBuyBox && $lr->newPrice > $lr->ourPrice->listing ){
                 $mins = $this->GetMinutesSinceRepriced( $product['last_repriced']);
-//                debug($mins);
-            }
+                if( $mins >=60 ){
+                    $do_reprice = true;
+                }
+            }else{
+                $do_reprice;
+            }    
+        }
+        
+        if( $do_reprice ){
             $this->log('### Reprcing to '.$lr->newPrice.' from '.$product['price']);
             $seller->MWSPriceUpdate($product['sku'], $lr->newPrice);
-//            $product['last_repriced'] = $this->GetMySQLNowTime();
         }
         
         if ( $product['price'] != $lr->ourPrice->listing) {
