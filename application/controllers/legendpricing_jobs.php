@@ -27,8 +27,15 @@ class legendpricing_jobs extends CI_Controller {
         //$seller = new MWS_Seller('A3NP85KUD0UI05');
         
 //        $data = $seller->MWSGetReport(_GET_MERCHANT_LISTINGS_DATA_,1);
-        $data = $seller->MWSProductListingData(array('QHDC gray'));
-        debug($data);
+        while(true){
+            $data = $seller->MWSProductListingData(array('QHDC gray'));
+            $p = current($data);
+            $p = $p['Offers'][0]['BuyingPrice']['LandedPrice']['Amount'];
+//            $p = $data[0]['Offers'][0]['BuyingPrice']['LandedPrice']['Amount'];
+            cli_echo("\n\n####Price = ".$p."\n\n");
+            sleep(10);
+        }
+        
         exit();
     }
     
@@ -39,7 +46,7 @@ class legendpricing_jobs extends CI_Controller {
             $sellerId = $row['sellerid'];
             $data['update_fbafees'] = true;
             $data['sellerid'] = $sellerId;
-//            $this->client->addTask(new LPGM_Task('syncListings', $data));
+            $this->client->addTask(new LPGM_Task('syncListings', $data));
         }
     }
     
