@@ -252,7 +252,7 @@ class MWS_Seller {
             $supplies = $amz->getSupply();
             foreach ($supplies as $supply) {
                 if (isset($results[$supply['SellerSKU']]['Offers'][0]['FulfillmentChannel']) && $results[$supply['SellerSKU']]['Offers'][0]['FulfillmentChannel'] != 'MERCHANT') {
-                    $results[$supply['SellerSKU']]['qty'] = $supply['InStockSupplyQuantity'];
+                    $results[$supply['SellerSKU']]['qty'] = !empty($supply['InStockSupplyQuantity']) ? $supply['InStockSupplyQuantity'] : 0;
 //                    debug($results[$supply['SellerSKU']]);
                 } else {
                     //debug($results[$supply['SellerSKU']]['Offers']);
@@ -357,7 +357,7 @@ class MWS_Seller {
             $this->log('fetching inventory for ' . $sku);
             $amz->fetchInventoryList();
             $supply = $amz->getSupply()[0];
-            $mws_product['qty'] = $supply['InStockSupplyQuantity'];
+            $mws_product['qty'] = !empty($supply['InStockSupplyQuantity']) ? $supply['InStockSupplyQuantity'] : 0;
         }
 
 

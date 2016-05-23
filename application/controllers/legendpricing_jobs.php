@@ -27,6 +27,8 @@ class legendpricing_jobs extends CI_Controller {
         //$seller = new MWS_Seller('A3NP85KUD0UI05');
         
 //        $data = $seller->MWSGetReport(_GET_MERCHANT_LISTINGS_DATA_,1);
+//        $data = $seller->MWSProductListingData(array('long red'));
+//        debug($data);exit();
         while(true){
             $data = $seller->MWSProductListingData(array('QHDC gray'));
             $p = current($data);
