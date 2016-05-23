@@ -114,10 +114,15 @@ class legend_pricing {
         $product['price'] = $lr->ourPrice->listing;
         
         // lost buy box - we had it before
-        $product['bb_won_after_lost'] = 0;
         if( $product['bb'] == 'no' && $lr->hasBuyBox ){
             $this->log('Won after Lost = YES');
             $product['bb_won_after_lost'] = 1;
+        }
+        
+        if( $product['bb_won_after_lost'] && $lr->hasBuyBox ){
+            $product['bb_won_after_lost'] = 1;
+        }else{
+            $product['bb_won_after_lost'] = 0;
         }
         
         $product['bb'] = $lr->hasBuyBox ? 'yes' : 'no';
