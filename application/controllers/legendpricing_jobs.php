@@ -37,7 +37,6 @@ class legendpricing_jobs extends CI_Controller {
                 $rules = $seller->LocalGetProduct($sku);
                 $lp = new LegendRepricer($p, $rules);
                 $lp->reprice();
-                var_dump($lp->hasBuyBox);
                 $bb = $lp->hasBuyBox ? '*' : ' ';
                 cli_echo("### {$lp->ourPrice->landed}{$bb} = $sku");
             }
