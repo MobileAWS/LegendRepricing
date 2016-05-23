@@ -33,6 +33,7 @@ class LegendRepricer {
         $this->rules = $rules;
         $this->checkOurPrice();
         $this->checkBuyBox();
+//        $this->hasBuyBox = false;
         $this->matchOffers();
     }
 

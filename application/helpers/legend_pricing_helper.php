@@ -29,9 +29,9 @@ class legend_pricing {
             $level = 'info';
         }
         $datetime = date('Y-m-d H:i:s');
-        $sellerid = $this->seller['sellerid'];
-        cli_echo("[$datetime] - $sellerid - ".$message);
-        $this->mws_logs->log($sellerid.' - '.$message, $level);
+        $selleridStr = !empty($this->seller['sellerid']) ? ' - '.$this->seller['sellerid'] : '';
+        cli_echo("[$datetime]$selleridStr - ".$message);
+        $this->mws_logs->log($selleridStr.' - '.$message, $level);
     }
     
     function update_listings($seller_id) {
@@ -78,7 +78,6 @@ class legend_pricing {
 
         $lr = new LegendRepricer($item, $product);
         $lr->reprice();
-
         if( $lr->hasBuyBox ){
             $this->log("####BuyBox###");
         }
@@ -89,7 +88,12 @@ class legend_pricing {
         if ($lr->newPrice && $lr->newPrice != $lr->ourPrice->listing) {
             if( $lr->hasBuyBox && $lr->newPrice > $lr->ourPrice->listing ){
                 $mins = $this->GetMinutesSinceRepriced( $product['last_repriced']);
-                if( $mins >=60 ){
+                $this->log('BB-YES - last repriced '. $mins.' minutes ago');
+                $wal = $product['bb_won_after_lost'] ? 'yes' : 'no';
+                $this->log('Won after lost ='.$wal);
+//                $product['bb_won_after_lost'] = 1;
+//                $mins = 60;
+                if( !$product['bb_won_after_lost'] || $mins >= 60 ){
                     $do_reprice = true;
                 }
             }else{
@@ -98,15 +102,23 @@ class legend_pricing {
         }
         
         if( $do_reprice ){
-            $this->log('### Reprcing to '.$lr->newPrice.' from '.$product['price']);
-            $seller->MWSPriceUpdate($product['sku'], $lr->newPrice);
+            $this->log('### Reprcing to '.$lr->newPrice.' from '.$lr->ourPrice->listing);
+            //$seller->MWSPriceUpdate($product['sku'], $lr->newPrice);
         }
         
         if ( $product['price'] != $lr->ourPrice->listing) {
             $product['last_repriced'] = $this->GetMySQLNowTime();
+            $product['prevprice'] = $product['price'];
         }
         
         $product['price'] = $lr->ourPrice->listing;
+        
+        // lost buy box - we had it before
+        $product['bb_won_after_lost'] = 0;
+        if( $product['bb'] == 'no' && $lr->hasBuyBox ){
+            $this->log('Won after Lost = YES');
+            $product['bb_won_after_lost'] = 1;
+        }
         
         $product['bb'] = $lr->hasBuyBox ? 'yes' : 'no';
         $product['bb_price'] = $lr->buyBox->landed;

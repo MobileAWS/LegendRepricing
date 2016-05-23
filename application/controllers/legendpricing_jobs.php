@@ -25,33 +25,39 @@ class legendpricing_jobs extends CI_Controller {
     public function test() {
         $seller = new MWS_Seller('A1ERLGARDFTEUE');
         //$seller = new MWS_Seller('A3NP85KUD0UI05');
-        
+        $this->load->helper('mws_reprice');
+
 //        $data = $seller->MWSGetReport(_GET_MERCHANT_LISTINGS_DATA_,1);
-//        $data = $seller->MWSProductListingData(array('long red'));
-//        debug($data);exit();
-        while(true){
-            $data = $seller->MWSProductListingData(array('QHDC gray'));
-            $p = current($data);
-            $p = $p['Offers'][0]['BuyingPrice']['LandedPrice']['Amount'];
-//            $p = $data[0]['Offers'][0]['BuyingPrice']['LandedPrice']['Amount'];
-            cli_echo("\n\n####Price = ".$p."\n\n");
-            sleep(10);
+//        $data = $seller->MWSProductListingData(array('QHDC gray'));
+//        debug($data);
+//        exit();
+        while (true) {
+            $data = $seller->MWSProductListingData(array('QHDC gray','LH-F8UN-9CLQ'));
+            foreach ($data as $sku => $p) {
+                $rules = $seller->LocalGetProduct($sku);
+                $lp = new LegendRepricer($p, $rules);
+                $lp->reprice();
+                var_dump($lp->hasBuyBox);
+                $bb = $lp->hasBuyBox ? '*' : ' ';
+                cli_echo("### {$lp->ourPrice->landed}{$bb} = $sku");
+            }
+            sleep(2);
         }
-        
+
         exit();
     }
-    
-    function sync_inventory(){
+
+    function sync_inventory() {
         $query = 'SELECT sellerid FROM user_settings';
         $sellers = $this->db->query($query)->result_array();
-        foreach($sellers as $row ){
+        foreach ($sellers as $row) {
             $sellerId = $row['sellerid'];
             $data['update_fbafees'] = true;
             $data['sellerid'] = $sellerId;
             $this->client->addTask(new LPGM_Task('syncListings', $data));
         }
     }
-    
+
     public function sync_listings($sellerId) {
         $query = "UPDATE user_listings SET last_repriced=null WHERE sellerid='{$sellerId}'";
         $this->db->query($query);
@@ -59,8 +65,8 @@ class legendpricing_jobs extends CI_Controller {
         $data['sellerid'] = $sellerId; //'ANF2DSU3YZFVJ';
         $this->client->addTask(new LPGM_Task('syncListings', $data));
     }
-    
-        function reprice_products(){
+
+    function reprice_products() {
         $query = "SELECT sku,sellerid, TIMESTAMPDIFF(MINUTE, last_repriced, now()) minutes FROM user_listings WHERE
                     status='active' AND ( TIMESTAMPDIFF(MINUTE, last_repriced, now()) >= 0 OR last_repriced IS NULL) 
                     AND sellerid IN (SELECT sellerid FROM user_settings) AND sellerid='A1ERLGARDFTEUE'
@@ -68,13 +74,13 @@ class legendpricing_jobs extends CI_Controller {
         $skuArray = $this->db->query($query)->result_array();
         $start = 0;
         $limit = 500;
-        while ($skuList = array_slice($skuArray, $start, $limit,true)) {
+        while ($skuList = array_slice($skuArray, $start, $limit, true)) {
             $task = new LPGM_Task('reprice_products', $skuList);
             $this->client->addTask($task);
             $start += $limit;
         }
-        
     }
+
     public function reprice_products_old() {
 //        $conditions = array('sellerid' => 'ANF2DSU3YZFVJ');
 //        $conditions = array();
