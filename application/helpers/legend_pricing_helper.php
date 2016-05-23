@@ -84,7 +84,7 @@ class legend_pricing {
         }
         $do_reprice = false;
         $product['price'] = (float) $product['price'];
-//        $this->log('###'.$lr->newPrice.' = '.$lr->ourPrice->listing.' from '.$product['price']);
+        $this->log('###'.$lr->newPrice.' = '.$lr->ourPrice->listing.' from '.$product['price']);
         $mins = $this->GetMinutesSinceRepriced( $last_repriced );
         if ($lr->newPrice && $lr->newPrice != $lr->ourPrice->listing) {
             if( $lr->hasBuyBox && $lr->newPrice > $lr->ourPrice->listing ){
