@@ -28,9 +28,9 @@ class legendpricing_jobs extends CI_Controller {
         $this->load->helper('mws_reprice');
 
 //        $data = $seller->MWSGetReport(_GET_MERCHANT_LISTINGS_DATA_,1);
-//        $data = $seller->MWSProductListingData(array('QHDC gray'));
-//        debug($data);
-//        exit();
+        $data = $seller->MWSProductListingData(array('QHDC gray','LH-F8UN-9CLQ'));
+        debug($data);
+        exit();
         while (true) {
             $data = $seller->MWSProductListingData(array('QHDC gray','LH-F8UN-9CLQ'));
             foreach ($data as $sku => $p) {
@@ -68,8 +68,7 @@ class legendpricing_jobs extends CI_Controller {
     function reprice_products() {
         $query = "SELECT sku,sellerid, TIMESTAMPDIFF(MINUTE, last_repriced, now()) minutes FROM user_listings WHERE
                     status='active' AND ( TIMESTAMPDIFF(MINUTE, last_repriced, now()) >= 0 OR last_repriced IS NULL) 
-                    AND sellerid IN (SELECT sellerid FROM user_settings) AND sellerid='A1ERLGARDFTEUE'
-                    limit 10";
+                    AND sellerid IN (SELECT sellerid FROM user_settings) AND sellerid IN ('A1ERLGARDFTEUE','ANF2DSU3YZFVJ')";
         $skuArray = $this->db->query($query)->result_array();
         $start = 0;
         $limit = 500;
