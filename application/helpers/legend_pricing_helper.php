@@ -103,7 +103,7 @@ class legend_pricing {
         
         if( $do_reprice ){
             $this->log('### Reprcing to '.$lr->newPrice.' from '.$lr->ourPrice->listing);
-            //$seller->MWSPriceUpdate($product['sku'], $lr->newPrice);
+            $seller->MWSPriceUpdate($product['sku'], $lr->newPrice);
         }
         
         if ( $product['price'] != $lr->ourPrice->listing) {
