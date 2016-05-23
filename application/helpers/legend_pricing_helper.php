@@ -93,7 +93,7 @@ class legend_pricing {
                     $do_reprice = true;
                 }
             }else{
-                $do_reprice;
+                $do_reprice = true;
             }    
         }
         
