@@ -591,5 +591,20 @@ class MWS_Seller {
             return false;
         }
     }
+    
+    function addRepriceLogs( $sku,$asin,$price_changed,$our_price,$new_price,$bb_price,$bb ){
+        $log = array(
+            'sellerid' => $this->getSellerId(),
+            'sku' => $sku,
+            'asin' => $asin,
+            'price_changed' => $price_changed,
+            'our_price' => $our_price,
+            'new_price' => $new_price,
+            'bb_price' => $bb_price,
+            'bb' => $bb
+        );
+        $this->db_mysql->on_duplicate_key_update()->insert("reprice_logs", $log);
+        return true;
+    }
 
 }

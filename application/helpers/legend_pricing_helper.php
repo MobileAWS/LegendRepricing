@@ -119,9 +119,14 @@ class legend_pricing {
             $seller->MWSPriceUpdate($product['sku'], $lr->newPrice);
         }
         
+        $price_changed = 'no';
+        $our_price = $product['price'];
+        $new_price = $lr->ourPrice->listing;
+        
         if ( $product['price'] != $lr->ourPrice->listing) {
             $product['last_repriced'] = $this->GetMySQLNowTime();
             $product['prevprice'] = $product['price'];
+            $price_changed = 'yes';
         }
         
         $product['price'] = $lr->ourPrice->listing;
@@ -133,6 +138,7 @@ class legend_pricing {
             $product['qty'] = $item['qty'];
         }
         $seller->LocalUpdateProduct($product);
+        $seller->addRepriceLogs($product['sku'], $product['asin'], $price_changed, $our_price, $new_price, $product['bb_price'], $product['bb']);
     }
     
     
