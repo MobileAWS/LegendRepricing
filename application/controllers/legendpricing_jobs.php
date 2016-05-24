@@ -24,13 +24,14 @@ class legendpricing_jobs extends CI_Controller {
 
     public function test() {
         $seller = new MWS_Seller('A1ERLGARDFTEUE');
+        $seller->addRepriceLogs(array());exit();
         //$seller = new MWS_Seller('A3NP85KUD0UI05');
         $this->load->helper('mws_reprice');
-
+//
 //        $data = $seller->MWSGetReport(_GET_MERCHANT_LISTINGS_DATA_,1);
-        $data = $seller->MWSProductListingData(array('QHDC gray','LH-F8UN-9CLQ'));
-        debug($data);
-        exit();
+//        $data = $seller->MWSProductListingData(array('QHDC gray','LH-F8UN-9CLQ'));
+//        debug($data);
+//        exit();
         while (true) {
             $data = $seller->MWSProductListingData(array('QHDC gray','LH-F8UN-9CLQ'));
             foreach ($data as $sku => $p) {
@@ -40,12 +41,16 @@ class legendpricing_jobs extends CI_Controller {
                 $bb = $lp->hasBuyBox ? '*' : ' ';
                 cli_echo("### {$lp->ourPrice->landed}{$bb} = $sku");
             }
-            sleep(2);
+//            sleep(2);
         }
 
         exit();
     }
-
+    function get_feed_status(){
+        $seller = new MWS_Seller('A1ERLGARDFTEUE');
+        $feeds = $seller->MWSGetFeed($_GET['fid']);
+        debug($feeds);
+    }
     function sync_inventory() {
         $query = 'SELECT sellerid FROM user_settings';
         $sellers = $this->db->query($query)->result_array();
@@ -67,8 +72,8 @@ class legendpricing_jobs extends CI_Controller {
 
     function reprice_products() {
         $query = "SELECT sku,sellerid, TIMESTAMPDIFF(MINUTE, last_repriced, now()) minutes FROM user_listings WHERE
-                    status='active' AND ( TIMESTAMPDIFF(MINUTE, last_repriced, now()) >= 0 OR last_repriced IS NULL) 
-                    AND sellerid IN (SELECT sellerid FROM user_settings) AND sellerid IN ('A1ERLGARDFTEUE','ANF2DSU3YZFVJ')";
+                    status='active' AND ( TIMESTAMPDIFF(MINUTE, last_repriced, now()) >= 15 OR last_repriced IS NULL) 
+                    AND sellerid IN (SELECT sellerid FROM user_settings) ";
         $skuArray = $this->db->query($query)->result_array();
         $start = 0;
         $limit = 500;
