@@ -71,9 +71,23 @@ class legendpricing_jobs extends CI_Controller {
     }
 
     function reprice_products() {
+        $query = "SELECT sellerid from user_settings";
+        $sellers = $this->db->query($query)->result_array();
+        $sellersToReprice = array();
+        foreach($sellers as $row){
+            $seller = new MWS_Seller($row['sellerid']);
+            if( $seller->isAuthrized() ){
+                $sellersToReprice[] = "'".$row['sellerid']."'";
+            }
+        }
+        if( empty($sellersToReprice) ){
+            die('No seller to reprice');
+        }
+        
+        $sellersToReprice = implode(',',$sellersToReprice);
         $query = "SELECT sku,sellerid, TIMESTAMPDIFF(MINUTE, last_repriced, now()) minutes FROM user_listings WHERE
                     status='active' AND ( TIMESTAMPDIFF(MINUTE, last_repriced, now()) >= 15 OR last_repriced IS NULL) 
-                    AND sellerid IN (SELECT sellerid FROM user_settings) ";
+                    AND sellerid IN ({$sellersToReprice}) ";
         $skuArray = $this->db->query($query)->result_array();
         $start = 0;
         $limit = 500;

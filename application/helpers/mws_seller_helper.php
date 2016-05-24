@@ -64,8 +64,10 @@ class MWS_Seller {
         $amz->fetchParticipationList();
         $part = $amz->getParticipationList();
         if( count($part) == 0 ){
+            $this->log('*****NOT Authorized******');
             return false;
         }
+        $this->log('Authorized');
         return true;
     }
     function log($message, $level = null) {

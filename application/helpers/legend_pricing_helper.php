@@ -61,12 +61,6 @@ class legend_pricing {
             return false;
         }
         
-        if( !$seller->isAuthrized() ){
-            $this->log('seller is not authorized');
-            return false;
-        }
-        
-        
         $product = $seller->LocalGetProduct($sku);
         $last_repriced = $product['last_repriced'];
         
