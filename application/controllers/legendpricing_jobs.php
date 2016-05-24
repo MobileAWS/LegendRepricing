@@ -24,7 +24,8 @@ class legendpricing_jobs extends CI_Controller {
 
     public function test() {
         $seller = new MWS_Seller('A1ERLGARDFTEUE');
-        $seller->addRepriceLogs(array());exit();
+        $seller->addRepriceLogs('sku123','asin123','yes', 100, 101, 102,'no');
+        exit();
         //$seller = new MWS_Seller('A3NP85KUD0UI05');
         $this->load->helper('mws_reprice');
 //
