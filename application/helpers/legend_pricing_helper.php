@@ -81,6 +81,19 @@ class legend_pricing {
         if( $lr->hasBuyBox ){
             $this->log("####BuyBox###");
         }
+        
+        // lost buy box - we had it before
+        if( $product['bb'] == 'no' && $lr->hasBuyBox ){
+            $this->log('Won after Lost = YES');
+            $product['bb_won_after_lost'] = 1;
+        }
+        
+        if( $product['bb_won_after_lost'] && $lr->hasBuyBox ){
+            $product['bb_won_after_lost'] = 1;
+        }else{
+            $product['bb_won_after_lost'] = 0;
+        }
+        
         $do_reprice = false;
         $product['price'] = (float) $product['price'];
         $this->log('###'.$lr->newPrice.' = '.$lr->ourPrice->listing.' from '.$product['price']);
@@ -112,18 +125,6 @@ class legend_pricing {
         }
         
         $product['price'] = $lr->ourPrice->listing;
-        
-        // lost buy box - we had it before
-        if( $product['bb'] == 'no' && $lr->hasBuyBox ){
-            $this->log('Won after Lost = YES');
-            $product['bb_won_after_lost'] = 1;
-        }
-        
-        if( $product['bb_won_after_lost'] && $lr->hasBuyBox ){
-            $product['bb_won_after_lost'] = 1;
-        }else{
-            $product['bb_won_after_lost'] = 0;
-        }
         
         $product['bb'] = $lr->hasBuyBox ? 'yes' : 'no';
         $product['bb_price'] = $lr->buyBox->landed;
