@@ -606,8 +606,7 @@ class MWS_Seller {
             'bb' => $bb
         );
         $this->log('added logs for '.$sku);
-        $this->db_mysql->on_duplicate_key_update()->insert("reprice_logs", $log);
-        debug($this->db_mysql);
+        $r = $this->db->insert("reprice_logs", $log);
         return true;
     }
 
