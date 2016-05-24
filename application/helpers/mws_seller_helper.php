@@ -606,8 +606,7 @@ class MWS_Seller {
             'bb' => $bb
         );
         $this->log('added logs for '.$sku);
-        $r = $this->db->insert("reprice_logs", $log);
-        return true;
+        return $this->db->insert("reprice_logs", $log);
     }
 
 }
