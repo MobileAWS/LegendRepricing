@@ -596,6 +596,7 @@ class MWS_Seller {
     
     function addRepriceLogs( $sku,$asin,$price_changed,$our_price,$new_price,$bb_price,$bb ){
         $log = array(
+            'id' => null,
             'sellerid' => $this->getSellerId(),
             'sku' => $sku,
             'asin' => $asin,

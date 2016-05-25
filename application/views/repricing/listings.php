@@ -375,7 +375,7 @@
               <!--                <th>Status </th>
                 <th>Actions</th>-->
               <th>    
-                <button disabled class="btn" type="button" onclick="alert('Hello world!')">Save ALL!</button>
+<!--                <button disabled class="btn" type="button" onclick="alert('Hello world!')">Save ALL!</button>-->
               </th>
             </thead>
             <tbody> 
